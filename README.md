@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Rock Earn — Pro Dashboard</title>
+<title>Rock Earn — Dashboard</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
 body{font-family:'Segoe UI',sans-serif;}
@@ -19,7 +19,7 @@ body{font-family:'Segoe UI',sans-serif;}
 
 <header class="w-full max-w-6xl mb-6 p-6 rounded-xl bg-gradient-to-r from-indigo-600 via-pink-500 to-purple-600 text-white shadow-2xl text-center">
   <h1 class="text-4xl font-extrabold">Rock Earn</h1>
-  <p class="mt-2 text-base opacity-90">Your interactive earning dashboard</p>
+  <p class="mt-2 text-base opacity-90">Interactive earning dashboard</p>
 </header>
 
 <main class="w-full max-w-6xl bg-white rounded-xl shadow-lg p-6 flex flex-col gap-6">
@@ -42,7 +42,7 @@ body{font-family:'Segoe UI',sans-serif;}
     <input type="password" name="password" id="passwordInput" placeholder="Password" class="p-3 rounded-lg border border-gray-200" required>
     <div class="flex items-center gap-3">
       <input type="checkbox" id="termsCheck" required>
-      <label for="termsCheck" class="text-sm">I agree to the <a href="#" class="underline text-indigo-600">Terms & Conditions</a></label>
+      <label for="termsCheck" class="text-sm">I agree to <a href="#" class="underline text-indigo-600">Terms & Conditions</a></label>
     </div>
     <button type="submit" class="py-3 rounded-xl bg-gradient-primary text-white font-semibold button-animate">Submit</button>
   </form>
@@ -61,27 +61,20 @@ body{font-family:'Segoe UI',sans-serif;}
     <div class="p-4 rounded-xl shadow-xl bg-gradient-success text-white">
       <h3 class="font-semibold">Account Balance</h3>
       <div class="text-2xl font-bold">PKR <span id="accountBalance">0</span></div>
-      <div class="text-sm mt-1">Total Daily Profit: PKR <span id="totalDailyProfit">0</span></div>
     </div>
   </div>
 
   <!-- Company Info -->
   <div class="p-4 rounded-xl bg-gray-100 border shadow-sm text-gray-700">
     <h3 class="font-semibold mb-1">Company Info</h3>
-    <p>Rock Earn LLC — 2018 se based in California, United States. Professional simulated earning platform with interactive plans, deposits, and withdrawals. Trusted and user-friendly experience.</p>
-  </div>
-
-  <!-- Profile & Share -->
-  <div class="flex gap-4">
-    <button id="profileBtn" class="px-4 py-2 bg-indigo-600 text-white rounded-xl button-animate">Profile</button>
-    <button id="shareBtn" class="px-4 py-2 bg-pink-500 text-white rounded-xl button-animate">Share Link</button>
-    <button id="customerServiceBtn" class="px-4 py-2 bg-green-500 text-white rounded-xl button-animate">Customer Service</button>
+    <p>Rock Earn LLC, launched 2018, based in California, United States. Professional earning platform with interactive plans. Customer service available. Profile & share link included.</p>
   </div>
 
   <!-- Plans -->
   <div>
     <h3 class="font-semibold mb-2">Available Plans</h3>
     <div class="grid md:grid-cols-3 gap-4">
+      <!-- 7 Plans -->
       <div class="p-4 rounded-xl bg-white shadow-md card-hover flex flex-col gap-2">
         <div class="text-gray-500 text-sm">Micro</div>
         <div class="font-bold text-xl">PKR 180</div>
@@ -126,24 +119,25 @@ body{font-family:'Segoe UI',sans-serif;}
 
     <!-- Deposit -->
     <div id="depositSection" class="p-4 rounded-xl bg-gray-50 border shadow-sm hidden flex flex-col gap-2">
-      <h3 class="font-semibold mb-2">Deposit Options (Simulation)</h3>
+      <h3 class="font-semibold mb-2">Make a Deposit (Simulation)</h3>
       <div class="flex flex-col gap-2">
-        <div class="flex gap-2 items-center">
-          <button class="px-4 py-2 bg-green-500 text-white rounded-xl depositBtn button-animate" data-number="03379827882">Easypaisa</button>
-          <span id="easypaisaNumber" class="font-mono">03379827882</span>
-          <button onclick="copyNumber('03379827882')" class="px-2 py-1 bg-gray-300 rounded">Copy</button>
-        </div>
-        <div class="flex gap-2 items-center">
-          <button class="px-4 py-2 bg-blue-500 text-white rounded-xl depositBtn button-animate" data-number="03705519562">JazzCash</button>
-          <span id="jazzCashNumber" class="font-mono">03705519562</span>
-          <button onclick="copyNumber('03705519562')" class="px-2 py-1 bg-gray-300 rounded">Copy</button>
-        </div>
+        <button class="px-4 py-2 bg-green-500 text-white rounded-xl depositBtn button-animate" data-method="Easypaisa" data-number="03379827882">Easypaisa</button>
+        <button class="px-4 py-2 bg-blue-500 text-white rounded-xl depositBtn button-animate" data-method="JazzCash" data-number="03705519562">JazzCash</button>
+      </div>
+      <div id="depositFormFields" class="hidden flex flex-col gap-2">
+        <label>Amount (PKR)</label>
+        <input id="depositAmount" class="p-2 rounded-lg border border-gray-200">
+        <label>Transaction ID</label>
+        <input id="depositTxn" class="p-2 rounded-lg border border-gray-200">
+        <label>Upload Proof</label>
+        <input type="file" id="depositProof" accept="image/*">
+        <button id="submitDeposit" class="py-2 rounded-xl bg-gradient-secondary text-white button-animate">Submit Deposit</button>
       </div>
     </div>
 
     <!-- Withdraw -->
     <div id="withdrawSection" class="p-4 rounded-xl bg-gray-50 border shadow-sm hidden flex flex-col gap-2">
-      <h3 class="font-semibold mb-2">Withdrawal (Simulation)</h3>
+      <h3 class="font-semibold mb-2">Request Withdrawal (Simulation)</h3>
       <label>Amount (PKR)</label>
       <input id="withdrawAmount" class="p-2 rounded-lg border border-gray-200">
       <label>Method</label>
@@ -175,10 +169,8 @@ body{font-family:'Segoe UI',sans-serif;}
 </main>
 
 <script>
-// State
-const state={user:null,activities:[],balance:0,plan:null,totalDailyProfit:0};
+const state={user:null,activities:[],balance:0,plan:null};
 
-// Elements
 const landingStep=document.getElementById('landingStep');
 const formStep=document.getElementById('formStep');
 const dashboardStep=document.getElementById('dashboardStep');
@@ -189,15 +181,11 @@ const backLanding=document.getElementById('backLanding');
 const loginBtn=document.getElementById('loginBtn');
 const signupBtn=document.getElementById('signupBtn');
 const accountBalance=document.getElementById('accountBalance');
-const totalDailyProfitSpan=document.getElementById('totalDailyProfit');
+const depositFormFields=document.getElementById('depositFormFields');
 const planInfo=document.getElementById('planInfo');
 const planStatus=document.getElementById('planStatus');
 const depositBtns=document.querySelectorAll('.depositBtn');
 
-// Copy Number Function
-function copyNumber(num){navigator.clipboard.writeText(num);alert('Number copied: '+num);}
-
-// Load from localStorage
 window.onload=()=>{
   const savedUser=JSON.parse(localStorage.getItem('rockUser'));
   const savedBalance=parseInt(localStorage.getItem('rockBalance'));
@@ -212,15 +200,12 @@ window.onload=()=>{
   renderActivities();
 };
 
-// Landing Buttons
 loginBtn.onclick=()=>{showForm('Login');};
 signupBtn.onclick=()=>{showForm('Sign Up');};
 backLanding.onclick=()=>{formStep.classList.add('hidden');landingStep.classList.remove('hidden');};
 
-// Show Form
 function showForm(type){landingStep.classList.add('hidden');formStep.classList.remove('hidden');formTitle.textContent=type;}
 
-// Submit Auth Form
 authForm.addEventListener('submit',e=>{
   e.preventDefault();
   const data=Object.fromEntries(new FormData(authForm).entries());
@@ -231,7 +216,6 @@ authForm.addEventListener('submit',e=>{
   alert(`${formTitle.textContent} successful! Select a plan to start.`);
 });
 
-// Buy Plan
 document.querySelectorAll('.buyPlan').forEach(btn=>{
   btn.addEventListener('click',()=>{
     document.getElementById('depositSection').classList.remove('hidden');
@@ -240,19 +224,29 @@ document.querySelectorAll('.buyPlan').forEach(btn=>{
     const duration=parseInt(btn.dataset.duration);
     const startTime=new Date();
     state.plan={profit,duration,startTime,count:0};
-    state.totalDailyProfit=profit;
     localStorage.setItem('rockPlan',JSON.stringify(state.plan));
     planStatus.classList.remove('hidden');
     updatePlanInfo();
-    updateTotalDailyProfit();
     alert('Plan selected! Deposit to start earning daily profit.');
   });
 });
 
-// Deposit Option Buttons
-depositBtns.forEach(btn=>{btn.onclick=()=>{};});
+depositBtns.forEach(btn=>{btn.onclick=()=>{depositFormFields.classList.remove('hidden');};});
 
-// Withdrawal Simulation
+document.getElementById('submitDeposit').addEventListener('click',()=>{
+  const amt=parseInt(document.getElementById('depositAmount').value);
+  const txn=document.getElementById('depositTxn').value;
+  const file=document.getElementById('depositProof').files[0];
+  if(!amt||!txn||!file){alert('Provide all deposit details.');return;}
+  state.balance+=amt;localStorage.setItem('rockBalance',state.balance);
+  updateBalance();
+  const log=`Deposit submitted PKR ${amt} — TXN: ${txn} (Simulation)`;
+  state.activities.unshift(log);
+  localStorage.setItem('rockActivities',JSON.stringify(state.activities));
+  renderActivities();
+  alert('Deposit submitted (simulation).');
+});
+
 document.getElementById('requestWithdraw').addEventListener('click',()=>{
   const amt=parseInt(document.getElementById('withdrawAmount').value);
   const method=document.getElementById('withdrawMethod').value;
@@ -268,7 +262,6 @@ document.getElementById('requestWithdraw').addEventListener('click',()=>{
   alert('Withdrawal request submitted (simulation).');
 });
 
-// Render Activities
 function renderActivities(){
   const container=document.getElementById('activityList');
   container.innerHTML='';
@@ -280,13 +273,8 @@ function renderActivities(){
   });
 }
 
-// Update Balance Display
 function updateBalance(){accountBalance.textContent=state.balance;}
 
-// Update Total Daily Profit
-function updateTotalDailyProfit(){totalDailyProfitSpan.textContent=state.totalDailyProfit;}
-
-// Update Plan Info
 function updatePlanInfo(){
   if(!state.plan) return;
   const now=new Date();
@@ -303,9 +291,7 @@ function updatePlanInfo(){
   planInfo.innerHTML=`Plan Active: ${state.plan.duration} days<br>Daily Profit: PKR ${state.plan.profit}<br>Days Completed: ${state.plan.count}`;
 }
 
-// Auto-update daily profit every minute
 setInterval(updatePlanInfo,60000);
-
 </script>
 </body>
 </html>
