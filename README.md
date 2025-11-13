@@ -1,4 +1,4 @@
-<ROCK--EARN>
+<WELCOME TO ROCK EARNING>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -14,6 +14,8 @@ body{font-family:'Segoe UI',sans-serif;background:#f0f4f8;}
 .bg-gradient-secondary{background:linear-gradient(90deg,#f97316,#facc15);}
 .bg-gradient-success{background:linear-gradient(90deg,#10b981,#3b82f6);}
 .bg-gradient-customer{background:linear-gradient(90deg,#f43f5e,#ec4899);}
+.copy-box{background:#e5e7eb;padding:8px;border-radius:8px;text-align:center;font-weight:bold;}
+.copy-btn{margin-top:4px;padding:4px 8px;border-radius:6px;background:#4f46e5;color:white;cursor:pointer;}
 </style>
 </head>
 <body class="min-h-screen flex flex-col items-center p-4">
@@ -93,28 +95,47 @@ body{font-family:'Segoe UI',sans-serif;background:#f0f4f8;}
   <div>
     <h3 class="font-semibold mb-2">Available Plans</h3>
     <div class="grid md:grid-cols-3 gap-4">
+      <!-- Example: 7 plans from 180 to 5000 -->
       <div class="p-4 rounded-xl bg-white shadow-md card-hover flex flex-col gap-2">
         <div class="text-gray-500 text-sm">Starter</div>
-        <div class="font-bold text-xl">PKR 285</div>
-        <div class="text-xs text-gray-400">Daily Profit PKR 62 • Duration 35 days</div>
-        <button class="mt-2 px-3 py-2 rounded-xl bg-gradient-primary text-white font-semibold buyPlan" data-profit="62" data-duration="35">Buy Plan</button>
+        <div class="font-bold text-xl">PKR 180</div>
+        <div class="text-xs text-gray-400">Daily Profit PKR 35 • Duration 20 days</div>
+        <button class="mt-2 px-3 py-2 rounded-xl bg-gradient-primary text-white font-semibold buyPlan" data-profit="35" data-duration="20">Buy Plan</button>
       </div>
       <div class="p-4 rounded-xl bg-white shadow-md card-hover flex flex-col gap-2">
-        <div class="text-gray-500 text-sm">Bronze</div>
-        <div class="font-bold text-xl">PKR 985</div>
-        <div class="text-xs text-gray-400">Daily Profit PKR 240 • Duration 35 days</div>
-        <button class="mt-2 px-3 py-2 rounded-xl bg-gradient-primary text-white font-semibold buyPlan" data-profit="240" data-duration="35">Buy Plan</button>
+        <div class="text-gray-500 text-sm">Basic</div>
+        <div class="font-bold text-xl">PKR 500</div>
+        <div class="text-xs text-gray-400">Daily Profit PKR 100 • Duration 25 days</div>
+        <button class="mt-2 px-3 py-2 rounded-xl bg-gradient-primary text-white font-semibold buyPlan" data-profit="100" data-duration="25">Buy Plan</button>
       </div>
       <div class="p-4 rounded-xl bg-white shadow-md card-hover flex flex-col gap-2">
         <div class="text-gray-500 text-sm">Silver</div>
-        <div class="font-bold text-xl">PKR 1985</div>
-        <div class="text-xs text-gray-400">Daily Profit PKR 480 • Duration 35 days</div>
-        <button class="mt-2 px-3 py-2 rounded-xl bg-gradient-primary text-white font-semibold buyPlan" data-profit="480" data-duration="35">Buy Plan</button>
+        <div class="font-bold text-xl">PKR 1000</div>
+        <div class="text-xs text-gray-400">Daily Profit PKR 220 • Duration 30 days</div>
+        <button class="mt-2 px-3 py-2 rounded-xl bg-gradient-primary text-white font-semibold buyPlan" data-profit="220" data-duration="30">Buy Plan</button>
+      </div>
+      <div class="p-4 rounded-xl bg-white shadow-md card-hover flex flex-col gap-2">
+        <div class="text-gray-500 text-sm">Gold</div>
+        <div class="font-bold text-xl">PKR 2000</div>
+        <div class="text-xs text-gray-400">Daily Profit PKR 450 • Duration 30 days</div>
+        <button class="mt-2 px-3 py-2 rounded-xl bg-gradient-primary text-white font-semibold buyPlan" data-profit="450" data-duration="30">Buy Plan</button>
+      </div>
+      <div class="p-4 rounded-xl bg-white shadow-md card-hover flex flex-col gap-2">
+        <div class="text-gray-500 text-sm">Platinum</div>
+        <div class="font-bold text-xl">PKR 3000</div>
+        <div class="text-xs text-gray-400">Daily Profit PKR 700 • Duration 35 days</div>
+        <button class="mt-2 px-3 py-2 rounded-xl bg-gradient-primary text-white font-semibold buyPlan" data-profit="700" data-duration="35">Buy Plan</button>
+      </div>
+      <div class="p-4 rounded-xl bg-white shadow-md card-hover flex flex-col gap-2">
+        <div class="text-gray-500 text-sm">Diamond</div>
+        <div class="font-bold text-xl">PKR 4000</div>
+        <div class="text-xs text-gray-400">Daily Profit PKR 950 • Duration 35 days</div>
+        <button class="mt-2 px-3 py-2 rounded-xl bg-gradient-primary text-white font-semibold buyPlan" data-profit="950" data-duration="35">Buy Plan</button>
       </div>
       <div class="p-6 rounded-xl bg-yellow-200 shadow-lg card-hover flex flex-col gap-2 border-4 border-dashed border-yellow-500 text-center">
-        <div class="text-2xl font-bold">Platinum</div>
+        <div class="text-2xl font-bold">VIP</div>
         <div class="text-gray-600">Coming Soon</div>
-        <div class="text-sm text-gray-700">Daily Profit: 600 • Duration: 40 days</div>
+        <div class="text-sm text-gray-700">Daily Profit: 1200 • Duration: 40 days</div>
         <button class="mt-2 px-3 py-2 rounded-xl bg-gray-400 text-white cursor-not-allowed opacity-70">Coming Soon</button>
       </div>
     </div>
@@ -127,8 +148,12 @@ body{font-family:'Segoe UI',sans-serif;background:#f0f4f8;}
     <div id="depositSection" class="p-4 rounded-xl bg-gray-50 border shadow-sm hidden flex flex-col gap-2">
       <h3 class="font-semibold mb-2">Make a Deposit (Simulation)</h3>
       <div class="flex flex-col gap-2">
-        <button class="px-4 py-2 bg-green-500 text-white rounded-xl depositBtn button-animate" data-method="Easypaisa" data-number="03379827882">Easypaisa (03379827882)</button>
-        <button class="px-4 py-2 bg-blue-500 text-white rounded-xl depositBtn button-animate" data-method="JazzCash" data-number="03705519562">JazzCash (03705519562)</button>
+        <button class="px-4 py-2 bg-green-500 text-white rounded-xl depositBtn button-animate" data-method="Easypaisa" data-number="03379827882">Easypaisa</button>
+        <button class="px-4 py-2 bg-blue-500 text-white rounded-xl depositBtn button-animate" data-method="JazzCash" data-number="03705519562">JazzCash</button>
+      </div>
+      <div id="depositNumberBox" class="hidden flex flex-col gap-2 mt-2">
+        <div id="depositNumber" class="copy-box"></div>
+        <button id="copyNumber" class="copy-btn">Copy Number</button>
       </div>
       <div id="depositFormFields" class="hidden flex flex-col gap-2 mt-2">
         <label>Amount (PKR)</label>
@@ -186,6 +211,9 @@ const planStatus=document.getElementById('myPlanSection');
 const depositBtns=document.querySelectorAll('.depositBtn');
 const profileBtn=document.getElementById('profileBtn');
 const shareBtn=document.getElementById('shareBtn');
+const depositNumberBox=document.getElementById('depositNumberBox');
+const depositNumber=document.getElementById('depositNumber');
+const copyNumber=document.getElementById('copyNumber');
 
 // Load from localStorage
 window.onload=()=>{
@@ -236,7 +264,19 @@ document.querySelectorAll('.buyPlan').forEach(btn=>{
 });
 
 // Deposit Option Buttons
-depositBtns.forEach(btn=>{btn.onclick=()=>{depositFormFields.classList.remove('hidden');};});
+depositBtns.forEach(btn=>{
+  btn.onclick=()=>{
+    depositFormFields.classList.remove('hidden');
+    depositNumberBox.classList.remove('hidden');
+    depositNumber.textContent=`${btn.dataset.method}: ${btn.dataset.number}`;
+  };
+});
+
+// Copy Number
+copyNumber.onclick=()=>{
+  navigator.clipboard.writeText(depositNumber.textContent);
+  alert('Number copied to clipboard!');
+};
 
 // Deposit Simulation
 document.getElementById('submitDeposit').addEventListener('click',()=>{
@@ -247,69 +287,4 @@ document.getElementById('submitDeposit').addEventListener('click',()=>{
   state.balance+=amt;localStorage.setItem('rockBalance',state.balance);
   updateBalance();
   const log=`Deposit submitted PKR ${amt} — TXN: ${txn} (Simulation)`;
-  state.activities.unshift(log);
-  localStorage.setItem('rockActivities',JSON.stringify(state.activities));
-  renderActivities();
-  alert('Deposit submitted (simulation).');
-});
-
-// Withdrawal Simulation
-document.getElementById('requestWithdraw').addEventListener('click',()=>{
-  const amt=parseInt(document.getElementById('withdrawAmount').value);
-  const method=document.getElementById('withdrawMethod').value;
-  const note=document.getElementById('withdrawNote').value;
-  if(!amt){alert('Enter withdrawal amount.'); return;}
-  if(amt>state.balance){alert('Insufficient balance.'); return;}
-  state.balance-=amt;localStorage.setItem('rockBalance',state.balance);
-  updateBalance();
-  const log=`Withdrawal requested PKR ${amt} via ${method} — Note: ${note||'—'} (Simulation)`;
-  state.activities.unshift(log);
-  localStorage.setItem('rockActivities',JSON.stringify(state.activities));
-  renderActivities();
-  alert('Withdrawal request submitted (simulation).');
-});
-
-// Render Activities
-function renderActivities(){
-  const container=document.getElementById('activityList');
-  container.innerHTML='';
-  state.activities.forEach(a=>{
-    const div=document.createElement('div');
-    div.className='p-2 border rounded bg-white shadow-sm';
-    div.textContent=a;
-    container.appendChild(div);
-  });
-}
-
-// Update Balance Display
-function updateBalance(){accountBalance.textContent=state.balance;}
-
-// Update Plan Info
-function updatePlanInfo(){
-  if(!state.plan) return;
-  const now=new Date();
-  const elapsed=Math.floor((now - new Date(state.plan.startTime))/1000);
-  const daysElapsed=Math.floor(elapsed/86400);
-  const toAdd=daysElapsed - state.plan.count;
-  if(toAdd>0){
-    state.balance+=state.plan.profit*toAdd;
-    state.plan.count+=toAdd;
-    localStorage.setItem('rockBalance',state.balance);
-    localStorage.setItem('rockPlan',JSON.stringify(state.plan));
-    updateBalance();
-  }
-  planInfo.innerHTML=`Plan Active: ${state.plan.duration} days<br>Daily Profit: PKR ${state.plan.profit}<br>Days Completed: ${state.plan.count}`;
-}
-
-// Auto-update daily profit every minute
-setInterval(updatePlanInfo,60000);
-
-// Profile Button
-profileBtn.onclick=()=>{alert(`Name: ${state.user.name}\nEmail: ${state.user.email}\nBalance: PKR ${state.balance}`);};
-
-// Share Button
-shareBtn.onclick=()=>{navigator.clipboard.writeText(state.shareLink);alert('Share link copied to clipboard!');};
-</script>
-
-</body>
-</html>
+  state.activities
