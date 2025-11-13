@@ -1,4 +1,4 @@
-<ROCK>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -15,26 +15,16 @@ body{font-family:'Segoe UI',sans-serif;}
 .bg-gradient-success{background:linear-gradient(90deg,#10b981,#3b82f6);}
 </style>
 </head>
-<body class="bg-gray-50 min-h-screen flex flex-col items-center p-4">
-
-<header class="w-full max-w-6xl mb-6 p-6 rounded-xl bg-gradient-to-r from-indigo-600 via-pink-500 to-purple-600 text-white shadow-2xl text-center">
+<body class="bg-gray-50 min-h-screen flex flex-col items-center p-4"><header class="w-full max-w-6xl mb-6 p-6 rounded-xl bg-gradient-to-r from-indigo-600 via-pink-500 to-purple-600 text-white shadow-2xl text-center">
   <h1 class="text-4xl font-extrabold">Rock Earn</h1>
   <p class="mt-2 text-base opacity-90">Your interactive earning dashboard</p>
-</header>
-
-<main class="w-full max-w-6xl bg-white rounded-xl shadow-lg p-6 flex flex-col gap-6">
-
-<!-- Landing -->
-<div id="landingStep" class="flex flex-col items-center gap-6">
+</header><main class="w-full max-w-6xl bg-white rounded-xl shadow-lg p-6 flex flex-col gap-6"><!-- Landing --><div id="landingStep" class="flex flex-col items-center gap-6">
   <h2 class="text-2xl font-bold">Welcome! Login or Sign Up to Continue</h2>
   <div class="flex gap-4">
     <button id="loginBtn" class="px-6 py-3 rounded-xl bg-gradient-primary text-white font-semibold button-animate">Login</button>
     <button id="signupBtn" class="px-6 py-3 rounded-xl bg-gradient-secondary text-white font-semibold button-animate">Sign Up</button>
   </div>
-</div>
-
-<!-- Login / SignUp Form -->
-<div id="formStep" class="hidden flex flex-col gap-4">
+</div><!-- Login / SignUp Form --><div id="formStep" class="hidden flex flex-col gap-4">
   <h2 class="text-2xl font-bold" id="formTitle">Login</h2>
   <form id="authForm" class="flex flex-col gap-4">
     <input name="name" id="nameInput" placeholder="Full Name" class="p-3 rounded-lg border border-gray-200" required>
@@ -47,25 +37,22 @@ body{font-family:'Segoe UI',sans-serif;}
     <button type="submit" class="py-3 rounded-xl bg-gradient-primary text-white font-semibold button-animate">Submit</button>
   </form>
   <button id="backLanding" class="mt-2 text-sm text-gray-500 underline">Back</button>
-</div>
-
-<!-- Dashboard -->
-<div id="dashboardStep" class="hidden flex flex-col gap-6">
-
-  <!-- Welcome & Balance -->
-  <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+</div><!-- Dashboard --><div id="dashboardStep" class="hidden flex flex-col gap-6">  <!-- Welcome & Balance -->  <div class="flex flex-col md:flex-row justify-between items-center gap-4">
     <div>
       <h2 class="text-2xl font-bold">Welcome, <span id="userName">User</span></h2>
       <p class="text-gray-500">Your personalized dashboard</p>
     </div>
-    <div class="p-4 rounded-xl shadow-xl bg-gradient-success text-white">
-      <h3 class="font-semibold">Account Balance</h3>
-      <div class="text-2xl font-bold">PKR <span id="accountBalance">0</span></div>
+    <div class="flex gap-2 items-center">
+      <div class="p-4 rounded-xl shadow-xl bg-gradient-success text-white">
+        <h3 class="font-semibold">Account Balance</h3>
+        <div class="text-2xl font-bold">PKR <span id="accountBalance">0</span></div>
+      </div>
+      <button id="profileBtn" class="px-3 py-2 rounded-xl bg-indigo-500 text-white font-semibold button-animate">Profile</button>
     </div>
-  </div>
-
-  <!-- Plans -->
-  <div>
+  </div>  <!-- Company Info -->  <div class="p-4 rounded-xl bg-gray-100 border shadow-sm text-gray-700">
+    <h3 class="font-semibold mb-1">Company Info</h3>
+    <p>Rock Earn LLC, launched 2018, based in California, United States. Professional simulated earning platform with interactive plans, deposits, and withdrawals. Trusted and user-friendly experience.</p>
+  </div>  <!-- Plans -->  <div>
     <h3 class="font-semibold mb-2">Available Plans</h3>
     <div class="grid md:grid-cols-3 gap-4">
       <div class="p-4 rounded-xl bg-white shadow-md card-hover flex flex-col gap-2">
@@ -87,67 +74,63 @@ body{font-family:'Segoe UI',sans-serif;}
         <button class="mt-2 px-3 py-2 rounded-xl bg-gradient-primary text-white font-semibold buyPlan" data-profit="480" data-duration="35">Buy Plan</button>
       </div>
     </div>
-  </div>
-
-  <!-- Deposit / Withdraw -->
-  <div class="grid md:grid-cols-2 gap-4 mt-4">
-
-    <!-- Deposit -->
-    <div id="depositSection" class="p-4 rounded-xl bg-gray-50 border shadow-sm hidden flex flex-col gap-2">
-      <h3 class="font-semibold mb-2">Make a Deposit (Simulation)</h3>
-      <div class="flex flex-col gap-2">
-        <button class="px-4 py-2 bg-green-500 text-white rounded-xl depositBtn button-animate" data-method="Easypaisa" data-number="03379827882">Easypaisa</button>
-        <button class="px-4 py-2 bg-blue-500 text-white rounded-xl depositBtn button-animate" data-method="JazzCash" data-number="03705519562">JazzCash</button>
-      </div>
-      <div id="depositFormFields" class="hidden flex flex-col gap-2">
-        <label>Amount (PKR)</label>
-        <input id="depositAmount" class="p-2 rounded-lg border border-gray-200">
-        <label>Transaction ID</label>
-        <input id="depositTxn" class="p-2 rounded-lg border border-gray-200">
-        <label>Upload Proof</label>
-        <input type="file" id="depositProof" accept="image/*">
-        <button id="submitDeposit" class="py-2 rounded-xl bg-gradient-secondary text-white button-animate">Submit Deposit</button>
-      </div>
+  </div>  <!-- Deposit / Withdraw -->  <div class="grid md:grid-cols-2 gap-4 mt-4"><!-- Deposit -->
+<div id="depositSection" class="p-4 rounded-xl bg-gray-50 border shadow-sm hidden flex flex-col gap-2">
+  <h3 class="font-semibold mb-2">Make a Deposit (Simulation)</h3>
+  <div class="flex flex-col gap-2">
+    <div class="flex items-center justify-between">
+      <span>Easypaisa: 03379827882</span>
+      <button class="copyBtn px-2 py-1 bg-indigo-500 text-white rounded">Copy</button>
     </div>
-
-    <!-- Withdraw -->
-    <div id="withdrawSection" class="p-4 rounded-xl bg-gray-50 border shadow-sm hidden flex flex-col gap-2">
-      <h3 class="font-semibold mb-2">Request Withdrawal (Simulation)</h3>
-      <label>Amount (PKR)</label>
-      <input id="withdrawAmount" class="p-2 rounded-lg border border-gray-200">
-      <label>Method</label>
-      <select id="withdrawMethod" class="p-2 rounded-lg border border-gray-200">
-        <option value="easypaisa">Easypaisa</option>
-        <option value="jazzcash">JazzCash</option>
-      </select>
-      <label>Note</label>
-      <input id="withdrawNote" class="p-2 rounded-lg border border-gray-200">
-      <button id="requestWithdraw" class="py-2 rounded-xl bg-amber-500 text-white button-animate">Submit Withdrawal</button>
+    <div class="flex items-center justify-between">
+      <span>JazzCash: 03705519562</span>
+      <button class="copyBtn px-2 py-1 bg-indigo-500 text-white rounded">Copy</button>
     </div>
   </div>
+  <div id="depositFormFields" class="hidden flex flex-col gap-2">
+    <label>Amount (PKR)</label>
+    <input id="depositAmount" class="p-2 rounded-lg border border-gray-200">
+    <label>Transaction ID</label>
+    <input id="depositTxn" class="p-2 rounded-lg border border-gray-200">
+    <label>Upload Proof</label>
+    <input type="file" id="depositProof" accept="image/*">
+    <button id="submitDeposit" class="py-2 rounded-xl bg-gradient-secondary text-white button-animate">Submit Deposit</button>
+  </div>
+</div>
 
-  <!-- Plan Status & Activity -->
-  <div class="flex flex-col gap-4 mt-4">
+<!-- Withdraw -->
+<div id="withdrawSection" class="p-4 rounded-xl bg-gray-50 border shadow-sm hidden flex flex-col gap-2">
+  <h3 class="font-semibold mb-2">Request Withdrawal (Simulation)</h3>
+  <label>Amount (PKR)</label>
+  <input id="withdrawAmount" class="p-2 rounded-lg border border-gray-200">
+  <label>Method</label>
+  <select id="withdrawMethod" class="p-2 rounded-lg border border-gray-200">
+    <option value="easypaisa">Easypaisa</option>
+    <option value="jazzcash">JazzCash</option>
+  </select>
+  <label>Note</label>
+  <input id="withdrawNote" class="p-2 rounded-lg border border-gray-200">
+  <button id="requestWithdraw" class="py-2 rounded-xl bg-amber-500 text-white button-animate">Submit Withdrawal</button>
+</div>
+
+  </div>  <!-- Customer Service & Share Link -->  <div class="flex flex-col md:flex-row gap-4 mt-4">
+    <button id="customerServiceBtn" class="px-4 py-2 bg-green-500 text-white rounded-xl button-animate">Customer Service</button>
+    <div class="flex items-center gap-2">
+      <input type="text" id="shareLink" class="p-2 border rounded flex-1" value="https://rockearn.example.com?ref=123" readonly>
+      <button id="copyShare" class="px-2 py-1 bg-indigo-500 text-white rounded">Copy Link</button>
+    </div>
+  </div>  <!-- Plan Status & Activity -->  <div class="flex flex-col gap-4 mt-4">
     <div id="planStatus" class="p-4 rounded-xl bg-gray-50 border shadow-sm hidden">
       <h3 class="font-semibold mb-2">Your Plan Status</h3>
       <div id="planInfo" class="text-gray-700"></div>
-    </div>
-
-    <div id="activityLog" class="p-4 rounded-xl bg-gray-50 border shadow-sm">
-      <h3 class="font-semibold mb-2">Activity / Requests Log</h3>
-      <div id="activityList" class="space-y-2 text-sm text-gray-700"></div>
-    </div>
-  </div>
-
+    </div><div id="activityLog" class="p-4 rounded-xl bg-gray-50 border shadow-sm">
+  <h3 class="font-semibold mb-2">Activity / Requests Log</h3>
+  <div id="activityList" class="space-y-2 text-sm text-gray-700"></div>
 </div>
 
-</main>
-
-<script>
-// State
+  </div></div></main><script>
 const state={user:null,activities:[],balance:0,plan:null};
 
-// Elements
 const landingStep=document.getElementById('landingStep');
 const formStep=document.getElementById('formStep');
 const dashboardStep=document.getElementById('dashboardStep');
@@ -163,7 +146,6 @@ const planInfo=document.getElementById('planInfo');
 const planStatus=document.getElementById('planStatus');
 const depositBtns=document.querySelectorAll('.depositBtn');
 
-// Load from localStorage
 window.onload=()=>{
   const savedUser=JSON.parse(localStorage.getItem('rockUser'));
   const savedBalance=parseInt(localStorage.getItem('rockBalance'));
@@ -178,15 +160,11 @@ window.onload=()=>{
   renderActivities();
 };
 
-// Landing Buttons
 loginBtn.onclick=()=>{showForm('Login');};
 signupBtn.onclick=()=>{showForm('Sign Up');};
 backLanding.onclick=()=>{formStep.classList.add('hidden');landingStep.classList.remove('hidden');};
-
-// Show Form
 function showForm(type){landingStep.classList.add('hidden');formStep.classList.remove('hidden');formTitle.textContent=type;}
 
-// Submit Auth Form
 authForm.addEventListener('submit',e=>{
   e.preventDefault();
   const data=Object.fromEntries(new FormData(authForm).entries());
@@ -197,7 +175,6 @@ authForm.addEventListener('submit',e=>{
   alert(`${formTitle.textContent} successful! Select a plan to start.`);
 });
 
-// Buy Plan
 document.querySelectorAll('.buyPlan').forEach(btn=>{
   btn.addEventListener('click',()=>{
     document.getElementById('depositSection').classList.remove('hidden');
@@ -213,10 +190,8 @@ document.querySelectorAll('.buyPlan').forEach(btn=>{
   });
 });
 
-// Deposit Option Buttons
 depositBtns.forEach(btn=>{btn.onclick=()=>{depositFormFields.classList.remove('hidden');};});
 
-// Deposit Simulation
 document.getElementById('submitDeposit').addEventListener('click',()=>{
   const amt=parseInt(document.getElementById('depositAmount').value);
   const txn=document.getElementById('depositTxn').value;
@@ -231,7 +206,6 @@ document.getElementById('submitDeposit').addEventListener('click',()=>{
   alert('Deposit submitted (simulation).');
 });
 
-// Withdrawal Simulation
 document.getElementById('requestWithdraw').addEventListener('click',()=>{
   const amt=parseInt(document.getElementById('withdrawAmount').value);
   const method=document.getElementById('withdrawMethod').value;
@@ -247,7 +221,6 @@ document.getElementById('requestWithdraw').addEventListener('click',()=>{
   alert('Withdrawal request submitted (simulation).');
 });
 
-// Render Activities
 function renderActivities(){
   const container=document.getElementById('activityList');
   container.innerHTML='';
@@ -259,10 +232,8 @@ function renderActivities(){
   });
 }
 
-// Update Balance Display
 function updateBalance(){accountBalance.textContent=state.balance;}
 
-// Update Plan Info
 function updatePlanInfo(){
   if(!state.plan) return;
   const now=new Date();
@@ -278,10 +249,9 @@ function updatePlanInfo(){
   }
   planInfo.innerHTML=`Plan Active: ${state.plan.duration} days<br>Daily Profit: PKR ${state.plan.profit}<br>Days Completed: ${state.plan.count}`;
 }
-
-// Auto-update daily profit every minute
 setInterval(updatePlanInfo,60000);
 
-</script>
-</body>
-</html>
+// Copy buttons
+document.querySelectorAll('.copyBtn').forEach(btn=>{
+  btn.onclick=()=>{
+   
