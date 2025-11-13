@@ -3,19 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Rock Earn — Pro Dashboard</title>
+<title>Rock Earn — Professional Dashboard</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
-body{font-family:'Segoe UI',sans-serif;}
+body{font-family:'Segoe UI',sans-serif;background:#f0f4f8;}
 .button-animate:hover{transform:scale(1.05);transition:0.3s;}
 .card-hover:hover{transform:translateY(-6px);box-shadow:0 12px 25px rgba(0,0,0,0.25);transition:0.3s;}
 .hidden{display:none;}
 .bg-gradient-primary{background:linear-gradient(90deg,#4f46e5,#3b82f6);}
 .bg-gradient-secondary{background:linear-gradient(90deg,#f97316,#facc15);}
 .bg-gradient-success{background:linear-gradient(90deg,#10b981,#3b82f6);}
+.bg-gradient-customer{background:linear-gradient(90deg,#f43f5e,#ec4899);}
 </style>
 </head>
-<body class="bg-gray-50 min-h-screen flex flex-col items-center p-4">
+<body class="min-h-screen flex flex-col items-center p-4">
 
 <header class="w-full max-w-6xl mb-6 p-6 rounded-xl bg-gradient-to-r from-indigo-600 via-pink-500 to-purple-600 text-white shadow-2xl text-center">
   <h1 class="text-4xl font-extrabold">Rock Earn</h1>
@@ -52,6 +53,22 @@ body{font-family:'Segoe UI',sans-serif;}
 <!-- Dashboard -->
 <div id="dashboardStep" class="hidden flex flex-col gap-6">
 
+  <!-- Company & Profile -->
+  <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+    <div class="flex items-center gap-4">
+      <img src="https://via.placeholder.com/60" alt="SI LLC Logo" class="rounded-full border-2 border-gray-300">
+      <div>
+        <h2 class="text-2xl font-bold">SkyInvest SI LLC</h2>
+        <p class="text-gray-500 text-sm">Trusted interactive earning platform</p>
+      </div>
+    </div>
+    <div class="flex gap-4 items-center">
+      <button id="profileBtn" class="px-4 py-2 bg-indigo-500 text-white rounded-xl button-animate">Profile</button>
+      <button id="shareBtn" class="px-4 py-2 bg-green-500 text-white rounded-xl button-animate">Share Link</button>
+      <button id="customerServiceBtn" class="px-4 py-2 bg-yellow-500 text-white rounded-xl button-animate">Customer Service</button>
+    </div>
+  </div>
+
   <!-- Welcome & Balance -->
   <div class="flex flex-col md:flex-row justify-between items-center gap-4">
     <div>
@@ -64,59 +81,16 @@ body{font-family:'Segoe UI',sans-serif;}
     </div>
   </div>
 
-  <!-- Company Info -->
-  <div class="p-4 rounded-xl bg-gray-100 border shadow-sm text-gray-700">
-    <h3 class="font-semibold mb-1">Company Info</h3>
-    <p>Rock Earn LLC, launched 2018, California. Professional simulated earning platform with interactive plans, deposits, and withdrawals. Trusted and user-friendly experience.</p>
-  </div>
-
   <!-- Plans -->
   <div>
     <h3 class="font-semibold mb-2">Available Plans</h3>
-    <div class="grid md:grid-cols-3 gap-4">
-      <div class="p-4 rounded-xl bg-white shadow-md card-hover flex flex-col gap-2">
-        <div class="text-gray-500 text-sm">Starter</div>
-        <div class="font-bold text-xl">PKR 180</div>
-        <div class="text-xs text-gray-400">Daily Profit PKR 40 • Duration 30 days</div>
-        <button class="mt-2 px-3 py-2 rounded-xl bg-gradient-primary text-white font-semibold buyPlan" data-profit="40" data-duration="30">Buy Plan</button>
-      </div>
-      <div class="p-4 rounded-xl bg-white shadow-md card-hover flex flex-col gap-2">
-        <div class="text-gray-500 text-sm">Basic</div>
-        <div class="font-bold text-xl">PKR 500</div>
-        <div class="text-xs text-gray-400">Daily Profit PKR 120 • Duration 30 days</div>
-        <button class="mt-2 px-3 py-2 rounded-xl bg-gradient-primary text-white font-semibold buyPlan" data-profit="120" data-duration="30">Buy Plan</button>
-      </div>
-      <div class="p-4 rounded-xl bg-white shadow-md card-hover flex flex-col gap-2">
-        <div class="text-gray-500 text-sm">Silver</div>
-        <div class="font-bold text-xl">PKR 1000</div>
-        <div class="text-xs text-gray-400">Daily Profit PKR 250 • Duration 30 days</div>
-        <button class="mt-2 px-3 py-2 rounded-xl bg-gradient-primary text-white font-semibold buyPlan" data-profit="250" data-duration="30">Buy Plan</button>
-      </div>
-      <div class="p-4 rounded-xl bg-white shadow-md card-hover flex flex-col gap-2">
-        <div class="text-gray-500 text-sm">Gold</div>
-        <div class="font-bold text-xl">PKR 2500</div>
-        <div class="text-xs text-gray-400">Daily Profit PKR 650 • Duration 30 days</div>
-        <button class="mt-2 px-3 py-2 rounded-xl bg-gradient-primary text-white font-semibold buyPlan" data-profit="650" data-duration="30">Buy Plan</button>
-      </div>
-      <div class="p-4 rounded-xl bg-white shadow-md card-hover flex flex-col gap-2">
-        <div class="text-gray-500 text-sm">Platinum</div>
-        <div class="font-bold text-xl">PKR 5000</div>
-        <div class="text-xs text-gray-400">Daily Profit PKR 1400 • Duration 30 days</div>
-        <button class="mt-2 px-3 py-2 rounded-xl bg-gradient-primary text-white font-semibold buyPlan" data-profit="1400" data-duration="30">Buy Plan</button>
-      </div>
-      <div class="p-4 rounded-xl bg-white shadow-md card-hover flex flex-col gap-2">
-        <div class="text-gray-500 text-sm">Diamond</div>
-        <div class="font-bold text-xl">PKR 7000</div>
-        <div class="text-xs text-gray-400">Daily Profit PKR 2000 • Duration 30 days</div>
-        <button class="mt-2 px-3 py-2 rounded-xl bg-gradient-primary text-white font-semibold buyPlan" data-profit="2000" data-duration="30">Buy Plan</button>
-      </div>
+    <div class="grid md:grid-cols-3 gap-4" id="plansContainer">
+      <!-- Plans generated by JS -->
     </div>
   </div>
 
   <!-- Deposit / Withdraw -->
   <div class="grid md:grid-cols-2 gap-4 mt-4">
-
-    <!-- Deposit -->
     <div id="depositSection" class="p-4 rounded-xl bg-gray-50 border shadow-sm hidden flex flex-col gap-2">
       <h3 class="font-semibold mb-2">Make a Deposit (Simulation)</h3>
       <div class="flex flex-col gap-2">
@@ -130,12 +104,9 @@ body{font-family:'Segoe UI',sans-serif;}
         <input id="depositTxn" class="p-2 rounded-lg border border-gray-200">
         <label>Upload Proof</label>
         <input type="file" id="depositProof" accept="image/*">
-        <button id="copyDepositNumber" class="py-2 px-4 mt-2 rounded-xl bg-indigo-500 text-white button-animate">Copy Deposit Number</button>
         <button id="submitDeposit" class="py-2 rounded-xl bg-gradient-secondary text-white button-animate">Submit Deposit</button>
       </div>
     </div>
-
-    <!-- Withdraw -->
     <div id="withdrawSection" class="p-4 rounded-xl bg-gray-50 border shadow-sm hidden flex flex-col gap-2">
       <h3 class="font-semibold mb-2">Request Withdrawal (Simulation)</h3>
       <label>Amount (PKR)</label>
@@ -157,7 +128,6 @@ body{font-family:'Segoe UI',sans-serif;}
       <h3 class="font-semibold mb-2">Your Plan Status</h3>
       <div id="planInfo" class="text-gray-700"></div>
     </div>
-
     <div id="activityLog" class="p-4 rounded-xl bg-gray-50 border shadow-sm">
       <h3 class="font-semibold mb-2">Activity / Requests Log</h3>
       <div id="activityList" class="space-y-2 text-sm text-gray-700"></div>
@@ -168,9 +138,21 @@ body{font-family:'Segoe UI',sans-serif;}
 
 </main>
 
+<!-- Profile Modal -->
+<div id="profileModal" class="hidden fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center">
+  <div class="bg-white p-6 rounded-xl max-w-md w-full relative">
+    <h3 class="text-xl font-bold mb-2">User Profile</h3>
+    <p><strong>Name:</strong> <span id="profileName">User</span></p>
+    <p><strong>Email:</strong> <span id="profileEmail">user@example.com</span></p>
+    <p><strong>Total Daily Profit:</strong> PKR <span id="totalProfit">0</span></p>
+    <p><strong>Invitation Bonus:</strong> PKR <span id="inviteBonus">0</span></p>
+    <button id="closeProfile" class="mt-4 px-4 py-2 bg-red-500 text-white rounded-xl">Close</button>
+  </div>
+</div>
+
 <script>
 // State
-const state={user:null,activities:[],balance:0,plan:null};
+const state={user:null,activities:[],balance:0,plan:null,inviteBonus:0};
 
 // Elements
 const landingStep=document.getElementById('landingStep');
@@ -187,7 +169,18 @@ const depositFormFields=document.getElementById('depositFormFields');
 const planInfo=document.getElementById('planInfo');
 const planStatus=document.getElementById('planStatus');
 const depositBtns=document.querySelectorAll('.depositBtn');
-const copyDepositNumber=document.getElementById('copyDepositNumber');
+const plansContainer=document.getElementById('plansContainer');
+
+// Profile & share
+const profileBtn=document.getElementById('profileBtn');
+const profileModal=document.getElementById('profileModal');
+const closeProfile=document.getElementById('closeProfile');
+const profileName=document.getElementById('profileName');
+const profileEmail=document.getElementById('profileEmail');
+const totalProfitSpan=document.getElementById('totalProfit');
+const inviteBonusSpan=document.getElementById('inviteBonus');
+const shareBtn=document.getElementById('shareBtn');
+const customerServiceBtn=document.getElementById('customerServiceBtn');
 
 // Load from localStorage
 window.onload=()=>{
@@ -195,21 +188,22 @@ window.onload=()=>{
   const savedBalance=parseInt(localStorage.getItem('rockBalance'));
   const savedPlan=JSON.parse(localStorage.getItem('rockPlan'));
   const savedActivities=JSON.parse(localStorage.getItem('rockActivities'));
+  const savedInvite=JSON.parse(localStorage.getItem('rockInvite'));
   if(savedUser){state.user=savedUser;userNameSpan.textContent=savedUser.name;dashboardStep.classList.remove('hidden');landingStep.classList.add('hidden');formStep.classList.add('hidden');}
   if(savedBalance) state.balance=savedBalance;
   if(savedPlan) state.plan=savedPlan;
   if(savedActivities) state.activities=savedActivities;
+  if(savedInvite) state.inviteBonus=savedInvite;
   updateBalance();
-  updatePlanInfo();
   renderActivities();
+  generatePlans();
+  updatePlanInfo();
 };
 
 // Landing Buttons
 loginBtn.onclick=()=>{showForm('Login');};
 signupBtn.onclick=()=>{showForm('Sign Up');};
 backLanding.onclick=()=>{formStep.classList.add('hidden');landingStep.classList.remove('hidden');};
-
-// Show Form
 function showForm(type){landingStep.classList.add('hidden');formStep.classList.remove('hidden');formTitle.textContent=type;}
 
 // Submit Auth Form
@@ -223,32 +217,39 @@ authForm.addEventListener('submit',e=>{
   alert(`${formTitle.textContent} successful! Select a plan to start.`);
 });
 
-// Buy Plan
-document.querySelectorAll('.buyPlan').forEach(btn=>{
-  btn.addEventListener('click',()=>{
-    document.getElementById('depositSection').classList.remove('hidden');
-    document.getElementById('withdrawSection').classList.remove('hidden');
-    const profit=parseInt(btn.dataset.profit);
-    const duration=parseInt(btn.dataset.duration);
-    const startTime=new Date();
-    state.plan={profit,duration,startTime,count:0};
-    localStorage.setItem('rockPlan',JSON.stringify(state.plan));
-    planStatus.classList.remove('hidden');
-    updatePlanInfo();
-    alert('Plan selected! Deposit to start earning daily profit.');
+// Generate Plans 180 to 7000
+function generatePlans(){
+  const planValues=[180,500,1000,2000,3500,5000,7000];
+  const profits=[20,50,100,200,350,500,700];
+  plansContainer.innerHTML='';
+  planValues.forEach((amt,i)=>{
+    const profit=profits[i];
+    const div=document.createElement('div');
+    div.className='p-4 rounded-xl bg-white shadow-md card-hover flex flex-col gap-2';
+    div.innerHTML=`<div class="text-gray-500 text-sm">Plan</div>
+    <div class="font-bold text-xl">PKR ${amt}</div>
+    <div class="text-xs text-gray-400">Daily Profit PKR ${profit} • Duration 35 days</div>
+    <button class="mt-2 px-3 py-2 rounded-xl bg-gradient-primary text-white font-semibold buyPlan" data-profit="${profit}" data-duration="35">Buy Plan</button>`;
+    plansContainer.appendChild(div);
   });
-});
+  document.querySelectorAll('.buyPlan').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      document.getElementById('depositSection').classList.remove('hidden');
+      document.getElementById('withdrawSection').classList.remove('hidden');
+      const profit=parseInt(btn.dataset.profit);
+      const duration=parseInt(btn.dataset.duration);
+      const startTime=new Date();
+      state.plan={profit,duration,startTime,count:0};
+      localStorage.setItem('rockPlan',JSON.stringify(state.plan));
+      planStatus.classList.remove('hidden');
+      updatePlanInfo();
+      alert('Plan selected! Deposit to start earning daily profit.');
+    });
+  });
+}
 
-// Deposit Option Buttons + Copy
-depositBtns.forEach(btn=>{
-  btn.onclick=()=>{
-    depositFormFields.classList.remove('hidden');
-    const number=btn.dataset.number;
-    copyDepositNumber.onclick=()=>{
-      navigator.clipboard.writeText(number).then(()=>alert(`${btn.dataset.method} number ${number} copied!`));
-    };
-  };
-});
+// Deposit Option Buttons
+depositBtns.forEach(btn=>{btn.onclick=()=>{depositFormFields.classList.remove('hidden');};});
 
 // Deposit Simulation
 document.getElementById('submitDeposit').addEventListener('click',()=>{
@@ -312,10 +313,18 @@ function updatePlanInfo(){
   }
   planInfo.innerHTML=`Plan Active: ${state.plan.duration} days<br>Daily Profit: PKR ${state.plan.profit}<br>Days Completed: ${state.plan.count}`;
 }
-
-// Auto-update daily profit every minute
 setInterval(updatePlanInfo,60000);
 
-</script>
-</body>
-</html>
+// Profile modal logic
+profileBtn.onclick=()=>{
+  profileName.textContent=state.user?.name||'User';
+  profileEmail.textContent=state.user?.email||'user@example.com';
+  totalProfitSpan.textContent=state.plan?state.plan.profit:0;
+  inviteBonusSpan.textContent=state.inviteBonus||0;
+  profileModal.classList.remove('hidden');
+};
+closeProfile.onclick=()=>{profileModal.classList.add('hidden');};
+
+// Share link logic
+shareBtn.onclick=()=>{
+  const
