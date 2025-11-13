@@ -13,7 +13,6 @@ body{font-family:'Segoe UI',sans-serif;}
 .bg-gradient-primary{background:linear-gradient(90deg,#4f46e5,#3b82f6);}
 .bg-gradient-secondary{background:linear-gradient(90deg,#f97316,#facc15);}
 .bg-gradient-success{background:linear-gradient(90deg,#10b981,#3b82f6);}
-.copyBtn:hover{background-color:#3b82f6;}
 </style>
 </head>
 <body class="bg-gray-50 min-h-screen flex flex-col items-center p-4">
@@ -62,25 +61,56 @@ body{font-family:'Segoe UI',sans-serif;}
     <div class="p-4 rounded-xl shadow-xl bg-gradient-success text-white">
       <h3 class="font-semibold">Account Balance</h3>
       <div class="text-2xl font-bold">PKR <span id="accountBalance">0</span></div>
+      <div class="text-sm mt-1">Total Daily Profit: PKR <span id="totalDailyProfit">0</span></div>
     </div>
   </div>
 
   <!-- Company Info -->
   <div class="p-4 rounded-xl bg-gray-100 border shadow-sm text-gray-700">
     <h3 class="font-semibold mb-1">Company Info</h3>
-    <p>Rock Earn LLC, based in California, United States, established in 2018. Professional simulated earning platform with interactive plans, deposit options, customer service, profile, and share link features. Trusted and user-friendly experience.</p>
+    <p>Rock Earn LLC — 2018 se based in California, United States. Professional simulated earning platform with interactive plans, deposits, and withdrawals. Trusted and user-friendly experience.</p>
+  </div>
+
+  <!-- Profile & Share -->
+  <div class="flex gap-4">
+    <button id="profileBtn" class="px-4 py-2 bg-indigo-600 text-white rounded-xl button-animate">Profile</button>
+    <button id="shareBtn" class="px-4 py-2 bg-pink-500 text-white rounded-xl button-animate">Share Link</button>
+    <button id="customerServiceBtn" class="px-4 py-2 bg-green-500 text-white rounded-xl button-animate">Customer Service</button>
   </div>
 
   <!-- Plans -->
   <div>
     <h3 class="font-semibold mb-2">Available Plans</h3>
     <div class="grid md:grid-cols-3 gap-4">
-      <!-- Example Plans (same as before) -->
       <div class="p-4 rounded-xl bg-white shadow-md card-hover flex flex-col gap-2">
         <div class="text-gray-500 text-sm">Micro</div>
         <div class="font-bold text-xl">PKR 180</div>
         <div class="text-xs text-gray-400">Daily Profit PKR 35 • Duration 30 days</div>
         <button class="mt-2 px-3 py-2 rounded-xl bg-gradient-primary text-white font-semibold buyPlan" data-profit="35" data-duration="30">Buy Plan</button>
+      </div>
+      <div class="p-4 rounded-xl bg-white shadow-md card-hover flex flex-col gap-2">
+        <div class="text-gray-500 text-sm">Starter</div>
+        <div class="font-bold text-xl">PKR 500</div>
+        <div class="text-xs text-gray-400">Daily Profit PKR 95 • Duration 35 days</div>
+        <button class="mt-2 px-3 py-2 rounded-xl bg-gradient-primary text-white font-semibold buyPlan" data-profit="95" data-duration="35">Buy Plan</button>
+      </div>
+      <div class="p-4 rounded-xl bg-white shadow-md card-hover flex flex-col gap-2">
+        <div class="text-gray-500 text-sm">Bronze</div>
+        <div class="font-bold text-xl">PKR 1000</div>
+        <div class="text-xs text-gray-400">Daily Profit PKR 200 • Duration 35 days</div>
+        <button class="mt-2 px-3 py-2 rounded-xl bg-gradient-primary text-white font-semibold buyPlan" data-profit="200" data-duration="35">Buy Plan</button>
+      </div>
+      <div class="p-4 rounded-xl bg-white shadow-md card-hover flex flex-col gap-2">
+        <div class="text-gray-500 text-sm">Silver</div>
+        <div class="font-bold text-xl">PKR 2500</div>
+        <div class="text-xs text-gray-400">Daily Profit PKR 500 • Duration 35 days</div>
+        <button class="mt-2 px-3 py-2 rounded-xl bg-gradient-primary text-white font-semibold buyPlan" data-profit="500" data-duration="35">Buy Plan</button>
+      </div>
+      <div class="p-4 rounded-xl bg-white shadow-md card-hover flex flex-col gap-2">
+        <div class="text-gray-500 text-sm">Gold</div>
+        <div class="font-bold text-xl">PKR 5000</div>
+        <div class="text-xs text-gray-400">Daily Profit PKR 1200 • Duration 35 days</div>
+        <button class="mt-2 px-3 py-2 rounded-xl bg-gradient-primary text-white font-semibold buyPlan" data-profit="1200" data-duration="35">Buy Plan</button>
       </div>
       <div class="p-4 rounded-xl bg-white shadow-md card-hover flex flex-col gap-2">
         <div class="text-gray-500 text-sm">Platinum</div>
@@ -91,36 +121,40 @@ body{font-family:'Segoe UI',sans-serif;}
     </div>
   </div>
 
-  <!-- Deposit / Withdraw Options -->
+  <!-- Deposit / Withdraw -->
   <div class="grid md:grid-cols-2 gap-4 mt-4">
 
     <!-- Deposit -->
-    <div id="depositSection" class="p-4 rounded-xl bg-gray-50 border shadow-sm flex flex-col gap-2">
-      <h3 class="font-semibold mb-2">Deposit Options</h3>
+    <div id="depositSection" class="p-4 rounded-xl bg-gray-50 border shadow-sm hidden flex flex-col gap-2">
+      <h3 class="font-semibold mb-2">Deposit Options (Simulation)</h3>
       <div class="flex flex-col gap-2">
-        <div class="flex items-center justify-between">
-          <span>Easypaisa: 03379827882</span>
-          <button class="px-2 py-1 bg-indigo-500 text-white rounded copyBtn" onclick="copyNumber('03379827882')">Copy</button>
+        <div class="flex gap-2 items-center">
+          <button class="px-4 py-2 bg-green-500 text-white rounded-xl depositBtn button-animate" data-number="03379827882">Easypaisa</button>
+          <span id="easypaisaNumber" class="font-mono">03379827882</span>
+          <button onclick="copyNumber('03379827882')" class="px-2 py-1 bg-gray-300 rounded">Copy</button>
         </div>
-        <div class="flex items-center justify-between">
-          <span>JazzCash: 03705519562</span>
-          <button class="px-2 py-1 bg-indigo-500 text-white rounded copyBtn" onclick="copyNumber('03705519562')">Copy</button>
+        <div class="flex gap-2 items-center">
+          <button class="px-4 py-2 bg-blue-500 text-white rounded-xl depositBtn button-animate" data-number="03705519562">JazzCash</button>
+          <span id="jazzCashNumber" class="font-mono">03705519562</span>
+          <button onclick="copyNumber('03705519562')" class="px-2 py-1 bg-gray-300 rounded">Copy</button>
         </div>
       </div>
     </div>
 
     <!-- Withdraw -->
-    <div id="withdrawSection" class="p-4 rounded-xl bg-gray-50 border shadow-sm flex flex-col gap-2">
-      <h3 class="font-semibold mb-2">Withdraw Options</h3>
-      <p>Withdrawal option available (simulation only)</p>
+    <div id="withdrawSection" class="p-4 rounded-xl bg-gray-50 border shadow-sm hidden flex flex-col gap-2">
+      <h3 class="font-semibold mb-2">Withdrawal (Simulation)</h3>
+      <label>Amount (PKR)</label>
+      <input id="withdrawAmount" class="p-2 rounded-lg border border-gray-200">
+      <label>Method</label>
+      <select id="withdrawMethod" class="p-2 rounded-lg border border-gray-200">
+        <option value="easypaisa">Easypaisa</option>
+        <option value="jazzcash">JazzCash</option>
+      </select>
+      <label>Note</label>
+      <input id="withdrawNote" class="p-2 rounded-lg border border-gray-200">
+      <button id="requestWithdraw" class="py-2 rounded-xl bg-amber-500 text-white button-animate">Submit Withdrawal</button>
     </div>
-  </div>
-
-  <!-- Profile / Share / Customer Service -->
-  <div class="flex flex-col gap-2 mt-4">
-    <button class="px-4 py-2 bg-blue-500 text-white rounded button-animate">Profile</button>
-    <button class="px-4 py-2 bg-green-500 text-white rounded button-animate">Share Link</button>
-    <button class="px-4 py-2 bg-indigo-600 text-white rounded button-animate">Customer Service</button>
   </div>
 
   <!-- Plan Status & Activity -->
@@ -142,7 +176,7 @@ body{font-family:'Segoe UI',sans-serif;}
 
 <script>
 // State
-const state={user:null,activities:[],balance:0,plan:null};
+const state={user:null,activities:[],balance:0,plan:null,totalDailyProfit:0};
 
 // Elements
 const landingStep=document.getElementById('landingStep');
@@ -155,8 +189,13 @@ const backLanding=document.getElementById('backLanding');
 const loginBtn=document.getElementById('loginBtn');
 const signupBtn=document.getElementById('signupBtn');
 const accountBalance=document.getElementById('accountBalance');
+const totalDailyProfitSpan=document.getElementById('totalDailyProfit');
 const planInfo=document.getElementById('planInfo');
 const planStatus=document.getElementById('planStatus');
+const depositBtns=document.querySelectorAll('.depositBtn');
+
+// Copy Number Function
+function copyNumber(num){navigator.clipboard.writeText(num);alert('Number copied: '+num);}
 
 // Load from localStorage
 window.onload=()=>{
@@ -195,15 +234,38 @@ authForm.addEventListener('submit',e=>{
 // Buy Plan
 document.querySelectorAll('.buyPlan').forEach(btn=>{
   btn.addEventListener('click',()=>{
+    document.getElementById('depositSection').classList.remove('hidden');
+    document.getElementById('withdrawSection').classList.remove('hidden');
     const profit=parseInt(btn.dataset.profit);
     const duration=parseInt(btn.dataset.duration);
     const startTime=new Date();
     state.plan={profit,duration,startTime,count:0};
+    state.totalDailyProfit=profit;
     localStorage.setItem('rockPlan',JSON.stringify(state.plan));
     planStatus.classList.remove('hidden');
     updatePlanInfo();
+    updateTotalDailyProfit();
     alert('Plan selected! Deposit to start earning daily profit.');
   });
+});
+
+// Deposit Option Buttons
+depositBtns.forEach(btn=>{btn.onclick=()=>{};});
+
+// Withdrawal Simulation
+document.getElementById('requestWithdraw').addEventListener('click',()=>{
+  const amt=parseInt(document.getElementById('withdrawAmount').value);
+  const method=document.getElementById('withdrawMethod').value;
+  const note=document.getElementById('withdrawNote').value;
+  if(!amt){alert('Enter withdrawal amount.'); return;}
+  if(amt>state.balance){alert('Insufficient balance.'); return;}
+  state.balance-=amt;localStorage.setItem('rockBalance',state.balance);
+  updateBalance();
+  const log=`Withdrawal requested PKR ${amt} via ${method} — Note: ${note||'—'} (Simulation)`;
+  state.activities.unshift(log);
+  localStorage.setItem('rockActivities',JSON.stringify(state.activities));
+  renderActivities();
+  alert('Withdrawal request submitted (simulation).');
 });
 
 // Render Activities
@@ -220,6 +282,9 @@ function renderActivities(){
 
 // Update Balance Display
 function updateBalance(){accountBalance.textContent=state.balance;}
+
+// Update Total Daily Profit
+function updateTotalDailyProfit(){totalDailyProfitSpan.textContent=state.totalDailyProfit;}
 
 // Update Plan Info
 function updatePlanInfo(){
@@ -241,12 +306,6 @@ function updatePlanInfo(){
 // Auto-update daily profit every minute
 setInterval(updatePlanInfo,60000);
 
-// Copy number function
-function copyNumber(num){
-  navigator.clipboard.writeText(num);
-  alert('Number copied: '+num);
-}
 </script>
-
 </body>
 </html>
