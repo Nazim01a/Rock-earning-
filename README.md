@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Rock Earn — Professional Dashboard</title>
+<title>Rock Earn — Pro Dashboard</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
 body{font-family:'Segoe UI',sans-serif;background:#f0f4f8;}
@@ -151,8 +151,7 @@ body{font-family:'Segoe UI',sans-serif;background:#f0f4f8;}
 </div>
 
 <script>
-// State
-const state={user:null,activities:[],balance:0,plan:null,inviteBonus:0};
+const state={user:null,balance:0,plan:null,activities:[],inviteBonus:0};
 
 // Elements
 const landingStep=document.getElementById('landingStep');
@@ -182,31 +181,28 @@ const inviteBonusSpan=document.getElementById('inviteBonus');
 const shareBtn=document.getElementById('shareBtn');
 const customerServiceBtn=document.getElementById('customerServiceBtn');
 
-// Load from localStorage
+// Load
 window.onload=()=>{
   const savedUser=JSON.parse(localStorage.getItem('rockUser'));
   const savedBalance=parseInt(localStorage.getItem('rockBalance'));
   const savedPlan=JSON.parse(localStorage.getItem('rockPlan'));
   const savedActivities=JSON.parse(localStorage.getItem('rockActivities'));
-  const savedInvite=JSON.parse(localStorage.getItem('rockInvite'));
+  const savedInvite=parseInt(localStorage.getItem('rockInvite'));
   if(savedUser){state.user=savedUser;userNameSpan.textContent=savedUser.name;dashboardStep.classList.remove('hidden');landingStep.classList.add('hidden');formStep.classList.add('hidden');}
   if(savedBalance) state.balance=savedBalance;
   if(savedPlan) state.plan=savedPlan;
   if(savedActivities) state.activities=savedActivities;
   if(savedInvite) state.inviteBonus=savedInvite;
-  updateBalance();
-  renderActivities();
-  generatePlans();
-  updatePlanInfo();
+  updateBalance();renderActivities();generatePlans();updatePlanInfo();
 };
 
-// Landing Buttons
-loginBtn.onclick=()=>{showForm('Login');};
-signupBtn.onclick=()=>{showForm('Sign Up');};
+// Landing
+loginBtn.onclick=()=>showForm('Login');
+signupBtn.onclick=()=>showForm('Sign Up');
 backLanding.onclick=()=>{formStep.classList.add('hidden');landingStep.classList.remove('hidden');};
 function showForm(type){landingStep.classList.add('hidden');formStep.classList.remove('hidden');formTitle.textContent=type;}
 
-// Submit Auth Form
+// Auth submit
 authForm.addEventListener('submit',e=>{
   e.preventDefault();
   const data=Object.fromEntries(new FormData(authForm).entries());
@@ -217,7 +213,7 @@ authForm.addEventListener('submit',e=>{
   alert(`${formTitle.textContent} successful! Select a plan to start.`);
 });
 
-// Generate Plans 180 to 7000
+// Plans 180-7000
 function generatePlans(){
   const planValues=[180,500,1000,2000,3500,5000,7000];
   const profits=[20,50,100,200,350,500,700];
@@ -233,26 +229,22 @@ function generatePlans(){
     plansContainer.appendChild(div);
   });
   document.querySelectorAll('.buyPlan').forEach(btn=>{
-    btn.addEventListener('click',()=>{
+    btn.onclick=()=>{
       document.getElementById('depositSection').classList.remove('hidden');
       document.getElementById('withdrawSection').classList.remove('hidden');
       const profit=parseInt(btn.dataset.profit);
       const duration=parseInt(btn.dataset.duration);
-      const startTime=new Date();
-      state.plan={profit,duration,startTime,count:0};
+      state.plan={profit,duration,startTime:new Date(),count:0};
       localStorage.setItem('rockPlan',JSON.stringify(state.plan));
-      planStatus.classList.remove('hidden');
-      updatePlanInfo();
+      planStatus.classList.remove('hidden');updatePlanInfo();
       alert('Plan selected! Deposit to start earning daily profit.');
-    });
+    }
   });
 }
 
-// Deposit Option Buttons
-depositBtns.forEach(btn=>{btn.onclick=()=>{depositFormFields.classList.remove('hidden');};});
-
-// Deposit Simulation
-document.getElementById('submitDeposit').addEventListener('click',()=>{
+// Deposit / Withdraw
+document.querySelectorAll('.depositBtn').forEach(btn=>btn.onclick=()=>depositFormFields.classList.remove('hidden'));
+document.getElementById('submitDeposit').onclick=()=>{
   const amt=parseInt(document.getElementById('depositAmount').value);
   const txn=document.getElementById('depositTxn').value;
   const file=document.getElementById('depositProof').files[0];
@@ -264,10 +256,8 @@ document.getElementById('submitDeposit').addEventListener('click',()=>{
   localStorage.setItem('rockActivities',JSON.stringify(state.activities));
   renderActivities();
   alert('Deposit submitted (simulation).');
-});
-
-// Withdrawal Simulation
-document.getElementById('requestWithdraw').addEventListener('click',()=>{
+};
+document.getElementById('requestWithdraw').onclick=()=>{
   const amt=parseInt(document.getElementById('withdrawAmount').value);
   const method=document.getElementById('withdrawMethod').value;
   const note=document.getElementById('withdrawNote').value;
@@ -280,42 +270,29 @@ document.getElementById('requestWithdraw').addEventListener('click',()=>{
   localStorage.setItem('rockActivities',JSON.stringify(state.activities));
   renderActivities();
   alert('Withdrawal request submitted (simulation).');
-});
+};
 
-// Render Activities
+// Activities
 function renderActivities(){
   const container=document.getElementById('activityList');
   container.innerHTML='';
-  state.activities.forEach(a=>{
-    const div=document.createElement('div');
-    div.className='p-2 border rounded bg-white shadow-sm';
-    div.textContent=a;
-    container.appendChild(div);
-  });
+  state.activities.forEach(a=>{const div=document.createElement('div');div.className='p-2 border rounded bg-white shadow-sm';div.textContent=a;container.appendChild(div);});
 }
 
-// Update Balance Display
+// Balance & Plan info
 function updateBalance(){accountBalance.textContent=state.balance;}
-
-// Update Plan Info
 function updatePlanInfo(){
   if(!state.plan) return;
   const now=new Date();
   const elapsed=Math.floor((now - new Date(state.plan.startTime))/1000);
   const daysElapsed=Math.floor(elapsed/86400);
   const toAdd=daysElapsed - state.plan.count;
-  if(toAdd>0){
-    state.balance+=state.plan.profit*toAdd;
-    state.plan.count+=toAdd;
-    localStorage.setItem('rockBalance',state.balance);
-    localStorage.setItem('rockPlan',JSON.stringify(state.plan));
-    updateBalance();
-  }
+  if(toAdd>0){state.balance+=state.plan.profit*toAdd;state.plan.count+=toAdd;localStorage.setItem('rockBalance',state.balance);localStorage.setItem('rockPlan',JSON.stringify(state.plan));updateBalance();}
   planInfo.innerHTML=`Plan Active: ${state.plan.duration} days<br>Daily Profit: PKR ${state.plan.profit}<br>Days Completed: ${state.plan.count}`;
 }
 setInterval(updatePlanInfo,60000);
 
-// Profile modal logic
+// Profile
 profileBtn.onclick=()=>{
   profileName.textContent=state.user?.name||'User';
   profileEmail.textContent=state.user?.email||'user@example.com';
@@ -323,8 +300,11 @@ profileBtn.onclick=()=>{
   inviteBonusSpan.textContent=state.inviteBonus||0;
   profileModal.classList.remove('hidden');
 };
-closeProfile.onclick=()=>{profileModal.classList.add('hidden');};
+closeProfile.onclick=()=>profileModal.classList.add('hidden');
 
-// Share link logic
-shareBtn.onclick=()=>{
-  const
+// Share & Customer
+shareBtn.onclick()=>alert('Share this link: https://rockearn.example.com?ref='+state.user?.name);
+customerServiceBtn.onclick=()=>alert('Contact customer support: support@skyinvest.com');
+</script>
+</body>
+</html>
