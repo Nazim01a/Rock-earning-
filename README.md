@@ -74,42 +74,41 @@ body{font-family:'Segoe UI',sans-serif;}
   <div>
     <h3 class="font-semibold mb-2">Available Plans</h3>
     <div class="grid md:grid-cols-3 gap-4">
-      <!-- Plans 180 - 7000 -->
-      <div class="p-4 rounded-xl bg-white shadow-md card-hover flex flex-col gap-2">
-        <div class="text-gray-500 text-sm">Micro</div>
-        <div class="font-bold text-xl">PKR 180</div>
-        <div class="text-xs text-gray-400">Daily Profit PKR 35 • Duration 30 days</div>
-        <button class="mt-2 px-3 py-2 rounded-xl bg-gradient-primary text-white font-semibold buyPlan" data-profit="35" data-duration="30">Buy Plan</button>
-      </div>
       <div class="p-4 rounded-xl bg-white shadow-md card-hover flex flex-col gap-2">
         <div class="text-gray-500 text-sm">Starter</div>
-        <div class="font-bold text-xl">PKR 500</div>
-        <div class="text-xs text-gray-400">Daily Profit PKR 95 • Duration 35 days</div>
-        <button class="mt-2 px-3 py-2 rounded-xl bg-gradient-primary text-white font-semibold buyPlan" data-profit="95" data-duration="35">Buy Plan</button>
+        <div class="font-bold text-xl">PKR 180</div>
+        <div class="text-xs text-gray-400">Daily Profit PKR 40 • Duration 30 days</div>
+        <button class="mt-2 px-3 py-2 rounded-xl bg-gradient-primary text-white font-semibold buyPlan" data-profit="40" data-duration="30">Buy Plan</button>
       </div>
       <div class="p-4 rounded-xl bg-white shadow-md card-hover flex flex-col gap-2">
-        <div class="text-gray-500 text-sm">Bronze</div>
-        <div class="font-bold text-xl">PKR 1000</div>
-        <div class="text-xs text-gray-400">Daily Profit PKR 200 • Duration 35 days</div>
-        <button class="mt-2 px-3 py-2 rounded-xl bg-gradient-primary text-white font-semibold buyPlan" data-profit="200" data-duration="35">Buy Plan</button>
+        <div class="text-gray-500 text-sm">Basic</div>
+        <div class="font-bold text-xl">PKR 500</div>
+        <div class="text-xs text-gray-400">Daily Profit PKR 120 • Duration 30 days</div>
+        <button class="mt-2 px-3 py-2 rounded-xl bg-gradient-primary text-white font-semibold buyPlan" data-profit="120" data-duration="30">Buy Plan</button>
       </div>
       <div class="p-4 rounded-xl bg-white shadow-md card-hover flex flex-col gap-2">
         <div class="text-gray-500 text-sm">Silver</div>
-        <div class="font-bold text-xl">PKR 2500</div>
-        <div class="text-xs text-gray-400">Daily Profit PKR 500 • Duration 35 days</div>
-        <button class="mt-2 px-3 py-2 rounded-xl bg-gradient-primary text-white font-semibold buyPlan" data-profit="500" data-duration="35">Buy Plan</button>
+        <div class="font-bold text-xl">PKR 1000</div>
+        <div class="text-xs text-gray-400">Daily Profit PKR 250 • Duration 30 days</div>
+        <button class="mt-2 px-3 py-2 rounded-xl bg-gradient-primary text-white font-semibold buyPlan" data-profit="250" data-duration="30">Buy Plan</button>
       </div>
       <div class="p-4 rounded-xl bg-white shadow-md card-hover flex flex-col gap-2">
         <div class="text-gray-500 text-sm">Gold</div>
-        <div class="font-bold text-xl">PKR 5000</div>
-        <div class="text-xs text-gray-400">Daily Profit PKR 1200 • Duration 35 days</div>
-        <button class="mt-2 px-3 py-2 rounded-xl bg-gradient-primary text-white font-semibold buyPlan" data-profit="1200" data-duration="35">Buy Plan</button>
+        <div class="font-bold text-xl">PKR 2500</div>
+        <div class="text-xs text-gray-400">Daily Profit PKR 650 • Duration 30 days</div>
+        <button class="mt-2 px-3 py-2 rounded-xl bg-gradient-primary text-white font-semibold buyPlan" data-profit="650" data-duration="30">Buy Plan</button>
       </div>
       <div class="p-4 rounded-xl bg-white shadow-md card-hover flex flex-col gap-2">
         <div class="text-gray-500 text-sm">Platinum</div>
+        <div class="font-bold text-xl">PKR 5000</div>
+        <div class="text-xs text-gray-400">Daily Profit PKR 1400 • Duration 30 days</div>
+        <button class="mt-2 px-3 py-2 rounded-xl bg-gradient-primary text-white font-semibold buyPlan" data-profit="1400" data-duration="30">Buy Plan</button>
+      </div>
+      <div class="p-4 rounded-xl bg-white shadow-md card-hover flex flex-col gap-2">
+        <div class="text-gray-500 text-sm">Diamond</div>
         <div class="font-bold text-xl">PKR 7000</div>
-        <div class="text-xs text-gray-400">Daily Profit PKR 1750 • Duration 35 days</div>
-        <button class="mt-2 px-3 py-2 rounded-xl bg-gradient-primary text-white font-semibold buyPlan" data-profit="1750" data-duration="35">Buy Plan</button>
+        <div class="text-xs text-gray-400">Daily Profit PKR 2000 • Duration 30 days</div>
+        <button class="mt-2 px-3 py-2 rounded-xl bg-gradient-primary text-white font-semibold buyPlan" data-profit="2000" data-duration="30">Buy Plan</button>
       </div>
     </div>
   </div>
@@ -124,13 +123,14 @@ body{font-family:'Segoe UI',sans-serif;}
         <button class="px-4 py-2 bg-green-500 text-white rounded-xl depositBtn button-animate" data-method="Easypaisa" data-number="03379827882">Easypaisa</button>
         <button class="px-4 py-2 bg-blue-500 text-white rounded-xl depositBtn button-animate" data-method="JazzCash" data-number="03705519562">JazzCash</button>
       </div>
-      <div id="depositFormFields" class="hidden flex flex-col gap-2">
+      <div id="depositFormFields" class="hidden flex flex-col gap-2 mt-2">
         <label>Amount (PKR)</label>
         <input id="depositAmount" class="p-2 rounded-lg border border-gray-200">
         <label>Transaction ID</label>
         <input id="depositTxn" class="p-2 rounded-lg border border-gray-200">
         <label>Upload Proof</label>
         <input type="file" id="depositProof" accept="image/*">
+        <button id="copyDepositNumber" class="py-2 px-4 mt-2 rounded-xl bg-indigo-500 text-white button-animate">Copy Deposit Number</button>
         <button id="submitDeposit" class="py-2 rounded-xl bg-gradient-secondary text-white button-animate">Submit Deposit</button>
       </div>
     </div>
@@ -187,6 +187,7 @@ const depositFormFields=document.getElementById('depositFormFields');
 const planInfo=document.getElementById('planInfo');
 const planStatus=document.getElementById('planStatus');
 const depositBtns=document.querySelectorAll('.depositBtn');
+const copyDepositNumber=document.getElementById('copyDepositNumber');
 
 // Load from localStorage
 window.onload=()=>{
@@ -238,8 +239,16 @@ document.querySelectorAll('.buyPlan').forEach(btn=>{
   });
 });
 
-// Deposit Option Buttons
-depositBtns.forEach(btn=>{btn.onclick=()=>{depositFormFields.classList.remove('hidden');};});
+// Deposit Option Buttons + Copy
+depositBtns.forEach(btn=>{
+  btn.onclick=()=>{
+    depositFormFields.classList.remove('hidden');
+    const number=btn.dataset.number;
+    copyDepositNumber.onclick=()=>{
+      navigator.clipboard.writeText(number).then(()=>alert(`${btn.dataset.method} number ${number} copied!`));
+    };
+  };
+});
 
 // Deposit Simulation
 document.getElementById('submitDeposit').addEventListener('click',()=>{
