@@ -1,9 +1,9 @@
-<WELCOME TO ROCK EARNING>
+<ROCK>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Rock Earn — Professional Dashboard</title>
+<title>Rock Earn — Dashboard</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
 body{font-family:'Segoe UI',sans-serif;background:#f0f4f8;}
@@ -23,7 +23,7 @@ body{font-family:'Segoe UI',sans-serif;background:#f0f4f8;}
 <header class="w-full max-w-6xl mb-6 p-6 rounded-xl bg-gradient-to-r from-indigo-600 via-pink-500 to-purple-600 text-white shadow-2xl text-center flex flex-col md:flex-row justify-between items-center">
   <div>
     <h1 class="text-4xl font-extrabold">Rock Earn</h1>
-    <p class="mt-1 text-base opacity-90">Your interactive earning dashboard</p>
+    <p class="mt-1 text-base opacity-90">Interactive Earning Dashboard</p>
   </div>
   <div class="flex gap-3 mt-4 md:mt-0">
     <button id="profileBtn" class="px-4 py-2 bg-white text-indigo-600 font-semibold rounded-xl button-animate">Profile</button>
@@ -73,29 +73,10 @@ body{font-family:'Segoe UI',sans-serif;background:#f0f4f8;}
     </div>
   </div>
 
-  <!-- Company Info & Customer Service -->
-  <div class="p-4 rounded-xl bg-gray-100 border shadow-sm text-gray-700 flex flex-col md:flex-row justify-between items-start gap-4">
-    <div>
-      <h3 class="font-semibold mb-1">Company Info</h3>
-      <p>Rock Earn LLC, founded 2018, California. Trusted simulated earning platform offering interactive plans, deposits, withdrawals and unique features for all users. Our aim is to make earning simple and secure.</p>
-    </div>
-    <div class="p-4 rounded-xl bg-gradient-customer text-white text-center">
-      <h3 class="font-semibold mb-1">Customer Service</h3>
-      <p>Email: support@rockearn.com<br>Phone: +1-555-1234</p>
-    </div>
-  </div>
-
-  <!-- My Plan -->
-  <div id="myPlanSection" class="p-4 rounded-xl bg-gray-50 border shadow-sm hidden">
-    <h3 class="font-semibold mb-2">My Plan</h3>
-    <div id="planInfo" class="text-gray-700"></div>
-  </div>
-
-  <!-- Available Plans -->
+  <!-- Plans -->
   <div>
     <h3 class="font-semibold mb-2">Available Plans</h3>
     <div class="grid md:grid-cols-3 gap-4">
-      <!-- Example: 7 plans from 180 to 5000 -->
       <div class="p-4 rounded-xl bg-white shadow-md card-hover flex flex-col gap-2">
         <div class="text-gray-500 text-sm">Starter</div>
         <div class="font-bold text-xl">PKR 180</div>
@@ -132,54 +113,48 @@ body{font-family:'Segoe UI',sans-serif;background:#f0f4f8;}
         <div class="text-xs text-gray-400">Daily Profit PKR 950 • Duration 35 days</div>
         <button class="mt-2 px-3 py-2 rounded-xl bg-gradient-primary text-white font-semibold buyPlan" data-profit="950" data-duration="35">Buy Plan</button>
       </div>
-      <div class="p-6 rounded-xl bg-yellow-200 shadow-lg card-hover flex flex-col gap-2 border-4 border-dashed border-yellow-500 text-center">
-        <div class="text-2xl font-bold">VIP</div>
-        <div class="text-gray-600">Coming Soon</div>
-        <div class="text-sm text-gray-700">Daily Profit: 1200 • Duration: 40 days</div>
-        <button class="mt-2 px-3 py-2 rounded-xl bg-gray-400 text-white cursor-not-allowed opacity-70">Coming Soon</button>
+      <div class="p-4 rounded-xl bg-white shadow-md card-hover flex flex-col gap-2">
+        <div class="text-gray-500 text-sm">VIP</div>
+        <div class="font-bold text-xl">PKR 5000</div>
+        <div class="text-xs text-gray-400">Daily Profit PKR 1200 • Duration 40 days</div>
+        <button class="mt-2 px-3 py-2 rounded-xl bg-gradient-primary text-white font-semibold buyPlan" data-profit="1200" data-duration="40">Buy Plan</button>
       </div>
     </div>
   </div>
 
-  <!-- Deposit / Withdraw -->
-  <div class="grid md:grid-cols-2 gap-4 mt-4">
-
-    <!-- Deposit -->
-    <div id="depositSection" class="p-4 rounded-xl bg-gray-50 border shadow-sm hidden flex flex-col gap-2">
-      <h3 class="font-semibold mb-2">Make a Deposit (Simulation)</h3>
-      <div class="flex flex-col gap-2">
-        <button class="px-4 py-2 bg-green-500 text-white rounded-xl depositBtn button-animate" data-method="Easypaisa" data-number="03379827882">Easypaisa</button>
-        <button class="px-4 py-2 bg-blue-500 text-white rounded-xl depositBtn button-animate" data-method="JazzCash" data-number="03705519562">JazzCash</button>
-      </div>
-      <div id="depositNumberBox" class="hidden flex flex-col gap-2 mt-2">
-        <div id="depositNumber" class="copy-box"></div>
-        <button id="copyNumber" class="copy-btn">Copy Number</button>
-      </div>
-      <div id="depositFormFields" class="hidden flex flex-col gap-2 mt-2">
-        <label>Amount (PKR)</label>
-        <input id="depositAmount" class="p-2 rounded-lg border border-gray-200">
-        <label>Transaction ID</label>
-        <input id="depositTxn" class="p-2 rounded-lg border border-gray-200">
-        <label>Upload Proof</label>
-        <input type="file" id="depositProof" accept="image/*">
-        <button id="submitDeposit" class="py-2 rounded-xl bg-gradient-secondary text-white button-animate">Submit Deposit</button>
-      </div>
+  <!-- Deposit -->
+  <div id="depositSection" class="p-4 rounded-xl bg-gray-50 border shadow-sm hidden flex flex-col gap-2 mt-4">
+    <h3 class="font-semibold mb-2">Deposit (Simulation)</h3>
+    <button class="px-4 py-2 bg-green-500 text-white rounded-xl depositBtn button-animate" data-method="Easypaisa" data-number="03379827882">Easypaisa</button>
+    <button class="px-4 py-2 bg-blue-500 text-white rounded-xl depositBtn button-animate" data-method="JazzCash" data-number="03705519562">JazzCash</button>
+    <div id="depositNumberBox" class="hidden">
+      <div id="depositNumber" class="copy-box"></div>
+      <button id="copyNumber" class="copy-btn">Copy Number</button>
     </div>
-
-    <!-- Withdraw -->
-    <div id="withdrawSection" class="p-4 rounded-xl bg-gray-50 border shadow-sm hidden flex flex-col gap-2">
-      <h3 class="font-semibold mb-2">Request Withdrawal (Simulation)</h3>
+    <div id="depositFormFields" class="hidden flex flex-col gap-2 mt-2">
       <label>Amount (PKR)</label>
-      <input id="withdrawAmount" class="p-2 rounded-lg border border-gray-200">
-      <label>Method</label>
-      <select id="withdrawMethod" class="p-2 rounded-lg border border-gray-200">
-        <option value="easypaisa">Easypaisa</option>
-        <option value="jazzcash">JazzCash</option>
-      </select>
-      <label>Note</label>
-      <input id="withdrawNote" class="p-2 rounded-lg border border-gray-200">
-      <button id="requestWithdraw" class="py-2 rounded-xl bg-amber-500 text-white button-animate">Submit Withdrawal</button>
+      <input id="depositAmount" class="p-2 rounded-lg border border-gray-200">
+      <label>Transaction ID</label>
+      <input id="depositTxn" class="p-2 rounded-lg border border-gray-200">
+      <label>Upload Proof</label>
+      <input type="file" id="depositProof" accept="image/*">
+      <button id="submitDeposit" class="py-2 rounded-xl bg-gradient-secondary text-white button-animate">Submit Deposit</button>
     </div>
+  </div>
+
+  <!-- Withdraw -->
+  <div id="withdrawSection" class="p-4 rounded-xl bg-gray-50 border shadow-sm hidden flex flex-col gap-2 mt-4">
+    <h3 class="font-semibold mb-2">Request Withdrawal (Simulation)</h3>
+    <label>Amount (PKR)</label>
+    <input id="withdrawAmount" class="p-2 rounded-lg border border-gray-200">
+    <label>Method</label>
+    <select id="withdrawMethod" class="p-2 rounded-lg border border-gray-200">
+      <option value="easypaisa">Easypaisa</option>
+      <option value="jazzcash">JazzCash</option>
+    </select>
+    <label>Note</label>
+    <input id="withdrawNote" class="p-2 rounded-lg border border-gray-200">
+    <button id="requestWithdraw" class="py-2 rounded-xl bg-amber-500 text-white button-animate">Submit Withdrawal</button>
   </div>
 
   <!-- Activity Log -->
@@ -191,10 +166,8 @@ body{font-family:'Segoe UI',sans-serif;background:#f0f4f8;}
 </main>
 
 <script>
-// State
 const state={user:null,activities:[],balance:0,plan:null,shareLink:'https://rockearn.com/ref/abc123'};
 
-// Elements
 const landingStep=document.getElementById('landingStep');
 const formStep=document.getElementById('formStep');
 const dashboardStep=document.getElementById('dashboardStep');
@@ -206,16 +179,15 @@ const loginBtn=document.getElementById('loginBtn');
 const signupBtn=document.getElementById('signupBtn');
 const accountBalance=document.getElementById('accountBalance');
 const depositFormFields=document.getElementById('depositFormFields');
+const depositNumberBox=document.getElementById('depositNumberBox');
+const depositNumber=document.getElementById('depositNumber');
+const copyNumber=document.getElementById('copyNumber');
 const planInfo=document.getElementById('planInfo');
 const planStatus=document.getElementById('myPlanSection');
 const depositBtns=document.querySelectorAll('.depositBtn');
 const profileBtn=document.getElementById('profileBtn');
 const shareBtn=document.getElementById('shareBtn');
-const depositNumberBox=document.getElementById('depositNumberBox');
-const depositNumber=document.getElementById('depositNumber');
-const copyNumber=document.getElementById('copyNumber');
 
-// Load from localStorage
 window.onload=()=>{
   const savedUser=JSON.parse(localStorage.getItem('rockUser'));
   const savedBalance=parseInt(localStorage.getItem('rockBalance'));
@@ -230,13 +202,11 @@ window.onload=()=>{
   renderActivities();
 };
 
-// Landing Buttons
 loginBtn.onclick=()=>{showForm('Login');};
 signupBtn.onclick=()=>{showForm('Sign Up');};
 backLanding.onclick=()=>{formStep.classList.add('hidden');landingStep.classList.remove('hidden');};
 function showForm(type){landingStep.classList.add('hidden');formStep.classList.remove('hidden');formTitle.textContent=type;}
 
-// Submit Auth Form
 authForm.addEventListener('submit',e=>{
   e.preventDefault();
   const data=Object.fromEntries(new FormData(authForm).entries());
@@ -247,15 +217,14 @@ authForm.addEventListener('submit',e=>{
   alert(`${formTitle.textContent} successful! Select a plan to start.`);
 });
 
-// Buy Plan
+// Buy plan
 document.querySelectorAll('.buyPlan').forEach(btn=>{
   btn.addEventListener('click',()=>{
     document.getElementById('depositSection').classList.remove('hidden');
     document.getElementById('withdrawSection').classList.remove('hidden');
     const profit=parseInt(btn.dataset.profit);
     const duration=parseInt(btn.dataset.duration);
-    const startTime=new Date();
-    state.plan={profit,duration,startTime,count:0};
+    state.plan={profit,duration,startTime:new Date(),count:0};
     localStorage.setItem('rockPlan',JSON.stringify(state.plan));
     planStatus.classList.remove('hidden');
     updatePlanInfo();
@@ -263,7 +232,7 @@ document.querySelectorAll('.buyPlan').forEach(btn=>{
   });
 });
 
-// Deposit Option Buttons
+// Deposit buttons
 depositBtns.forEach(btn=>{
   btn.onclick=()=>{
     depositFormFields.classList.remove('hidden');
@@ -272,19 +241,55 @@ depositBtns.forEach(btn=>{
   };
 });
 
-// Copy Number
 copyNumber.onclick=()=>{
   navigator.clipboard.writeText(depositNumber.textContent);
-  alert('Number copied to clipboard!');
+  alert('Number copied!');
 };
 
-// Deposit Simulation
+// Deposit submit
 document.getElementById('submitDeposit').addEventListener('click',()=>{
   const amt=parseInt(document.getElementById('depositAmount').value);
   const txn=document.getElementById('depositTxn').value;
   const file=document.getElementById('depositProof').files[0];
   if(!amt||!txn||!file){alert('Provide all deposit details.');return;}
-  state.balance+=amt;localStorage.setItem('rockBalance',state.balance);
+  state.balance+=amt;
+  localStorage.setItem('rockBalance',state.balance);
   updateBalance();
-  const log=`Deposit submitted PKR ${amt} — TXN: ${txn} (Simulation)`;
-  state.activities
+  state.activities.unshift(`Deposit submitted PKR ${amt} — TXN: ${txn} (Simulation)`);
+  localStorage.setItem('rockActivities',JSON.stringify(state.activities));
+  renderActivities();
+  alert('Deposit submitted (simulation).');
+});
+
+// Withdraw
+document.getElementById('requestWithdraw').addEventListener('click',()=>{
+  const amt=parseInt(document.getElementById('withdrawAmount').value);
+  const method=document.getElementById('withdrawMethod').value;
+  const note=document.getElementById('withdrawNote').value;
+  if(!amt){alert('Enter withdrawal amount.'); return;}
+  if(amt>state.balance){alert('Insufficient balance.'); return;}
+  state.balance-=amt;localStorage.setItem('rockBalance',state.balance);
+  updateBalance();
+  state.activities.unshift(`Withdrawal requested PKR ${amt} via ${method} — Note: ${note||'—'} (Simulation)`);
+  localStorage.setItem('rockActivities',JSON.stringify(state.activities));
+  renderActivities();
+  alert('Withdrawal request submitted (simulation).');
+});
+
+// Render activities
+function renderActivities(){
+  const container=document.getElementById('activityList');
+  container.innerHTML='';
+  state.activities.forEach(a=>{
+    const div=document.createElement('div');
+    div.className='p-2 border rounded bg-white shadow-sm';
+    div.textContent=a;
+    container.appendChild(div);
+  });
+}
+
+// Update balance
+function updateBalance(){accountBalance.textContent=state.balance;}
+
+// Profile & Share
+profileBtn.onclick=()=>{alert(`Name: ${state.user.name}\nEmail: ${
