@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Rock Earn — Professional Dashboard</title>
+<title>ROCK EARNING-MASTER— Professional Dashboard</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
 body{font-family:'Segoe UI',sans-serif;background:#f3f4f6;}
@@ -93,30 +93,36 @@ body{font-family:'Segoe UI',sans-serif;background:#f3f4f6;}
   <div>
     <h3 class="font-semibold mb-2">Available Plans</h3>
     <div class="grid md:grid-cols-3 gap-4">
+
+      <!-- Plans -->
       <div class="p-4 rounded-xl bg-white shadow-md card-hover flex flex-col gap-2">
         <div class="text-gray-500 text-sm">Starter</div>
         <div class="font-bold text-xl">PKR 285</div>
         <div class="text-xs text-gray-400">Daily Profit PKR 62 • Duration 35 days</div>
         <button class="mt-2 px-3 py-2 rounded-xl bg-gradient-primary text-white font-semibold buyPlan" data-profit="62" data-duration="35">Buy Plan</button>
       </div>
+
       <div class="p-4 rounded-xl bg-white shadow-md card-hover flex flex-col gap-2">
         <div class="text-gray-500 text-sm">Bronze</div>
         <div class="font-bold text-xl">PKR 985</div>
         <div class="text-xs text-gray-400">Daily Profit PKR 240 • Duration 35 days</div>
         <button class="mt-2 px-3 py-2 rounded-xl bg-gradient-primary text-white font-semibold buyPlan" data-profit="240" data-duration="35">Buy Plan</button>
       </div>
+
       <div class="p-4 rounded-xl bg-white shadow-md card-hover flex flex-col gap-2">
         <div class="text-gray-500 text-sm">Silver</div>
         <div class="font-bold text-xl">PKR 1985</div>
         <div class="text-xs text-gray-400">Daily Profit PKR 480 • Duration 35 days</div>
         <button class="mt-2 px-3 py-2 rounded-xl bg-gradient-primary text-white font-semibold buyPlan" data-profit="480" data-duration="35">Buy Plan</button>
       </div>
+
       <div class="p-6 rounded-xl bg-yellow-200 shadow-lg card-hover flex flex-col gap-2 border-4 border-dashed border-yellow-500 text-center">
         <div class="text-2xl font-bold">Platinum</div>
         <div class="text-gray-600">Coming Soon</div>
         <div class="text-sm text-gray-700">Daily Profit: 600 • Duration: 40 days</div>
         <button class="mt-2 px-3 py-2 rounded-xl bg-gray-400 text-white cursor-not-allowed opacity-70">Coming Soon</button>
       </div>
+
     </div>
   </div>
 
@@ -127,17 +133,19 @@ body{font-family:'Segoe UI',sans-serif;background:#f3f4f6;}
     <div id="depositSection" class="p-4 rounded-xl bg-gray-50 border shadow-sm hidden flex flex-col gap-2">
       <h3 class="font-semibold mb-2">Make a Deposit (Simulation)</h3>
       <div class="flex flex-col gap-2">
-        <button class="px-4 py-2 bg-green-500 text-white rounded-xl depositBtn button-animate" data-method="Easypaisa" data-number="03379827882">Easypaisa (03379827882)</button>
-        <button class="px-4 py-2 bg-blue-500 text-white rounded-xl depositBtn button-animate" data-method="JazzCash" data-number="03705519562">JazzCash (03705519562)</button>
+        <button class="px-4 py-2 bg-green-500 text-white rounded-xl depositBtn button-animate" data-method="Easypaisa" data-number="03379827882">Easypaisa</button>
+        <button class="px-4 py-2 bg-blue-500 text-white rounded-xl depositBtn button-animate" data-method="JazzCash" data-number="03705519562">JazzCash</button>
       </div>
-      <div id="depositFormFields" class="hidden flex flex-col gap-2 mt-2">
+      <div id="selectedDeposit" class="hidden mt-2 p-3 rounded-xl bg-gray-100 border">
+        <p><strong>Selected Method:</strong> <span id="depositMethodName"></span></p>
+        <p><strong>Number:</strong> <span id="depositMethodNumber"></span></p>
         <label>Amount (PKR)</label>
         <input id="depositAmount" class="p-2 rounded-lg border border-gray-200">
         <label>Transaction ID</label>
         <input id="depositTxn" class="p-2 rounded-lg border border-gray-200">
         <label>Upload Proof</label>
         <input type="file" id="depositProof" accept="image/*">
-        <button id="submitDeposit" class="py-2 rounded-xl bg-gradient-secondary text-white button-animate">Submit Deposit</button>
+        <button id="submitDeposit" class="py-2 rounded-xl bg-gradient-secondary text-white button-animate mt-2">Submit Deposit</button>
       </div>
     </div>
 
@@ -180,7 +188,7 @@ const backLanding=document.getElementById('backLanding');
 const loginBtn=document.getElementById('loginBtn');
 const signupBtn=document.getElementById('signupBtn');
 const accountBalance=document.getElementById('accountBalance');
-const depositFormFields=document.getElementById('depositFormFields');
+const depositFormFields=document.getElementById('selectedDeposit');
 const planInfo=document.getElementById('planInfo');
 const planStatus=document.getElementById('myPlanSection');
 const depositBtns=document.querySelectorAll('.depositBtn');
@@ -235,8 +243,16 @@ document.querySelectorAll('.buyPlan').forEach(btn=>{
   });
 });
 
-// Deposit Option Buttons
-depositBtns.forEach(btn=>{btn.onclick=()=>{depositFormFields.classList.remove('hidden');};});
+// Deposit Buttons Logic
+depositBtns.forEach(btn=>{
+  btn.onclick=()=>{
+    const methodName=btn.dataset.method;
+    const methodNumber=btn.dataset.number;
+    document.getElementById('depositMethodName').textContent=methodName;
+    document.getElementById('depositMethodNumber').textContent=methodNumber;
+    depositFormFields.classList.remove('hidden');
+  };
+});
 
 // Deposit Simulation
 document.getElementById('submitDeposit').addEventListener('click',()=>{
@@ -253,7 +269,7 @@ document.getElementById('submitDeposit').addEventListener('click',()=>{
   alert('Deposit submitted (simulation).');
 });
 
-// Withdrawal Simulation
+// Withdraw Simulation
 document.getElementById('requestWithdraw').addEventListener('click',()=>{
   const amt=parseInt(document.getElementById('withdrawAmount').value);
   const method=document.getElementById('withdrawMethod').value;
@@ -281,7 +297,7 @@ function renderActivities(){
   });
 }
 
-// Update Balance Display
+// Update Balance
 function updateBalance(){accountBalance.textContent=state.balance;}
 
 // Update Plan Info
@@ -298,18 +314,4 @@ function updatePlanInfo(){
     localStorage.setItem('rockPlan',JSON.stringify(state.plan));
     updateBalance();
   }
-  planInfo.innerHTML=`Plan Active: ${state.plan.duration} days<br>Daily Profit: PKR ${state.plan.profit}<br>Days Completed: ${state.plan.count}`;
-}
-
-// Auto-update daily profit every minute
-setInterval(updatePlanInfo,60000);
-
-// Profile Button
-profileBtn.onclick=()=>{alert(`Name: ${state.user.name}\nEmail: ${state.user.email}\nBalance: PKR ${state.balance}`);};
-
-// Share Button
-shareBtn.onclick=()=>{navigator.clipboard.writeText(state.shareLink);alert('Share link copied to clipboard!');};
-</script>
-
-</body>
-</html>
+  planInfo.innerHTML=`Plan Active: ${state.plan.duration} days<br>Daily Profit: PKR ${state.plan.profit}<br>Days Completed: ${state.plan
