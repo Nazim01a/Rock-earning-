@@ -1,3 +1,4 @@
+<WELCOME TO ROCK EARNING>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -13,7 +14,6 @@ body{font-family:'Segoe UI',sans-serif;background:#f3f4f6;}
 .bg-gradient-secondary{background:linear-gradient(90deg,#f97316,#facc15);}
 .bg-gradient-success{background:linear-gradient(90deg,#10b981,#3b82f6);}
 .bg-gradient-customer{background:linear-gradient(90deg,#f43f5e,#ec4899);}
-.bg-gradient-activity{background:linear-gradient(90deg,#6366f1,#ec4899);}
 </style>
 </head>
 <body class="min-h-screen flex flex-col items-center p-4">
@@ -85,7 +85,7 @@ body{font-family:'Segoe UI',sans-serif;background:#f3f4f6;}
 
   <!-- My Plan -->
   <div id="myPlanSection" class="p-4 rounded-xl bg-gray-50 border shadow-sm hidden">
-    <h3 class="font-semibold mb-2">My Plans</h3>
+    <h3 class="font-semibold mb-2">My Plan</h3>
     <div id="planInfo" class="text-gray-700"></div>
   </div>
 
@@ -110,18 +110,6 @@ body{font-family:'Segoe UI',sans-serif;background:#f3f4f6;}
         <div class="font-bold text-xl">PKR 1985</div>
         <div class="text-xs text-gray-400">Daily Profit PKR 480 • Duration 35 days</div>
         <button class="mt-2 px-3 py-2 rounded-xl bg-gradient-primary text-white font-semibold buyPlan" data-profit="480" data-duration="35">Buy Plan</button>
-      </div>
-      <div class="p-4 rounded-xl bg-white shadow-md card-hover flex flex-col gap-2">
-        <div class="text-gray-500 text-sm">Gold</div>
-        <div class="font-bold text-xl">PKR 3985</div>
-        <div class="text-xs text-gray-400">Daily Profit PKR 960 • Duration 35 days</div>
-        <button class="mt-2 px-3 py-2 rounded-xl bg-gradient-primary text-white font-semibold buyPlan" data-profit="960" data-duration="35">Buy Plan</button>
-      </div>
-      <div class="p-4 rounded-xl bg-white shadow-md card-hover flex flex-col gap-2">
-        <div class="text-gray-500 text-sm">Diamond</div>
-        <div class="font-bold text-xl">PKR 5985</div>
-        <div class="text-xs text-gray-400">Daily Profit PKR 1440 • Duration 35 days</div>
-        <button class="mt-2 px-3 py-2 rounded-xl bg-gradient-primary text-white font-semibold buyPlan" data-profit="1440" data-duration="35">Buy Plan</button>
       </div>
       <div class="p-6 rounded-xl bg-yellow-200 shadow-lg card-hover flex flex-col gap-2 border-4 border-dashed border-yellow-500 text-center">
         <div class="text-2xl font-bold">Platinum</div>
@@ -304,4 +292,24 @@ function updatePlanInfo(){
   const daysElapsed=Math.floor(elapsed/86400);
   const toAdd=daysElapsed - state.plan.count;
   if(toAdd>0){
-    state.balance+=state.plan# Rock-earning-
+    state.balance+=state.plan.profit*toAdd;
+    state.plan.count+=toAdd;
+    localStorage.setItem('rockBalance',state.balance);
+    localStorage.setItem('rockPlan',JSON.stringify(state.plan));
+    updateBalance();
+  }
+  planInfo.innerHTML=`Plan Active: ${state.plan.duration} days<br>Daily Profit: PKR ${state.plan.profit}<br>Days Completed: ${state.plan.count}`;
+}
+
+// Auto-update daily profit every minute
+setInterval(updatePlanInfo,60000);
+
+// Profile Button
+profileBtn.onclick=()=>{alert(`Name: ${state.user.name}\nEmail: ${state.user.email}\nBalance: PKR ${state.balance}`);};
+
+// Share Button
+shareBtn.onclick=()=>{navigator.clipboard.writeText(state.shareLink);alert('Share link copied to clipboard!');};
+</script>
+
+</body>
+</html>
