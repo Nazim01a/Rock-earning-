@@ -14,28 +14,30 @@ body{font-family:'Segoe UI',sans-serif;background:linear-gradient(120deg,#0f1123
 .btn-deposit{background:#1dd11d;}
 .btn-withdraw{background:#f5b700;color:black;}
 .btn-logout{background:#ff4d4d;}
-.btn-section{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;}
-.section-btn{flex:1;min-width:120px;background:#5d5fef;padding:15px;border-radius:14px;text-align:center;cursor:pointer;transition:all 0.3s;}
-.section-btn:hover{transform: translateY(-5px);box-shadow:0 10px 20px rgba(0,0,0,0.6);}
+.btn-section{margin-top:15px;}
+.btn-section div{margin-bottom:10px;}
 .scroll{max-height:300px;overflow-y:auto;}
 input, select{background:#1e213d;border:none;padding:10px;width:100%;border-radius:10px;color:white;margin-top:8px;}
 </style>
 </head>
-<body><div class="logo">🚀 Rock Earn</div><!-- AUTH PAGE --><div id="authPage" class="p-5 max-w-md mx-auto">
+<body>
+<div class="logo">🚀 Rock Earn</div>
+<div id="authPage" class="p-5 max-w-md mx-auto">
 <h2 class="text-2xl font-bold mb-4 text-center">Sign Up</h2>
 <input id="su_name" placeholder="Username">
 <input id="su_email" placeholder="Email">
 <input id="su_pass" type="password" placeholder="Password">
-<button class="btn" onclick="signup()">Sign Up</button><hr class="my-4 border-gray-600">
+<button class="btn" onclick="signup()">Sign Up</button>
+<hr class="my-4 border-gray-600">
 <h2 class="text-2xl font-bold mb-4 text-center">Login</h2>
 <input id="li_email" placeholder="Email">
 <input id="li_pass" type="password" placeholder="Password">
 <button class="btn" onclick="login()">Login</button>
-</div><!-- DASHBOARD --><div id="dashboard" class="hidden p-5 max-w-5xl mx-auto">
+</div><div id="dashboard" class="hidden p-5 max-w-5xl mx-auto">
 <div class="card">
 <p id="welcome" class="text-xl font-semibold mb-2"></p>
 <p>Available Balance: <span id="balance">₨ 0</span></p>
-<div class="btn-section mt-4">
+<div class="btn-section">
 <div class="section-btn" onclick="showDeposit()">💰 Deposit</div>
 <div class="section-btn" onclick="showWithdraw()">🏧 Withdraw</div>
 <div class="section-btn" onclick="showPlans()">📈 Plans</div>
@@ -43,8 +45,7 @@ input, select{background:#1e213d;border:none;padding:10px;width:100%;border-radi
 <div class="section-btn" onclick="showProfile()">👤 Profile</div>
 <div class="section-btn" onclick="logout()">🚪 Logout</div>
 </div>
-</div>
-<div id="plansArea" class="scroll hidden"></div>
+</div><div id="plansArea" class="scroll hidden"></div>
 <div id="depositArea" class="hidden card"></div>
 <div id="withdrawArea" class="hidden card"></div>
 <div id="shareArea" class="hidden card"></div>
@@ -53,7 +54,6 @@ let users = JSON.parse(localStorage.getItem("rockUsers")) || [];
 let currentUser = JSON.parse(localStorage.getItem("rockCurrentUser")) || null;
 let balance = Number(localStorage.getItem("rockBalance")) || 0;
 
-// Updated 15 plans from 180 to 50000 PKR with high profits
 const plans = [
   {name:"Starter Plan", price:180, profit:30, days:20},
   {name:"Bronze Plan", price:500, profit:90, days:25},
@@ -78,33 +78,33 @@ window.onload = function(){
 };
 
 function signup(){
-  let n = document.getElementById("su_name").value.trim();
-  let e = document.getElementById("su_email").value.trim();
-  let p = document.getElementById("su_pass").value.trim();
+  let n=document.getElementById("su_name").value.trim();
+  let e=document.getElementById("su_email").value.trim();
+  let p=document.getElementById("su_pass").value.trim();
   if(!n||!e||!p){alert("Fill all fields"); return;}
   if(users.find(u=>u.email===e)){alert("Email already registered"); return;}
-  let u = {name:n,email:e,password:p};
+  let u={name:n,email:e,password:p};
   users.push(u);
-  localStorage.setItem("rockUsers", JSON.stringify(users));
-  currentUser = u;
-  localStorage.setItem("rockCurrentUser", JSON.stringify(currentUser));
+  localStorage.setItem("rockUsers",JSON.stringify(users));
+  currentUser=u;
+  localStorage.setItem("rockCurrentUser",JSON.stringify(currentUser));
   localStorage.setItem("rockBalance", balance);
   showDashboard();
 }
 
 function login(){
-  let e = document.getElementById("li_email").value.trim();
-  let p = document.getElementById("li_pass").value.trim();
+  let e=document.getElementById("li_email").value.trim();
+  let p=document.getElementById("li_pass").value.trim();
   if(!e||!p){alert("Fill all fields"); return;}
-  let u = users.find(u=>u.email===e && u.password===p);
+  let u=users.find(u=>u.email===e && u.password===p);
   if(!u){alert("Invalid credentials"); return;}
-  currentUser = u;
-  localStorage.setItem("rockCurrentUser", JSON.stringify(currentUser));
+  currentUser=u;
+  localStorage.setItem("rockCurrentUser",JSON.stringify(currentUser));
   showDashboard();
 }
 
 function logout(){
-  currentUser = null;
+  currentUser=null;
   localStorage.removeItem("rockCurrentUser");
   document.getElementById("dashboard").style.display="none";
   document.getElementById("authPage").style.display="block";
@@ -113,14 +113,14 @@ function logout(){
 function showDashboard(){
   document.getElementById("authPage").style.display="none";
   document.getElementById("dashboard").style.display="block";
-  document.getElementById("welcome").innerText = "Welcome, "+currentUser.name;
+  document.getElementById("welcome").innerText="Welcome, "+currentUser.name;
   updateBalance();
   hideAllSections();
 }
 
 function updateBalance(){
   balance = Number(localStorage.getItem("rockBalance")) || 0;
-  document.getElementById("balance").innerText = "₨ "+balance;
+  document.getElementById("balance").innerText="₨ "+balance;
 }
 
 function hideAllSections(){
@@ -133,26 +133,73 @@ function hideAllSections(){
 
 function showPlans(){
   hideAllSections();
-  let html = '';
+  let html='';
   plans.forEach(p=>{
     if(p.price===0){
-      html += `<div class='card'><h3>${p.name}</h3><p class='text-yellow-400'>Coming Soon</p></div>`;
+      html+=`<div class='card'><h3>${p.name}</h3><p class='text-yellow-400'>Coming Soon</p></div>`;
     } else {
-      html += `<div class='card'><h3>${p.name}</h3><p>Price: ${p.price} PKR</p><p>Daily Profit: ${p.profit}</p><p>Days: ${p.days}</p><button class='btn btn-deposit mt-2' onclick='showDeposit(${p.price})'>Buy Now</button></div>`;
+      html+=`<div class='card'><h3>${p.name}</h3><p>Price: ${p.price} PKR</p><p>Daily Profit: ${p.profit}</p><p>Days: ${p.days}</p><button class='btn btn-deposit mt-2' onclick='showDeposit(${p.price})'>Buy Now</button></div>`;
     }
   });
-  let area = document.getElementById("plansArea");
-  area.innerHTML = html;
+  let area=document.getElementById("plansArea");
+  area.innerHTML=html;
   area.classList.remove("hidden");
 }
 
-// Deposit, Withdraw, Share, Profile placeholders
-function showDeposit(amount=0){/* ... */}
-function submitDeposit(){/* ... */}
-function showWithdraw(){/* ... */}
-function submitWithdraw(){/* ... */}
-function showShare(){/* ... */}
-function copyLink(){/* ... */}
-function showProfile(){/* ... */}
+function showDeposit(amount=0){
+  hideAllSections();
+  let html=`<h2>Deposit</h2>
+  <label>Choose Method:</label>
+  <select id='dep_method'>
+  <option value='jazz'>JazzCash</option>
+  <option value='easy'>EasyPaisa</option>
+  </select>
+  <p>JazzCash: 03705519562</p>
+  <p>EasyPaisa: 03379827882</p>
+  <input id='dep_amount' placeholder='Amount' value='${amount}'>
+  <input id='dep_trx' placeholder='Transaction ID'>
+  <input type='file' id='dep_proof'>
+  <button class='btn btn-deposit' onclick='submitDeposit()'>Submit Deposit</button>`;
+  let area=document.getElementById("depositArea");
+  area.innerHTML=html;
+  area.classList.remove("hidden");
+}
+
+function submitDeposit(){
+  let amt=Number(document.getElementById('dep_amount').value);
+  if(!amt||amt<=0){alert("Enter valid amount");return;}
+  balance+=amt;
+  localStorage.setItem('rockBalance',balance);
+  alert('Deposit successful!');
+  showDashboard();
+}
+
+function showWithdraw(){
+  hideAllSections();
+  let html=`<h2>Withdraw</h2>
+  <label>Choose Method:</label>
+  <select id='with_method'>
+  <option value='jazz'>JazzCash</option>
+  <option value='easy'>EasyPaisa</option>
+  <option value='bank'>Bank</option>
+  </select>
+  <input id='with_name' placeholder='Full Name'>
+  <input id='with_account' placeholder='Account / Number'>
+  <input id='with_amount' placeholder='Amount'>
+  <button class='btn btn-withdraw' onclick='submitWithdraw()'>Submit Withdrawal</button>`;
+  let area=document.getElementById("withdrawArea");
+  area.innerHTML=html;
+  area.classList.remove("hidden");
+}
+
+function submitWithdraw(){
+  let amt=Number(document.getElementById('with_amount').value);
+  if(!amt||amt<=0){alert("Enter valid amount");return;}
+  if(amt>balance){alert("Insufficient balance");return;}
+  balance-=amt;
+  localStorage.setItem('rockBalance',balance);
+  alert('Withdrawal requested successfully!');
+  showDashboard();
+}
 </script></body>
 </html>
