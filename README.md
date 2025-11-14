@@ -1,4 +1,4 @@
-<ROCK ON><html lang="en">
+<ROCK EARNING><html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,20 +7,20 @@
 <style>
 body{font-family:'Segoe UI',sans-serif;background:linear-gradient(120deg,#0f1123,#1c1f3b);color:white;margin:0;}
 .logo{font-size:28px;font-weight:bold;text-align:center;margin:20px 0;background: linear-gradient(90deg,#5d5fef,#00ffe0); -webkit-background-clip: text; -webkit-text-fill-color: transparent;}
-.card{background:#16182e;border-radius:16px;padding:20px;color:white;box-shadow:0 10px 25px rgba(0,0,0,0.5);margin-bottom:15px;transition: transform 0.2s;}
-.card:hover{transform: translateY(-3px);}
+.card{background:#1b1f37;border-radius:16px;padding:20px;color:white;box-shadow:0 10px 25px rgba(0,0,0,0.5);margin-bottom:15px;transition: transform 0.3s;}
+.card:hover{transform: translateY(-5px);}
 .btn{padding:12px 20px;border-radius:12px;color:white;font-weight:600;cursor:pointer;display:inline-block;margin-top:8px;width:100%;text-align:center;transition:all 0.3s;}
 .btn:hover{opacity:0.85;transform: scale(1.05);}
 .btn-deposit{background:#1dd11d;}
 .btn-withdraw{background:#f5b700;color:black;}
 .btn-logout{background:#ff4d4d;}
-.btn-section{margin-top:15px;}
-.btn-section div{margin-bottom:10px;padding:10px;background:#2a2e4a;border-radius:12px;cursor:pointer;transition:0.3s;}
-.btn-section div:hover{background:#3b3f61;}
-.scroll{max-height:300px;overflow-y:auto;}
+.dashboard-icons{display:flex;flex-direction:column;gap:15px;margin-top:20px;}
+.dashboard-icons div{padding:15px;background:#2a2e4a;border-radius:12px;cursor:pointer;transition:0.3s;font-size:18px;}
+.dashboard-icons div:hover{background:#3b3f61;}
+.scroll{max-height:350px;overflow-y:auto;}
 input, select{background:#1e213d;border:none;padding:10px;width:100%;border-radius:10px;color:white;margin-top:8px;}
-.profile-content{display:flex;gap:20px;flex-wrap:wrap;}
-.profile-card{flex:1;min-width:250px;}
+.profile-content{display:flex;flex-direction:column;gap:20px;}
+.profile-card{padding:15px;background:#2a2e4a;border-radius:12px;}
 </style>
 </head>
 <body>
@@ -37,10 +37,9 @@ input, select{background:#1e213d;border:none;padding:10px;width:100%;border-radi
 <input id="li_pass" type="password" placeholder="Password">
 <button class="btn" onclick="login()">Login</button>
 </div><div id="dashboard" class="hidden p-5 max-w-5xl mx-auto">
-<div class="card">
-<p id="welcome" class="text-xl font-semibold mb-2"></p>
+<p id="welcome" class="text-xl font-semibold mb-4"></p>
 <p>Available Balance: <span id="balance">₨ 0</span></p>
-<div class="btn-section">
+<div class="dashboard-icons">
 <div onclick="showDeposit()">💰 Deposit</div>
 <div onclick="showWithdraw()">🏧 Withdraw</div>
 <div onclick="showPlans()">📈 Plans</div>
@@ -49,7 +48,7 @@ input, select{background:#1e213d;border:none;padding:10px;width:100%;border-radi
 <div onclick="showCompany()">🏢 Company Details</div>
 <div onclick="logout()">🚪 Logout</div>
 </div>
-</div><div id="plansArea" class="scroll hidden"></div>
+<div id="plansArea" class="scroll hidden"></div>
 <div id="depositArea" class="hidden card"></div>
 <div id="withdrawArea" class="hidden card"></div>
 <div id="shareArea" class="hidden card"></div>
@@ -136,9 +135,7 @@ function hideAllSections(){
 
 function showProfile(){
   hideAllSections();
-  let html=`<div class='profile-content'>
-  <div class='profile-card'><h3>User Info</h3><p>Username: ${currentUser.name}</p><p>Email: ${currentUser.email}</p></div>
-  </div>`;
+  let html=`<div class='profile-content'><div class='profile-card'><h3>User Info</h3><p>Username: ${currentUser.name}</p><p>Email: ${currentUser.email}</p></div></div>`;
   let area=document.getElementById("profileArea");
   area.innerHTML=html;
   area.classList.remove("hidden");
@@ -146,12 +143,7 @@ function showProfile(){
 
 function showCompany(){
   hideAllSections();
-  let html=`<h3>Company Details</h3>
-  <p>Company: Rock Earn Digital Pvt Ltd</p>
-  <p>Founded: 2018</p>
-  <p>Based in: California, United States</p>
-  <p>Services: Crypto, Binance integration, Earning Plans</p>
-  <p>Support: 24/7</p>`;
+  let html=`<h3>Company Details</h3><p>Company: Rock Earn Digital Pvt Ltd</p><p>Founded: 2018</p><p>Based in: California, United States</p><p>Services: Crypto, Binance integration, Earning Plans</p><p>Support: 24/7</p>`;
   let area=document.getElementById("companyArea");
   area.innerHTML=html;
   area.classList.remove("hidden");
