@@ -2,7 +2,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Rock Earn Pro — Premium Gold Dashboard</title>
+<title>Rock Earn Pro — Premium Dashboard</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 <style>
@@ -23,13 +23,13 @@ input:focus, select:focus{outline:none;box-shadow:0 0 10px #0ff;}
 .plan-item{border:1px solid #0ff;padding:12px;margin-bottom:10px;border-radius:12px;transition:0.2s;animation:planFade 0.5s ease forwards;}
 @keyframes planFade{0%{opacity:0;transform:translateX(-20px);}100%{opacity:1;transform:translateX(0);}}
 .plan-item:hover{box-shadow:0 0 15px #0ff;transform:scale(1.02);}
-.header-logo{font-size:36px;font-weight:800;text-align:center;background:linear-gradient(90deg,#FFD700,#FF8C00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:logoGlow 2s infinite alternate;}
-@keyframes logoGlow{0%{text-shadow:0 0 5px #FFD700;}50%{text-shadow:0 0 20px #FFD700;}100%{text-shadow:0 0 5px #FFD700;}}
+.header-logo{font-size:36px;font-weight:800;text-align:center;background:linear-gradient(90deg,#1e3a8a,#4f46e5);-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:logoGlow 2s infinite alternate;}
+@keyframes logoGlow{0%{text-shadow:0 0 5px #4f46e5;}50%{text-shadow:0 0 20px #4f46e5;}100%{text-shadow:0 0 5px #4f46e5;}}
 .logout-btn{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);width:200px;}
 </style>
 </head>
 <body class="p-4"><!-- HEADER --><header class="text-center py-6">
-  <div class="header-logo">🚀 Rock Earn Premium Gold</div>
+  <div class="header-logo">🚀 Rock Earn Premium</div>
   <p class="opacity-70">Since 2018 • Crypto FinTech • Partnered with Binance</p>
 </header><!-- AUTH --><div id="authBox" class="card mb-6">
   <h2 class="text-2xl font-bold mb-4 text-center">Login / Sign Up</h2>
