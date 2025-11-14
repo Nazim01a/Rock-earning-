@@ -15,6 +15,8 @@ input,select{padding:10px;border-radius:10px;width:100%;margin-bottom:10px;backg
 .icon-btn{display:flex;align-items:center;gap:8px;}
 #sidePanel{position:fixed;top:0;right:-400px;width:380px;height:100vh;background:#0f172a;padding:20px;transition:0.4s;overflow-y:auto;z-index:999;}
 #sidePanel.active{right:0;}
+.plan-list{margin-top:20px;}
+.plan-item{border:1px solid #333;padding:10px;margin-bottom:8px;border-radius:10px;}
 </style>
 </head>
 <body class="p-4"><!-- AUTH --><div id="authBox" class="card mb-6">
@@ -54,6 +56,9 @@ function logoutUser(){currentUser=null;localStorage.removeItem('reCurrent');loca
 let plans=[{name:'Starter',amount:180,daily:20},{name:'Basic',amount:350,daily:50},{name:'Pro',amount:500,daily:80},{name:'Premium',amount:1000,daily:180},{name:'Ultra',amount:2500,daily:450},{name:'Mega',amount:5000,daily:950},{name:'Elite',amount:7000,daily:1350},{name:'Mega Booster',amount:10000,daily:1500,coming:true},{name:'Ultra Pro',amount:15000,daily:2300,coming:true},{name:'Crypto Miner',amount:20000,daily:3500,coming:true}];
 
 function openPanel(type,amount=0,name=''){let panel=document.getElementById('sidePanel');panel.classList.add('active');panel.innerHTML='';
+if(type==='plans'){
+  panel.innerHTML='<h2>All Plans</h2><div class="plan-list">'+plans.map(p=>`<div class='plan-item'><b>${p.name}</b> - ${p.amount} PKR - Daily Profit: ${p.daily} PKR ${p.coming?'(Coming Soon)':''}<button class='btn mt-1' onclick='buyPlan(${p.amount},"${p.name}")'>Buy Now</button></div>`).join('')+'</div>';
+}
 if(type==='profile'){panel.innerHTML=`<h2>Profile</h2><p>Name: ${currentUser.name}</p><p>Email: ${currentUser.email}</p><p>Plans Bought: ${currentUser.plans.map(p=>p.name).join(', ')||'None'}</p><p>Notifications: ${currentUser.notifications?'On':'Off'}</p>`;}
 if(type==='deposit'){panel.innerHTML=`<h2>Deposit</h2><p>Plan Selected: ${name}</p><p>Amount: ${amount} PKR</p><p>JazzCash: 03705519562 <button onclick="copyText('03705519562')" class='btn'>Copy</button></p><p>EasyPaisa: 03379827882 <button onclick="copyText('03379827882')" class='btn'>Copy</button></p><input type='file' id='proofFile' class='mt-2'/><button class='btn mt-2 w-full' onclick='uploadProof()'>Upload Proof</button><input type='text' placeholder='Transaction ID' class='mt-2 w-full p-2 rounded bg-white/20'/><button class='btn mt-2 w-full' onclick='confirmDeposit()'>Confirm Deposit</button>`;}
 if(type==='withdraw'){panel.innerHTML=`<h2>Withdraw</h2><input placeholder='Amount'/><select><option>JazzCash</option><option>EasyPaisa</option><option>Bank</option></select><input placeholder='Account Number'/><button class='btn w-full mt-2'>Withdraw</button>`;}
