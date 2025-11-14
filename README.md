@@ -1,4 +1,4 @@
-<ROCK ON><html lang="en">
+<ROCKS ON><html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,8 +14,8 @@ body{font-family:'Segoe UI',sans-serif;background:linear-gradient(120deg,#0f1123
 .btn-deposit{background:#1dd11d;}
 .btn-withdraw{background:#f5b700;color:black;}
 .btn-logout{background:#ff4d4d;}
-.dashboard-icons{display:flex;flex-direction:column;gap:15px;margin-top:20px;}
-.dashboard-icons div{padding:15px;background:#2a2e4a;border-radius:12px;cursor:pointer;transition:0.3s;font-size:18px;}
+.dashboard-icons{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:15px;margin-top:20px;}
+.dashboard-icons div{padding:15px;background:#2a2e4a;border-radius:12px;cursor:pointer;transition:0.3s;text-align:center;font-size:18px;}
 .dashboard-icons div:hover{background:#3b3f61;}
 .scroll{max-height:350px;overflow-y:auto;}
 input, select{background:#1e213d;border:none;padding:10px;width:100%;border-radius:10px;color:white;margin-top:8px;}
