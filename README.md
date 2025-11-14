@@ -1,4 +1,4 @@
-<ROCKS>
+<ROCK>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
@@ -6,7 +6,6 @@
 <title>Rock Earn Official</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
-/* BODY & CARD */
 body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(120deg,#0f1123,#1c1f3b); color:white; margin:0; }
 .card { background:#16182e; border-radius:14px; padding:18px; color:white; box-shadow:0 8px 20px rgba(0,0,0,0.5);}
 .btn { background:#5d5fef; padding:10px 18px; border-radius:10px; color:white; font-weight:600; cursor:pointer; text-align:center; display:inline-block; }
@@ -15,12 +14,11 @@ input, select { background:#1e213d; border:none; padding:10px; width:100%; borde
 h2,h3 { margin:0; }
 .logo { font-size:28px; font-weight:bold; background: linear-gradient(90deg,#5d5fef,#00ffe0); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
 .scroll { max-height:300px; overflow-y:auto; }
-
-/* BUTTON COLORS */
 .btn-deposit { background:#1dd11d; }
 .btn-withdraw { background:#f5b700; color:black; }
 .btn-back { background:#555; }
-
+.table { width:100%; border-collapse:collapse; margin-top:10px;}
+.table th, .table td { border:1px solid #444; padding:8px; text-align:left; }
 </style>
 </head>
 <body>
@@ -42,14 +40,12 @@ h2,h3 { margin:0; }
 
 <!-- DASHBOARD -->
 <div id="dashboard" class="hidden p-5 max-w-5xl mx-auto">
-
-<!-- BALANCE + ACTIONS -->
 <div class="card mb-4 flex justify-between items-center">
   <div>
     <div class="text-gray-400">Available Balance</div>
     <div id="balance" class="text-2xl font-bold">₨ 0</div>
   </div>
-  <div class="flex gap-2">
+  <div class="flex gap-2 flex-wrap">
     <button class="btn" onclick="showDeposit()">Deposit</button>
     <button class="btn" onclick="showWithdraw()">Withdraw</button>
     <button class="btn" onclick="showShare()">Share Link</button>
@@ -59,10 +55,8 @@ h2,h3 { margin:0; }
   </div>
 </div>
 
-<!-- PLANS -->
 <h3 class="text-xl font-bold mb-2">Investment Plans</h3>
 <div id="plansArea" class="grid md:grid-cols-2 gap-4 scroll"></div>
-
 </div>
 
 <!-- PLAN PAGE -->
@@ -84,18 +78,26 @@ h2,h3 { margin:0; }
 <input id="trxid" placeholder="Transaction ID">
 <input id="proof" type="file">
 <button class="btn btn-deposit w-full mt-4" onclick="submitDeposit()">Submit Deposit</button>
+
+<h3 class="text-xl font-bold mt-4">Deposit History</h3>
+<div id="depositHistory"></div>
 </div>
 
 <!-- WITHDRAW PAGE -->
 <div id="withdrawPage" class="hidden p-5 max-w-md mx-auto card">
 <h2 class="text-2xl font-bold mb-3">Withdraw</h2>
+<label>Select Method:</label>
 <select id="withdrawMethod">
 <option value="jazz">JazzCash</option>
 <option value="easy">EasyPaisa</option>
+<option value="bank">Bank Account</option>
 </select>
-<input id="wNumber" placeholder="Your Number">
+<input id="wNumber" placeholder="Your Number / Bank Acc">
 <input id="wAmount" placeholder="Enter Amount">
 <button class="btn btn-withdraw w-full mt-4" onclick="submitWithdraw()">Submit Withdrawal</button>
+
+<h3 class="text-xl font-bold mt-4">Withdrawal History</h3>
+<div id="withdrawHistory"></div>
 </div>
 
 <!-- SHARE PAGE -->
@@ -127,6 +129,8 @@ h2,h3 { margin:0; }
 // ===== USER DATA =====
 let user = JSON.parse(localStorage.getItem("rockUser")) || null;
 let balance = Number(localStorage.getItem("rockBalance")) || 0;
+let depositHistoryArr = JSON.parse(localStorage.getItem("rockDeposit")) || [];
+let withdrawHistoryArr = JSON.parse(localStorage.getItem("rockWithdraw")) || [];
 
 // ===== PLANS =====
 const plans = [
@@ -150,6 +154,8 @@ window.onload = function(){
     document.getElementById("authPage").style.display="block";
   }
   updateBalance();
+  renderDepositHistory();
+  renderWithdrawHistory();
 }
 
 // ===== LOGIN =====
@@ -163,6 +169,7 @@ function login(){
   document.getElementById("dashboard").style.display="block";
   updateHeader();
   loadPlans();
+  updateBalance();
 }
 
 // ===== LOGOUT =====
@@ -212,7 +219,6 @@ function openPlan(i){
     <p>Daily Profit: ${p.profit} Rs</p>
     <p>Duration: ${p.days} Days</p>
     <p>Total Profit: ${p.profit*p.days} Rs</p>
-    <input id="depositAmount" type="number" placeholder="Amount (Default: ${p.price})" value="${p.price}">
     <button class='btn btn-deposit w-full mt-4' onclick='showDeposit()'>Deposit</button>
     <button class='btn btn-withdraw w-full mt-2' onclick='showWithdraw()'>Withdraw</button>
     <button class='btn btn-back w-full mt-2' onclick='backHome()'>Back</button>
@@ -225,32 +231,57 @@ function showWithdraw(){ hideAll(); document.getElementById("withdrawPage").styl
 function showShare(){ hideAll(); document.getElementById("sharePage").style.display="block"; }
 function showProfile(){ hideAll(); document.getElementById("profilePage").style.display="block"; }
 function showSupport(){ hideAll(); document.getElementById("supportPage").style.display="block"; }
-
 function backHome(){ hideAll(); document.getElementById("dashboard").style.display="block"; }
-
-function hideAll(){ document.querySelectorAll("body > div").forEach(d=>d.style.display="none"); }
+function hideAll(){ const pages=["dashboard","planPage","depositPage","withdrawPage","sharePage","profilePage","supportPage"]; pages.forEach(id=>document.getElementById(id).style.display="none"); }
 
 // ===== DEPOSIT =====
 function submitDeposit(){
   let amt = Number(document.getElementById("depositAmount").value);
-  if(!amt || amt <=0){ alert("Enter valid amount"); return; }
+  let method = document.getElementById("depositMethod").value;
+  let trx = document.getElementById("trxid").value;
+  let proofFile = document.getElementById("proof").files[0]?.name || "No file";
+  if(!amt || amt<=0 || !trx){ alert("Enter valid amount & trxID"); return; }
   balance += amt;
   updateBalance();
   localStorage.setItem("rockBalance", balance);
-  alert("Deposit successful! Balance updated.");
+  depositHistoryArr.push({amount:amt, method:method, trxID:trx, proof:proofFile, date:new Date().toLocaleString()});
+  localStorage.setItem("rockDeposit", JSON.stringify(depositHistoryArr));
+  renderDepositHistory();
+  alert("Deposit successful!");
   backHome();
+}
+
+function renderDepositHistory(){
+  if(depositHistoryArr.length===0){ document.getElementById("depositHistory").innerHTML="No deposits yet."; return; }
+  let html="<table class='table'><tr><th>Date</th><th>Amount</th><th>Method</th><th>TrxID</th><th>Proof</th></tr>";
+  depositHistoryArr.forEach(d=>{ html+=`<tr><td>${d.date}</td><td>${d.amount}</td><td>${d.method}</td><td>${d.trxID}</td><td>${d.proof}</td></tr>`; });
+  html+="</table>";
+  document.getElementById("depositHistory").innerHTML = html;
 }
 
 // ===== WITHDRAW =====
 function submitWithdraw(){
   let amt = Number(document.getElementById("wAmount").value);
-  if(!amt || amt <=0){ alert("Enter valid amount"); return; }
-  if(amt > balance){ alert("Insufficient balance"); return; }
+  let method = document.getElementById("withdrawMethod").value;
+  let number = document.getElementById("wNumber").value;
+  if(!amt || amt<=0 || !number){ alert("Enter valid amount & number/account"); return; }
+  if(amt>balance){ alert("Insufficient balance"); return; }
   balance -= amt;
   updateBalance();
+  withdrawHistoryArr.push({amount:amt, method:method, number:number, date:new Date().toLocaleString(), status:"Pending"});
   localStorage.setItem("rockBalance", balance);
-  alert("Withdrawal requested successfully!");
+  localStorage.setItem("rockWithdraw", JSON.stringify(withdrawHistoryArr));
+  renderWithdrawHistory();
+  alert("Withdrawal requested!");
   backHome();
+}
+
+function renderWithdrawHistory(){
+  if(withdrawHistoryArr.length===0){ document.getElementById("withdrawHistory").innerHTML="No withdrawals yet."; return; }
+  let html="<table class='table'><tr><th>Date</th><th>Amount</th><th>Method</th><th>Number/Acc</th><th>Status</th></tr>";
+  withdrawHistoryArr.forEach(d=>{ html+=`<tr><td>${d.date}</td><td>${d.amount}</td><td>${d.method}</td><td>${d.number}</td><td>${d.status}</td></tr>`; });
+  html+="</table>";
+  document.getElementById("withdrawHistory").innerHTML = html;
 }
 
 // ===== COPY LINK =====
@@ -261,6 +292,5 @@ function copyLink(){
   alert("Link Copied!");
 }
 </script>
-
 </body>
 </html>
