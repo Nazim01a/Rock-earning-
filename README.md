@@ -1,5 +1,4 @@
-<ROCK ON>
-<html lang="en">
+<ROCK EARNING><html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -21,31 +20,19 @@ h2,h3{margin:0;}
 .btn-back{background:#555;}
 </style>
 </head>
-<body>
-
-<div id="header" class="p-5 flex justify-between items-center bg-[#0f1123]">
+<body><div id="header" class="p-5 flex justify-between items-center bg-[#0f1123]">
   <div class="logo">🚀 Rock Earn</div>
   <div id="headerUser" class="text-white font-semibold"></div>
-</div>
-
-<!-- AUTH PAGE -->
-<div id="authPage" class="p-5 max-w-md mx-auto">
-<h2 class="text-2xl font-bold mb-4 text-center">Sign Up / Login</h2>
-
-<h3 class="text-xl font-semibold mt-4">Sign Up</h3>
+</div><!-- AUTH PAGE --><div id="authPage" class="p-5 max-w-md mx-auto">
+<h2 class="text-2xl font-bold mb-4 text-center">Sign Up / Login</h2><h3 class="text-xl font-semibold mt-4">Sign Up</h3>
 <input id="su_name" placeholder="Username">
 <input id="su_email" placeholder="Email">
 <input id="su_pass" type="password" placeholder="Password">
-<button class="btn w-full" onclick="signup()">Sign Up</button>
-
-<h3 class="text-xl font-semibold mt-4">Login</h3>
+<button class="btn w-full" onclick="signup()">Sign Up</button><h3 class="text-xl font-semibold mt-4">Login</h3>
 <input id="li_email" placeholder="Email">
 <input id="li_pass" type="password" placeholder="Password">
 <button class="btn w-full" onclick="login()">Login</button>
-</div>
-
-<!-- DASHBOARD -->
-<div id="dashboard" class="hidden p-5 max-w-5xl mx-auto">
+</div><!-- DASHBOARD --><div id="dashboard" class="hidden p-5 max-w-5xl mx-auto">
 <div class="card mb-4 flex justify-between items-center">
   <div>
     <div class="text-gray-400">Available Balance</div>
@@ -55,98 +42,86 @@ h2,h3{margin:0;}
     <button class="btn" onclick="showDeposit()">Deposit</button>
     <button class="btn" onclick="showWithdraw()">Withdraw</button>
     <button class="btn" onclick="showProfile()">Profile</button>
+    <button class="btn" onclick="showShare()">Share Link</button>
     <button class="btn bg-red-600" onclick="logout()">Logout</button>
   </div>
 </div>
 <h3 class="text-xl font-bold mb-2">Investment Plans</h3>
 <div id="plansArea" class="grid md:grid-cols-2 gap-4 scroll"></div>
-</div>
-
-<div id="depositPage" class="hidden p-5 max-w-md mx-auto card">
+</div><!-- DEPOSIT PAGE --><div id="depositPage" class="hidden p-5 max-w-md mx-auto card">
 <h2 class="text-2xl font-bold mb-3">Deposit</h2>
+<label>Enter Amount:</label>
 <input id="depositAmount" placeholder="Enter Amount">
+<label>Transaction ID:</label>
+<input id="trxid" placeholder="Enter Transaction ID">
+<label>Upload Proof:</label>
+<input id="proof" type="file">
 <button class="btn btn-deposit w-full mt-4" onclick="submitDeposit()">Deposit</button>
-</div>
-
-<div id="withdrawPage" class="hidden p-5 max-w-md mx-auto card">
+<button class="btn btn-back w-full mt-2" onclick="backHome()">Back</button>
+</div><!-- WITHDRAW PAGE --><div id="withdrawPage" class="hidden p-5 max-w-md mx-auto card">
 <h2 class="text-2xl font-bold mb-3">Withdraw</h2>
 <input id="wAmount" placeholder="Enter Amount">
 <button class="btn btn-withdraw w-full mt-4" onclick="submitWithdraw()">Withdraw</button>
-</div>
-
-<div id="profilePage" class="hidden p-5 max-w-md mx-auto card">
+<button class="btn btn-back w-full mt-2" onclick="backHome()">Back</button>
+</div><!-- PROFILE PAGE --><div id="profilePage" class="hidden p-5 max-w-md mx-auto card">
 <h2 class="text-xl font-bold mb-3">Profile</h2>
 <p id="pUser"></p>
 <p id="pMail"></p>
-</div>
+<p id="pBalance"></p>
+<button class="btn btn-back w-full mt-2" onclick="backHome()">Back</button>
+</div><!-- SHARE LINK PAGE --><div id="sharePage" class="hidden p-5 max-w-md mx-auto card">
+<h2 class="text-xl font-bold mb-3">Share Your Link</h2>
+<input id="shareLink" value="https://rockearn.com?ref=ROCK123">
+<button class="btn w-full mt-2" onclick="copyLink()">Copy Link</button>
+<button class="btn btn-back w-full mt-2" onclick="backHome()">Back</button>
+</div><script>
+let users = JSON.parse(localStorage.getItem("rockUsers")) || [];
+let currentUser = JSON.parse(localStorage.getItem("rockCurrentUser")) || null;
+const plans=[{name:"Starter Plan",price:180,profit:20,days:20},{name:"Silver Plan",price:350,profit:40,days:25},{name:"Gold Plan",price:600,profit:70,days:30},{name:"Pro Plan",price:1200,profit:150,days:35},{name:"Advance Plan",price:2500,profit:320,days:40},{name:"Ultra Plan",price:4000,profit:520,days:45},{name:"Premium Plan",price:7000,profit:900,days:50}];
 
-<script>
-let users = []; // temporary users session
-let currentUser = null;
-let balance = 0;
-
-const plans = [
-{name:"Starter", price:180, profit:20, days:20},
-{name:"Silver", price:350, profit:40, days:25},
-{name:"Gold", price:600, profit:70, days:30}
-];
+window.onload=function(){if(currentUser){showDashboard();}};
 
 function signup(){
-  let n=document.getElementById("su_name").value.trim();
-  let e=document.getElementById("su_email").value.trim();
-  let p=document.getElementById("su_pass").value.trim();
-  if(!n||!e||!p){alert("Fill all fields");return;}
-  if(users.find(u=>u.email===e)){alert("Email already registered");return;}
-  let u={name:n,email:e,password:p};
-  users.push(u); currentUser=u; balance=0;
-  alert("Signup successful!"); showDashboard();
-}
+let n=document.getElementById("su_name").value.trim();
+let e=document.getElementById("su_email").value.trim();
+let p=document.getElementById("su_pass").value.trim();
+if(!n||!e||!p){alert("Fill all fields");return;}
+if(users.find(u=>u.email===e)){alert("Email already registered");return;}
+let u={name:n,email:e,password:p,balance:0};
+users.push(u);localStorage.setItem("rockUsers",JSON.stringify(users));currentUser=u;localStorage.setItem("rockCurrentUser",JSON.stringify(currentUser));alert("Signup successful!");showDashboard();}
 
 function login(){
-  let e=document.getElementById("li_email").value.trim();
-  let p=document.getElementById("li_pass").value.trim();
-  if(!e||!p){alert("Fill all fields");return;}
-  let u=users.find(x=>x.email===e && x.password===p);
-  if(!u){alert("Invalid credentials");return;}
-  currentUser=u; alert("Login successful!"); showDashboard();
-}
+let e=document.getElementById("li_email").value.trim();
+let p=document.getElementById("li_pass").value.trim();
+if(!e||!p){alert("Fill all fields");return;}
+let u=users.find(u=>u.email===e && u.password===p);
+if(!u){alert("Invalid credentials");return;}
+currentUser=u;localStorage.setItem("rockCurrentUser",JSON.stringify(currentUser));alert("Login successful!");showDashboard();}
 
-function showDashboard(){
-  document.getElementById("authPage").style.display="none";
-  document.getElementById("dashboard").style.display="block";
-  document.getElementById("headerUser").innerText="Welcome, "+currentUser.name;
-  document.getElementById("pUser").innerText="Username: "+currentUser.name;
-  document.getElementById("pMail").innerText="Email: "+currentUser.email;
-  loadPlans();
-  updateBalance();
-}
+function showDashboard(){document.getElementById("authPage").style.display="none";document.getElementById("dashboard").style.display="block";document.getElementById("headerUser").innerText="Welcome, "+currentUser.name;loadPlans();updateBalance();}
 
-function logout(){
-  currentUser=null; balance=0;
-  document.getElementById("dashboard").style.display="none";
-  document.getElementById("authPage").style.display="block";
-}
+function loadPlans(){let html="";plans.forEach((p,i)=>{html+=`<div class='card'><h3 class='text-xl font-bold mb-1'>${p.name}</h3><p>Price: ${p.price}</p><p>Daily Profit: ${p.profit}</p><p>Days: ${p.days}</p><button class='btn w-full mt-2' onclick='planDeposit(${i})'>Deposit</button></div>`;});document.getElementById("plansArea").innerHTML=html;}
 
-function loadPlans(){
-  let html=""; plans.forEach(p=>{
-    html+=`<div class='card'>
-    <h3 class='text-xl font-bold mb-1'>${p.name}</h3>
-    <p>Price: ${p.price}</p>
-    <p>Daily Profit: ${p.profit}</p>
-    <p>Days: ${p.days}</p></div>`;
-  });
-  document.getElementById("plansArea").innerHTML=html;
-}
+function planDeposit(index){let p=plans[index];currentUser.balance+=p.price;saveUser();updateBalance();alert(p.name+" deposited! Balance updated.");}
 
-function updateBalance(){document.getElementById("balance").innerText="₨ "+balance;}
-function showDeposit(){document.getElementById("authPage").style.display="none"; hideAll(); document.getElementById("depositPage").style.display="block";}
-function showWithdraw(){document.getElementById("authPage").style.display="none"; hideAll(); document.getElementById("withdrawPage").style.display="block";}
-function showProfile(){document.getElementById("authPage").style.display="none"; hideAll(); document.getElementById("profilePage").style.display="block";}
-function hideAll(){["dashboard","depositPage","withdrawPage","profilePage"].forEach(id=>document.getElementById(id).style.display="none");}
-function submitDeposit(){let a=Number(document.getElementById("depositAmount").value); if(!a||a<=0){alert("Enter valid amount"); return;} balance+=a; updateBalance(); alert("Deposit success!"); backHome();}
-function submitWithdraw(){let a=Number(document.getElementById("wAmount").value); if(!a||a<=0){alert("Enter valid amount");return;} if(a>balance){alert("Insufficient balance"); return;} balance-=a; updateBalance(); alert("Withdraw success!"); backHome();}
-function backHome(){hideAll(); document.getElementById("dashboard").style.display="block";}
-</script>
+function updateBalance(){document.getElementById("balance").innerText="₨ "+currentUser.balance;document.getElementById("pBalance")?.innerText="Balance: ₨ "+currentUser.balance;}
 
-</body>
+function submitDeposit(){let amt=Number(document.getElementById("depositAmount").value);if(!amt||amt<=0){alert("Enter valid amount");return;}let trx=document.getElementById("trxid").value.trim();let proof=document.getElementById("proof").files[0];if(!trx||!proof){alert("Enter transaction ID and upload proof");return;}currentUser.balance+=amt;saveUser();updateBalance();alert("Deposit successful! Balance updated.");backHome();}
+
+function submitWithdraw(){let amt=Number(document.getElementById("wAmount").value);if(!amt||amt<=0){alert("Enter valid amount");return;}if(amt>currentUser.balance){alert("Insufficient balance");return;}currentUser.balance-=amt;saveUser();updateBalance();alert("Withdraw successful!");backHome();}
+
+function showProfile(){hideAll();document.getElementById("profilePage").style.display="block";document.getElementById("pUser").innerText="Username: "+currentUser.name;document.getElementById("pMail").innerText="Email: "+currentUser.email;updateBalance();}
+
+function showShare(){hideAll();document.getElementById("sharePage").style.display="block";}
+function copyLink(){let link=document.getElementById("shareLink");link.select();document.execCommand("copy");alert("Link copied!");}
+
+function backHome(){hideAll();document.getElementById("dashboard").style.display="block";}
+function showDeposit(){hideAll();document.getElementById("depositPage").style.display="block";}
+function showWithdraw(){hideAll();document.getElementById("withdrawPage").style.display="block";}
+function hideAll(){["dashboard","depositPage","withdrawPage","profilePage","sharePage"].forEach(id=>document.getElementById(id).style.display="none");}
+
+function logout(){currentUser=null;localStorage.removeItem("rockCurrentUser");document.getElementById("dashboard").style.display="none";document.getElementById("authPage").style.display="block";}
+
+function saveUser(){users=users.map(u=>u.email===currentUser.email?currentUser:u);localStorage.setItem("rockUsers",JSON.stringify(users));localStorage.setItem("rockCurrentUser",JSON.stringify(currentUser));}
+</script></body>
 </html>
