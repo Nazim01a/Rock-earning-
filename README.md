@@ -2,7 +2,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Rock Earn Official — Pro Ultimate</title>
+<title>Rock Earn Pro — Fixed Plans</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 <style>
@@ -29,23 +29,22 @@ input,select{padding:10px;border-radius:10px;width:100%;margin-bottom:10px;backg
     <button class="icon-btn btn bg-purple-600" onclick="openPanel('activity')"><i class="fa fa-list"></i> Activity</button>
     <button class="icon-btn btn bg-gray-600" onclick="openPanel('company')"><i class="fa fa-building"></i> Company</button>
     <button class="icon-btn btn bg-red-600" onclick="openPanel('settings')"><i class="fa fa-cog"></i> Settings</button>
-  </div>  <!-- PLANS -->  <h2 class="text-xl font-bold mb-3">Our Plans</h2>
-  <div class="grid grid-cols-1 gap-4" id="planList"></div>  <!-- SIDE PANEL -->  <div id="sidePanel" class="card mt-6 hidden"></div>
+  </div>  <!-- PLANS SECTION -->  <div class="card mt-6 p-4">
+    <h2 class="text-xl font-bold mb-4">Our Investment Plans</h2>
+    <div id="planList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+  </div>  <!-- SIDE PANEL -->  <div id="sidePanel" class="card mt-6 hidden"></div>
 </div><script>
 let users = JSON.parse(localStorage.getItem('reUsers'))||[];
 let currentUser = JSON.parse(localStorage.getItem('reCurrent'))||null;
-
 if(currentUser){openDashboard();}
-
 function validateEmail(e){return/^\S+@\S+\.\S+$/.test(e);}
 function signupUser(){let n=document.getElementById('authName').value.trim();let e=document.getElementById('authEmail').value.trim();let p=document.getElementById('authPass').value.trim();if(!n||!e||!p)return alert('Fill all fields');if(!validateEmail(e))return alert('Invalid email');if(users.find(u=>u.email===e))return alert('Email already registered');let u={name:n,email:e,pass:p,plans:[]};users.push(u);localStorage.setItem('reUsers',JSON.stringify(users));currentUser=u;localStorage.setItem('reCurrent',JSON.stringify(u));openDashboard();}
 function loginUser(){let e=document.getElementById('authEmail').value.trim();let p=document.getElementById('authPass').value.trim();let u=users.find(x=>x.email===e&&x.pass===p);if(!u)return alert('Invalid credentials');currentUser=u;localStorage.setItem('reCurrent',JSON.stringify(u));openDashboard();}
 function forgotPassword(){let e=prompt('Enter your email');if(!validateEmail(e))return alert('Invalid email');let u=users.find(x=>x.email===e);if(!u)return alert('Email not found');alert('Your password: '+u.pass);}
-
 function openDashboard(){document.getElementById('authBox').style.display='none';document.getElementById('welcomeBox').style.display='block';document.getElementById('dashboard').style.display='block';document.getElementById('welcomeBox').innerHTML=`<h2>Welcome, ${currentUser.name} 💖</h2><button onclick="logoutUser()" class='btn bg-red-600 w-full mt-2'><i class='fa fa-sign-out-alt'></i> Logout</button>`;loadPlans();}
 function logoutUser(){localStorage.removeItem('reCurrent');location.reload();}
 
-// PLANS DATA WITH DAILY PROFIT AND COMING SOON
+// PLANS DATA
 let plans=[
   {name:'Starter',amount:180,daily:20},
   {name:'Basic',amount:350,daily:50},
@@ -63,16 +62,17 @@ function loadPlans(){
   let box=document.getElementById('planList');
   box.innerHTML='';
   plans.forEach(p=>{
-    box.innerHTML+=`<div class='card'>
-      <h3>${p.name}${p.coming? ' (Coming Soon)':''}</h3>
+    box.innerHTML+=`<div class='card p-4'>
+      <h3 class='text-lg font-semibold'>${p.name}${p.coming?' (Coming Soon)':''}</h3>
       <p>Price: ${p.amount} PKR</p>
       <p>Daily Profit: ${p.daily} PKR</p>
-      ${!p.coming? `<button class='btn' onclick="buyPlan(${p.amount},'${p.name}')"><i class='fa fa-cart-plus'></i> Buy Now</button>`:''}
+      ${!p.coming? `<button class='btn mt-2' onclick="buyPlan(${p.amount},'${p.name}')"><i class='fa fa-cart-plus'></i> Buy Now</button>`:''}
     </div>`;
   });
 }
 
 function buyPlan(amount,name){
+  if(!currentUser.plans)currentUser.plans=[];
   currentUser.plans.push({name:name,amount:amount});
   localStorage.setItem('reCurrent',JSON.stringify(currentUser));
   openPanel('deposit',amount,name);
