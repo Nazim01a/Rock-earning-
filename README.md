@@ -41,7 +41,6 @@ h2,h3 { margin:0; }
 <!-- DASHBOARD -->
 <div id="dashboard" class="hidden p-5 max-w-5xl mx-auto">
 
-<!-- BALANCE + ACTIONS -->
 <div class="card mb-4 flex justify-between items-center">
   <div>
     <div class="text-gray-400">Available Balance</div>
@@ -159,15 +158,23 @@ window.onload = function(){
 
 // ===== LOGIN =====
 function login(){
-  let uname = document.getElementById("username").value;
-  let email = document.getElementById("email").value;
-  if(!uname || !email){ alert("Fill all fields"); return; }
-  user = {name: uname, email: email};
+  let uname = document.getElementById("username").value.trim();
+  let email = document.getElementById("email").value.trim();
+  let pass = document.getElementById("password").value.trim();
+  if(!uname || !email || !pass){ alert("Fill all fields"); return; }
+  user = {name: uname, email: email, password: pass};
   localStorage.setItem("rockUser", JSON.stringify(user));
+  if(localStorage.getItem("rockBalance") === null){
+    balance = 0;
+    localStorage.setItem("rockBalance", balance);
+  } else {
+    balance = Number(localStorage.getItem("rockBalance"));
+  }
   document.getElementById("authPage").style.display="none";
   document.getElementById("dashboard").style.display="block";
   updateHeader();
   loadPlans();
+  updateBalance();
 }
 
 // ===== LOGOUT =====
@@ -228,8 +235,8 @@ function openPlan(i){
     <p>Daily Profit: ${p.profit} Rs</p>
     <p>Duration: ${p.days} Days</p>
     <p>Total Profit: ${p.profit*p.days} Rs</p>
-    <input id="depositAmount" type="number" placeholder="Amount (Default: ${p.price})" value="${p.price}">
-    <button class='btn btn-deposit w-full mt-4' onclick='showDeposit()'>Deposit</button>
+    <input id="planDepositAmount" type="number" placeholder="Amount (Default: ${p.price})" value="${p.price}">
+    <button class='btn btn-deposit w-full mt-4' onclick='submitDeposit(true)'>Deposit</button>
     <button class='btn btn-withdraw w-full mt-2' onclick='showWithdraw()'>Withdraw</button>
     <button class='btn btn-back w-full mt-2' onclick='backHome()'>Back</button>
   `;
@@ -245,8 +252,16 @@ function backHome(){ hideAll(); document.getElementById("dashboard").style.displ
 function hideAll(){ document.querySelectorAll("body > div").forEach(d=>d.style.display="none"); }
 
 // ===== DEPOSIT =====
-function submitDeposit(){
-  let amt = Number(document.getElementById("depositAmount").value);
+function submitDeposit(fromPlan=false){
+  let amt;
+  if(fromPlan){
+    let amtInput = document.getElementById("planDepositAmount");
+    amt = Number(amtInput.value);
+  } else {
+    let amtInput = document.getElementById("depositAmount");
+    amt = Number(amtInput.value);
+  }
+
   if(!amt || amt <=0){ alert("Enter valid amount"); return; }
   balance += amt;
   updateBalance();
