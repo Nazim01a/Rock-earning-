@@ -1,4 +1,4 @@
-<ROCK ON><html lang="en">
+<ROCK><html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -16,22 +16,24 @@ body{
   border:1px solid rgba(255,255,255,0.1);
   background:rgba(255,255,255,0.05);
   backdrop-filter:blur(20px);
+  animation: fadeInUp 0.7s ease forwards;
 }
 .neon-card:hover{
-  transform:scale(1.05);
-  box-shadow:0 0 30px rgba(0,255,255,0.8);
+  transform:scale(1.07);
+  box-shadow:0 0 35px rgba(0,255,255,0.9);
 }
 #sidePanel{
   position:fixed;
   top:0;
-  right:-400px;
-  width:400px;
+  right:-450px;
+  width:450px;
   height:100vh;
   background:#0c1230;
-  padding:20px;
+  padding:25px;
   transition:0.4s;
   overflow-y:auto;
   z-index:999;
+  animation: slideIn 0.5s ease forwards;
 }
 .btn-primary{
   background:#00ffe0;
@@ -41,24 +43,35 @@ body{
 }
 .btn-primary:hover{
   transform:scale(1.05);
+  box-shadow:0 0 15px #00ffe0;
 }
 @keyframes fadeInUp{
   0%{opacity:0; transform:translateY(20px);}
   100%{opacity:1; transform:translateY(0);}
 }
-.animated{
-  animation: fadeInUp 0.7s ease forwards;
-}
 @keyframes glow{
   0% {text-shadow:0 0 5px #00ffe0,0 0 10px #00bfff;}
-  50% {text-shadow:0 0 15px #ff00ff,0 0 25px #00ffe0;}
+  50% {text-shadow:0 0 20px #ff00ff,0 0 30px #00ffe0;}
   100% {text-shadow:0 0 5px #00ffe0,0 0 10px #00bfff;}
+}
+@keyframes slideIn{
+  from {right:-450px;}
+  to {right:0px;}
 }
 .glow-text{
   background: linear-gradient(90deg, #00ffe0, #00bfff, #ff00ff);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: glow 3s ease-in-out infinite;
+}
+.icon-btn{
+  position:relative;
+  transition:0.3s;
+  animation: fadeInUp 0.7s ease forwards;
+}
+.icon-btn:hover{
+  transform:scale(1.1);
+  box-shadow:0 0 20px #00ffe0;
 }
 </style>
 </head>
@@ -105,14 +118,14 @@ function forgotPassword(){
   <h1 class="text-5xl font-bold mb-2 glow-text">🚀 Rock Earn Ultra Pro Premium</h1>
   <p class="opacity-70">Welcome, <span id="welcomeName">Guest</span> • Since 2018 • Crypto FinTech</p>
 </header><!-- ICON MENU --><div class="flex gap-4 flex-wrap justify-center mt-4 animated" id="iconMenu">
-  <button onclick="openPanel('profile')" class="bg-blue-600 px-4 py-2 rounded-lg">Profile</button>
-  <button onclick="openPanel('plans')" class="bg-purple-600 px-4 py-2 rounded-lg">Plans</button>
-  <button onclick="openPanel('deposit')" class="bg-green-600 px-4 py-2 rounded-lg">Deposit</button>
-  <button onclick="openPanel('withdraw')" class="bg-yellow-600 px-4 py-2 rounded-lg">Withdraw</button>
-  <button onclick="openPanel('activity')" class="bg-pink-600 px-4 py-2 rounded-lg">Activity</button>
-  <button onclick="openPanel('company')" class="bg-gray-600 px-4 py-2 rounded-lg">Company</button>
-  <button onclick="openPanel('settings')" class="bg-red-600 px-4 py-2 rounded-lg">Settings</button>
-  <button onclick="logout()" class="bg-black px-4 py-2 rounded-lg mt-6">Logout</button>
+  <button onclick="openPanel('profile')" class="icon-btn bg-blue-600 px-4 py-2 rounded-lg">Profile</button>
+  <button onclick="openPanel('plans')" class="icon-btn bg-purple-600 px-4 py-2 rounded-lg">Plans</button>
+  <button onclick="openPanel('deposit')" class="icon-btn bg-green-600 px-4 py-2 rounded-lg">Deposit</button>
+  <button onclick="openPanel('withdraw')" class="icon-btn bg-yellow-600 px-4 py-2 rounded-lg">Withdraw</button>
+  <button onclick="openPanel('activity')" class="icon-btn bg-pink-600 px-4 py-2 rounded-lg">Activity</button>
+  <button onclick="openPanel('company')" class="icon-btn bg-gray-600 px-4 py-2 rounded-lg">Company</button>
+  <button onclick="openPanel('settings')" class="icon-btn bg-red-600 px-4 py-2 rounded-lg">Settings</button>
+  <button onclick="logout()" class="icon-btn bg-black px-4 py-2 rounded-lg mt-6">Logout</button>
 </div><!-- PLANS SECTION --><section class="mt-10 text-center animated" id="plansSection">
   <h2 class="text-3xl font-bold mb-6 glow-text">Investment Plans</h2>
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="plansContainer"></div>
