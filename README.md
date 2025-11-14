@@ -20,9 +20,8 @@ input:focus, select:focus{outline:none;box-shadow:0 0 12px #0ff;}
 .icon-btn{display:flex;align-items:center;gap:10px;font-weight:600;transition:0.3s;animation:iconHover 1.5s infinite alternate;}
 .icon-btn:hover{transform:scale(1.1);}
 @keyframes iconHover{0%{transform:translateY(0);}50%{transform:translateY(-5px);}100%{transform:translateY(0);}}
-#sidePanel{position:fixed;top:0;right:-450px;width:420px;height:100vh;background:rgba(15,23,42,0.95);padding:20px;transition:0.5s;overflow-y:auto;z-index:999;animation:panelSlide 0.8s ease forwards;}
+#sidePanel{display:none; position:fixed; top:0; right:0; width:420px; max-width:90%; height:100vh; background:rgba(15,23,42,0.95); padding:40px 20px 20px 20px; transition:0.5s; overflow-y:auto; z-index:9999;}
 #sidePanel.active{right:0;}
-@keyframes panelSlide{0%{right:-450px;opacity:0;}100%{right:0;opacity:1;}}
 .plan-list{margin-top:20px;}
 .plan-item{border:1px solid #0ff;padding:12px;margin-bottom:12px;border-radius:12px;transition:0.3s;animation:planFade 0.6s ease forwards;}
 .plan-item:hover{box-shadow:0 0 25px #0ff,0 0 50px #4f46e5;transform:scale(1.04);}
@@ -68,7 +67,10 @@ input:focus, select:focus{outline:none;box-shadow:0 0 12px #0ff;}
 </div>
 
 <!-- SIDE PANEL -->
-<div id="sidePanel"></div>
+<div id="sidePanel">
+  <button id="closePanel" onclick="closePanel()" style="position:absolute;top:10px;right:15px;font-size:24px;background:none;border:none;color:white;cursor:pointer;">&times;</button>
+  <div id="panelContent"></div>
+</div>
 
 <!-- LOGOUT BUTTON FIXED BOTTOM CENTER -->
 <button onclick="logoutUser()" class="btn bg-red-600 logout-btn"><i class="fa fa-sign-out-alt"></i> Logout</button>
@@ -77,14 +79,121 @@ input:focus, select:focus{outline:none;box-shadow:0 0 12px #0ff;}
 let users=JSON.parse(localStorage.getItem('reUsers'))||[];
 let currentUser=JSON.parse(localStorage.getItem('reCurrent'))||null;
 if(currentUser){openDashboard();}
+
 function validateEmail(e){return/^\S+@\S+\.\S+$/.test(e);}
-function signupUser(){let n=document.getElementById('authName').value.trim();let e=document.getElementById('authEmail').value.trim();let p=document.getElementById('authPass').value.trim();if(!n||!e||!p)return alert('Fill all fields');if(!validateEmail(e))return alert('Invalid email');if(users.find(u=>u.email===e))return alert('Email already registered');let u={name:n,email:e,pass:p,plans:[],referrals:[],balance:0,profit:0,notifications:true};users.push(u);localStorage.setItem('reUsers',JSON.stringify(users));currentUser=u;localStorage.setItem('reCurrent',JSON.stringify(u));openDashboard();}
-function loginUser(){let e=document.getElementById('authEmail').value.trim();let p=document.getElementById('authPass').value.trim();let u=users.find(x=>x.email===e&&x.pass===p);if(!u)return alert('Invalid credentials');currentUser=u;localStorage.setItem('reCurrent',JSON.stringify(u));openDashboard();}
-function openDashboard(){document.getElementById('authBox').style.display='none';document.getElementById('welcomeBox').style.display='block';document.getElementById('dashboard').style.display='grid';document.getElementById('welcomeBox').innerHTML=`<h2>Welcome, ${currentUser.name} 💎</h2><p>Balance: ${currentUser.balance} PKR</p><p>Total Profit: ${currentUser.profit} PKR</p>`;}
+function signupUser(){
+  let n=document.getElementById('authName').value.trim();
+  let e=document.getElementById('authEmail').value.trim();
+  let p=document.getElementById('authPass').value.trim();
+  if(!n||!e||!p)return alert('Fill all fields');
+  if(!validateEmail(e))return alert('Invalid email');
+  if(users.find(u=>u.email===e))return alert('Email already registered');
+  let u={name:n,email:e,pass:p,plans:[],referrals:[],balance:0,profit:0,notifications:true};
+  users.push(u);
+  localStorage.setItem('reUsers',JSON.stringify(users));
+  currentUser=u;
+  localStorage.setItem('reCurrent',JSON.stringify(u));
+  openDashboard();
+}
+
+function loginUser(){
+  let e=document.getElementById('authEmail').value.trim();
+  let p=document.getElementById('authPass').value.trim();
+  let u=users.find(x=>x.email===e&&x.pass===p);
+  if(!u)return alert('Invalid credentials');
+  currentUser=u;
+  localStorage.setItem('reCurrent',JSON.stringify(u));
+  openDashboard();
+}
+
+function openDashboard(){
+  document.getElementById('authBox').style.display='none';
+  document.getElementById('welcomeBox').style.display='block';
+  document.getElementById('dashboard').style.display='grid';
+  document.getElementById('welcomeBox').innerHTML=`<h2>Welcome, ${currentUser.name} 💎</h2><p>Balance: ${currentUser.balance} PKR</p><p>Total Profit: ${currentUser.profit} PKR</p>`;
+}
+
 function logoutUser(){currentUser=null;localStorage.removeItem('reCurrent');location.reload();}
-let plans=[{name:'Ulta Pro',amount:500,daily:80},{name:'Premium',amount:1000,daily:180},{name:'Gold',amount:2500,daily:450},{name:'Platinum',amount:5000,daily:950},{name:'Diamond',amount:7000,daily:1350},{name:'Elite',amount:10000,daily:2200},{name:'Mega Booster',amount:15000,daily:3500,coming:true},{name:'Ultra Pro',amount:20000,daily:4800,coming:true},{name:'Crypto Miner',amount:30000,daily:6500,coming:true}];
-function openPanel(type,amount=0,name=''){let panel=document.getElementById('sidePanel');panel.classList.add('active');panel.innerHTML='';switch(type){case'plans':panel.innerHTML='<h2>All Plans</h2><div class="plan-list">'+plans.map(p=>`<div class='plan-item'><b>${p.name}</b> - ${p.amount} PKR - Daily Profit: ${p.daily} PKR ${p.coming?'(Coming Soon)':''}<button class='btn mt-1' onclick='buyPlan(${p.amount},"${p.name}")'>Buy Now</button></div>`).join('')+'</div>';break;case'profile':panel.innerHTML=`<h2>Your Profile</h2><p>Name: ${currentUser.name}</p><p>Email: ${currentUser.email}</p><button class='btn mt-2' onclick='copyText("https://rockearnpro.com/user/${currentUser.email}")'>Copy Profile Link</button>`;break;case'deposit':panel.innerHTML=`<h2>Deposit</h2><p>Amount Selected: <b>${amount}</b> PKR</p><p>JazzCash: 03705519562 <button class='btn' onclick='copyText("03705519562")'>Copy</button></p><p>EasyPaisa: 03379827882 <button class='btn' onclick='copyText("03379827882")'>Copy</button></p><input type='file' id='proofFile'><input type='text' placeholder='Transaction ID'><button class='btn mt-2' onclick='confirmDeposit()'>Submit</button>`;break;case'withdraw':panel.innerHTML=`<h2>Withdraw</h2><input type='number' placeholder='Amount'><select><option>JazzCash</option><option>EasyPaisa</option><option>Bank</option></select><input type='text' placeholder='Account Number'><button class='btn mt-2'>Withdraw</button>`;break;case'activity':panel.innerHTML=`<h2>Activity History</h2><p>• Deposit: 500 PKR</p><p>• Withdraw: 300 PKR</p><p>• Plan Bought: Basic Plan</p>`;break;case'company':panel.innerHTML=`<h2>Company Details</h2><p>Since: <b>2018</b></p><p>Industry: <b>Crypto & FinTech</b></p><p>Partner: <b>Binance</b></p><p>Address: <b>1234 Crypto Avenue, San Francisco, California, USA</b></p><p>Email: support@rockearnpro.com</p>`;break;case'settings':panel.innerHTML=`<h2>Settings</h2><input type='text' placeholder='Change Name'><input type='password' placeholder='Change Password'><button class='btn mt-2'>Save</button>`;break;case'referral':panel.innerHTML=`<h2>Referral</h2><p>Share your referral link:</p><input type='text' value='https://rockearnpro.com?ref=${currentUser.email}' readonly><button class='btn mt-2' onclick='copyText("https://rockearnpro.com?ref=${currentUser.email}")'>Copy Link</button>`;break;case'leaderboard':panel.innerHTML=`<h2>Leaderboard</h2><p>• User1 - 10,000 PKR</p><p>• User2 - 9,500 PKR</p>`;break;case'profit':panel.innerHTML=`<h2>Daily Profit</h2><p>Total Daily Profit: ${currentUser.profit} PKR</p>`;break;case'support':panel.innerHTML=`<h2>Support</h2><p>Contact us at support@rockearnpro.com</p>`;break;case'faq':panel.innerHTML=`<h2>FAQ</h2><p>Q1: How to deposit?</p><p>A1: Use JazzCash or EasyPaisa.</p>`;break;default:panel.innerHTML='';}}
-function buyPlan(amount,name){currentUser.plans.push({name:name,amount:amount});currentUser.balance+=amount;localStorage.setItem('reCurrent',JSON.stringify(currentUser));openPanel('deposit',amount,name);}
+
+let plans=[
+  {name:'Ulta Pro',amount:500,daily:80},
+  {name:'Premium',amount:1000,daily:180},
+  {name:'Gold',amount:2500,daily:450},
+  {name:'Platinum',amount:5000,daily:950},
+  {name:'Diamond',amount:7000,daily:1350},
+  {name:'Elite',amount:10000,daily:2200},
+  {name:'Mega Booster',amount:15000,daily:3500,coming:true},
+  {name:'Ultra Pro',amount:20000,daily:4800,coming:true},
+  {name:'Crypto Miner',amount:30000,daily:6500,coming:true}
+];
+
+function openPanel(type,amount=0,name=''){
+  const panel=document.getElementById('sidePanel');
+  const content=document.getElementById('panelContent');
+  panel.style.display='block';
+  panel.classList.add('active');
+  content.innerHTML='';
+  
+  switch(type){
+    case 'plans':
+      content.innerHTML='<h2>All Plans</h2><div class="plan-list">'+
+      plans.map(p=>`<div class='plan-item'><b>${p.name}</b> - ${p.amount} PKR - Daily Profit: ${p.daily} PKR ${p.coming?'(Coming Soon)':''}<button class='btn mt-1' onclick='buyPlan(${p.amount},"${p.name}")'>Buy Now</button></div>`).join('')+
+      '</div>';
+      break;
+    case 'profile':
+      content.innerHTML=`<h2>Your Profile</h2><p>Name: ${currentUser.name}</p><p>Email: ${currentUser.email}</p><button class='btn mt-2' onclick='copyText("https://rockearnpro.com/user/${currentUser.email}")'>Copy Profile Link</button>`;
+      break;
+    case 'deposit':
+      content.innerHTML=`<h2>Deposit</h2><p>Amount Selected: <b>${amount}</b> PKR</p>
+      <p>JazzCash: 03705519562 <button class='btn' onclick='copyText("03705519562")'>Copy</button></p>
+      <p>EasyPaisa: 03379827882 <button class='btn' onclick='copyText("03379827882")'>Copy</button></p>
+      <input type='file' id='proofFile'><input type='text' placeholder='Transaction ID'><button class='btn mt-2' onclick='confirmDeposit()'>Submit</button>`;
+      break;
+    case 'withdraw':
+      content.innerHTML=`<h2>Withdraw</h2><input type='number' placeholder='Amount'><select><option>JazzCash</option><option>EasyPaisa</option><option>Bank</option></select><input type='text' placeholder='Account Number'><button class='btn mt-2'>Withdraw</button>`;
+      break;
+    case 'activity':
+      content.innerHTML=`<h2>Activity History</h2><p>• Deposit: 500 PKR</p><p>• Withdraw: 300 PKR</p><p>• Plan Bought: Basic Plan</p>`;
+      break;
+    case 'company':
+      content.innerHTML=`<h2>Company Details</h2><p>Since: <b>2018</b></p><p>Industry: <b>Crypto & FinTech</b></p><p>Partner: <b>Binance</b></p><p>Address: <b>1234 Crypto Avenue, San Francisco, California, USA</b></p><p>Email: support@rockearnpro.com</p>`;
+      break;
+    case 'settings':
+      content.innerHTML=`<h2>Settings</h2><input type='text' placeholder='Change Name'><input type='password' placeholder='Change Password'><button class='btn mt-2'>Save</button>`;
+      break;
+    case 'referral':
+      content.innerHTML=`<h2>Referral</h2><p>Share your referral link:</p><input type='text' value='https://rockearnpro.com?ref=${currentUser.email}' readonly><button class='btn mt-2' onclick='copyText("https://rockearnpro.com?ref=${currentUser.email}")'>Copy Link</button>`;
+      break;
+    case 'leaderboard':
+      content.innerHTML=`<h2>Leaderboard</h2><p>• User1 - 10,000 PKR</p><p>• User2 - 9,500 PKR</p>`;
+      break;
+    case 'profit':
+      content.innerHTML=`<h2>Daily Profit</h2><p>Total Daily Profit: ${currentUser.profit} PKR</p>`;
+      break;
+    case 'support':
+      content.innerHTML=`<h2>Support</h2><p>Contact us at support@rockearnpro.com</p>`;
+      break;
+    case 'faq':
+      content.innerHTML=`<h2>FAQ</h2><p>Q1: How to deposit?</p><p>A1: Use JazzCash or EasyPaisa.</p>`;
+      break;
+    default:
+      content.innerHTML='';
+  }
+}
+
+function closePanel(){
+  const panel=document.getElementById('sidePanel');
+  panel.style.display='none';
+  panel.classList.remove('active');
+}
+
+function buyPlan(amount,name){
+  currentUser.plans.push({name:name,amount:amount});
+  currentUser.balance+=amount;
+  localStorage.setItem('reCurrent',JSON.stringify(currentUser));
+  openPanel('deposit',amount,name);
+}
+
 function copyText(val){navigator.clipboard.writeText(val);alert('Copied: '+val);}
 function confirmDeposit(){alert('Deposit confirmed!');}
 </script>
