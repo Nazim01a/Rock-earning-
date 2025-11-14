@@ -7,7 +7,7 @@
 <style>
 body{
   font-family:'Segoe UI',sans-serif;
-  background:#0a0a0a;
+  background: linear-gradient(135deg, #0f1f3b, #1c3b5f);
   color:white;
   overflow-x:hidden;
   margin:0;
@@ -26,15 +26,15 @@ body{
 #sidePanel{
   position:fixed;
   top:0;
-  right:0;
-  width:400px;
+  right:-400px;
+  width:380px;
   height:100vh;
-  background:#0b0b0b;
+  background: rgba(15,31,59,0.95);
   padding:25px;
   overflow-y:auto;
   z-index:999;
   box-shadow:-5px 0 30px rgba(0,255,255,0.5);
-  animation: slideIn 0.7s ease forwards;
+  transition:0.5s;
 }
 .btn-primary{
   background:#00ffe0;
@@ -54,10 +54,6 @@ body{
   0% {text-shadow:0 0 5px #00ffe0,0 0 10px #00bfff;}
   50% {text-shadow:0 0 20px #ff00ff,0 0 30px #00ffe0;}
   100% {text-shadow:0 0 5px #00ffe0,0 0 10px #00bfff;}
-}
-@keyframes slideIn{
-  from {right:-400px;}
-  to {right:0;}
 }
 .glow-text{
   background: linear-gradient(90deg, #00ffe0, #00bfff, #ff00ff);
@@ -135,7 +131,7 @@ function logout(){
 </div><!-- PLANS SECTION --><section class="mt-10 text-center animated" id="plansSection">
   <h2 class="text-3xl font-bold mb-6 glow-text">Investment Plans</h2>
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="plansContainer"></div>
-</section><!-- SIDE PANEL ALWAYS VISIBLE --><div id="sidePanel"></div><script>
+</section><!-- SIDE PANEL --><div id="sidePanel" style="right:-400px"></div><script>
 const plans=[
 {name:'Starter Plan',price:180,daily:20},
 {name:'Basic Plan',price:500,daily:60},
@@ -152,7 +148,6 @@ function loadDashboard(){
   document.getElementById('authBox').style.display='none';
   document.getElementById('welcomeName').innerText=currentUser.name;
   renderPlans();
-  openPanel('profile'); // Side panel visible by default
 }
 function renderPlans(){
   let container=document.getElementById('plansContainer');
@@ -170,9 +165,10 @@ function renderPlans(){
 }
 function openPanel(type){
   let panel=document.getElementById('sidePanel');
+  panel.style.right='0px';
   switch(type){
     case 'profile': panel.innerHTML=`<h2 class='text-2xl font-bold mb-4'>Profile</h2><p>Name: ${currentUser.name}</p>`; break;
-    case 'plans': panel.innerHTML=`<h2 class='text-2xl font-bold mb-4'>Plans</h2><p>Check available plans below</p>`; break;
+    case 'plans': panel.innerHTML=`<h2 class='text-2xl font-bold mb-4'>Plans</h2><p>Check all plans below</p>`; break;
     case 'deposit': panel.innerHTML=`<h2 class='text-2xl font-bold mb-4'>Deposit</h2>`; break;
     case 'withdraw': panel.innerHTML=`<h2 class='text-2xl font-bold mb-4'>Withdraw</h2>`; break;
     case 'activity': panel.innerHTML=`<h2 class='text-2xl font-bold mb-4'>Activity</h2>`; break;
@@ -181,6 +177,7 @@ function openPanel(type){
   }
 }
 function buyPlan(amount){
+  openPanel('deposit');
   document.getElementById('sidePanel').innerHTML+=`<p>Selected Plan Amount: ${amount} PKR</p>`;
 }
 </script></body>
