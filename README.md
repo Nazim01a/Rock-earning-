@@ -25,6 +25,7 @@ input:focus, select:focus{outline:none;box-shadow:0 0 10px #0ff;}
 .plan-item:hover{box-shadow:0 0 15px #0ff;transform:scale(1.02);}
 .header-logo{font-size:36px;font-weight:800;text-align:center;background:linear-gradient(90deg,#4f46e5,#00ffe0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:logoGlow 2s infinite alternate;}
 @keyframes logoGlow{0%{text-shadow:0 0 5px #0ff;}50%{text-shadow:0 0 20px #0ff;}100%{text-shadow:0 0 5px #0ff;}}
+.logout-btn{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);width:200px;}
 </style>
 </head>
 <body class="p-4"><!-- HEADER --><header class="text-center py-6">
@@ -51,18 +52,19 @@ input:focus, select:focus{outline:none;box-shadow:0 0 10px #0ff;}
   <button class="icon-btn btn bg-teal-600" onclick="openPanel('profit')"><i class="fa fa-chart-line"></i> Daily Profit</button>
   <button class="icon-btn btn bg-orange-600" onclick="openPanel('support')"><i class="fa fa-headset"></i> Support</button>
   <button class="icon-btn btn bg-cyan-600" onclick="openPanel('faq')"><i class="fa fa-question-circle"></i> FAQ</button>
-</div><!-- SIDE PANEL --><div id="sidePanel"></div><script>
+</div><!-- SIDE PANEL --><div id="sidePanel"></div><!-- LOGOUT BUTTON FIXED BOTTOM CENTER --><button onclick="logoutUser()" class="btn bg-red-600 logout-btn"><i class="fa fa-sign-out-alt"></i> Logout</button>
+
+<script>
 let users=JSON.parse(localStorage.getItem('reUsers'))||[];
 let currentUser=JSON.parse(localStorage.getItem('reCurrent'))||null;
 if(currentUser){openDashboard();}
 function validateEmail(e){return/^\S+@\S+\.\S+$/.test(e);}
 function signupUser(){let n=document.getElementById('authName').value.trim();let e=document.getElementById('authEmail').value.trim();let p=document.getElementById('authPass').value.trim();if(!n||!e||!p)return alert('Fill all fields');if(!validateEmail(e))return alert('Invalid email');if(users.find(u=>u.email===e))return alert('Email already registered');let u={name:n,email:e,pass:p,plans:[],referrals:[],balance:0,profit:0,notifications:true};users.push(u);localStorage.setItem('reUsers',JSON.stringify(users));currentUser=u;localStorage.setItem('reCurrent',JSON.stringify(u));openDashboard();}
 function loginUser(){let e=document.getElementById('authEmail').value.trim();let p=document.getElementById('authPass').value.trim();let u=users.find(x=>x.email===e&&x.pass===p);if(!u)return alert('Invalid credentials');currentUser=u;localStorage.setItem('reCurrent',JSON.stringify(u));openDashboard();}
-function openDashboard(){document.getElementById('authBox').style.display='none';document.getElementById('welcomeBox').style.display='block';document.getElementById('dashboard').style.display='grid';document.getElementById('welcomeBox').innerHTML=`<h2>Welcome, ${currentUser.name} 💎</h2><p>Balance: ${currentUser.balance} PKR</p><p>Total Profit: ${currentUser.profit} PKR</p><button onclick="logoutUser()" class='btn bg-red-600 w-full mt-2'><i class='fa fa-sign-out-alt'></i> Logout</button>`;}
+function openDashboard(){document.getElementById('authBox').style.display='none';document.getElementById('welcomeBox').style.display='block';document.getElementById('dashboard').style.display='grid';document.getElementById('welcomeBox').innerHTML=`<h2>Welcome, ${currentUser.name} 💎</h2><p>Balance: ${currentUser.balance} PKR</p><p>Total Profit: ${currentUser.profit} PKR</p>`;}
 function logoutUser(){currentUser=null;localStorage.removeItem('reCurrent');location.reload();}
 let plans=[{name:'Ulta Pro',amount:500, daily:80},{name:'Premium',amount:1000,daily:180},{name:'Gold',amount:2500,daily:450},{name:'Platinum',amount:5000,daily:950},{name:'Diamond',amount:7000,daily:1350},{name:'Elite',amount:10000,daily:2200},{name:'Mega Booster',amount:15000,daily:3500,coming:true},{name:'Ultra Pro',amount:20000,daily:4800,coming:true},{name:'Crypto Miner',amount:30000,daily:6500,coming:true}];
-function openPanel(type,amount=0,name=''){let panel=document.getElementById('sidePanel');panel.classList.add('active');panel.innerHTML='';if(type==='plans'){panel.innerHTML='<h2>All Plans</h2><div class="plan-list">'+plans.map(p=>`<div class='plan-item'><b>${p.name}</b> - ${p.amount} PKR - Daily Profit: ${p.daily} PKR ${p.coming?'(Coming Soon)':''}<button class='btn mt-1' onclick='buyPlan(${p.amount},"${p.name}")'>Buy Now</button></div>`).join('')+'</div>';}
-}
+function openPanel(type,amount=0,name=''){let panel=document.getElementById('sidePanel');panel.classList.add('active');panel.innerHTML='';if(type==='plans'){panel.innerHTML='<h2>All Plans</h2><div class="plan-list">'+plans.map(p=>`<div class='plan-item'><b>${p.name}</b> - ${p.amount} PKR - Daily Profit: ${p.daily} PKR ${p.coming?'(Coming Soon)':''}<button class='btn mt-1' onclick='buyPlan(${p.amount},"${p.name}")'>Buy Now</button></div>`).join('')+'</div>';}}
 function buyPlan(amount,name){if(!currentUser.plans)currentUser.plans=[];currentUser.plans.push({name:name,amount:amount,daily:plans.find(p=>p.name===name).daily});currentUser.balance+=amount;localStorage.setItem('reCurrent',JSON.stringify(currentUser));openPanel('deposit',amount,name);}
 function copyText(val){navigator.clipboard.writeText(val);alert('Copied: '+val);}
 function uploadProof(){let fileInput=document.getElementById('proofFile');if(!fileInput||!fileInput.files[0])return alert('Select a file first');let fileName=fileInput.files[0].name;localStorage.setItem('proofFileName',fileName);alert('Proof uploaded: '+fileName);}
