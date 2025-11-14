@@ -1,114 +1,121 @@
-<ROCK>
+<ROCKS>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Rock Earn Official</title>
 <script src="https://cdn.tailwindcss.com"></script>
-
 <style>
-body { font-family: 'Segoe UI', sans-serif; background:#0f1123; color:white; }
-.card { background:#16182e; border-radius:14px; padding:18px; color:white; }
-.btn { background:#5d5fef; padding:10px 18px; border-radius:10px; color:white; font-weight:600; display:inline-block; }
-.btn:hover { opacity:0.8; }
-input, select {
-    background:#1e213d; border:none; padding:10px;
-    width:100%; border-radius:10px; color:white; margin-top:8px;
-}
+/* BODY & CARD */
+body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(120deg,#0f1123,#1c1f3b); color:white; margin:0; }
+.card { background:#16182e; border-radius:14px; padding:18px; color:white; box-shadow:0 8px 20px rgba(0,0,0,0.5);}
+.btn { background:#5d5fef; padding:10px 18px; border-radius:10px; color:white; font-weight:600; cursor:pointer; text-align:center; display:inline-block; }
+.btn:hover { opacity:0.85; }
+input, select { background:#1e213d; border:none; padding:10px; width:100%; border-radius:10px; color:white; margin-top:8px;}
+h2,h3 { margin:0; }
+.logo { font-size:28px; font-weight:bold; background: linear-gradient(90deg,#5d5fef,#00ffe0); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+.scroll { max-height:300px; overflow-y:auto; }
+
+/* BUTTON COLORS */
+.btn-deposit { background:#1dd11d; }
+.btn-withdraw { background:#f5b700; color:black; }
+.btn-back { background:#555; }
+
 </style>
-
 </head>
-
 <body>
 
-<!-- SIGNUP + LOGIN PAGE -->
-<div id="authPage" class="p-5 hidden">
-<h2 class="text-2xl font-bold mb-4">Sign Up / Login</h2>
+<!-- HEADER -->
+<div id="header" class="p-5 flex justify-between items-center bg-[#0f1123]">
+  <div class="logo">🚀 Rock Earn</div>
+  <div id="headerUser" class="text-white font-semibold"></div>
+</div>
 
+<!-- AUTH PAGE -->
+<div id="authPage" class="p-5 max-w-md mx-auto">
+<h2 class="text-2xl font-bold mb-4 text-center">Sign Up / Login</h2>
 <input id="username" placeholder="Enter Username">
 <input id="email" placeholder="Enter Gmail">
 <input id="password" placeholder="Enter Password" type="password">
-
 <button class="btn mt-4 w-full" onclick="login()">Continue</button>
 </div>
 
 <!-- DASHBOARD -->
-<div id="dashboard" class="hidden p-4">
+<div id="dashboard" class="hidden p-5 max-w-5xl mx-auto">
 
-<h2 class="text-3xl font-bold mb-4">Rock Earn Dashboard</h2>
-
-<!-- TOP BUTTONS -->
-<div class="grid grid-cols-3 gap-3 mb-4">
-  <button class="btn w-full" onclick="showShare()">Share Link</button>
-  <button class="btn w-full" onclick="showProfile()">Profile</button>
-  <button class="btn w-full" onclick="showSupport()">Support</button>
+<!-- BALANCE + ACTIONS -->
+<div class="card mb-4 flex justify-between items-center">
+  <div>
+    <div class="text-gray-400">Available Balance</div>
+    <div id="balance" class="text-2xl font-bold">₨ 0</div>
+  </div>
+  <div class="flex gap-2">
+    <button class="btn" onclick="showDeposit()">Deposit</button>
+    <button class="btn" onclick="showWithdraw()">Withdraw</button>
+    <button class="btn" onclick="showShare()">Share Link</button>
+    <button class="btn" onclick="showProfile()">Profile</button>
+    <button class="btn" onclick="showSupport()">Support</button>
+    <button class="btn bg-red-600" onclick="logout()">Logout</button>
+  </div>
 </div>
 
-<h3 class="text-xl font-bold mb-2">Our Plans</h3>
-<div id="plansArea"></div>
-
-<button onclick="logout()" class="btn w-full mt-6 bg-red-600">Logout</button>
+<!-- PLANS -->
+<h3 class="text-xl font-bold mb-2">Investment Plans</h3>
+<div id="plansArea" class="grid md:grid-cols-2 gap-4 scroll"></div>
 
 </div>
 
 <!-- PLAN PAGE -->
-<div id="planPage" class="hidden p-4"></div>
+<div id="planPage" class="hidden p-5 max-w-3xl mx-auto card"></div>
 
 <!-- DEPOSIT PAGE -->
-<div id="depositPage" class="hidden p-4">
+<div id="depositPage" class="hidden p-5 max-w-md mx-auto card">
 <h2 class="text-2xl font-bold mb-3">Deposit</h2>
-
 <label>Choose Method:</label>
 <select id="depositMethod">
 <option value="jazz">JazzCash</option>
 <option value="easy">EasyPaisa</option>
 </select>
-
-<div class="mt-3">
+<div class="mt-2">
 <p><b>JazzCash Number:</b> 03705519562</p>
 <p><b>EasyPaisa Number:</b> 03379827882</p>
 </div>
-
-<input id="trxid" placeholder="Enter Transaction ID">
+<input id="depositAmount" placeholder="Enter Amount">
+<input id="trxid" placeholder="Transaction ID">
 <input id="proof" type="file">
-
-<button class="btn w-full mt-4" onclick="submitted()">Submit Deposit</button>
+<button class="btn btn-deposit w-full mt-4" onclick="submitDeposit()">Submit Deposit</button>
 </div>
 
 <!-- WITHDRAW PAGE -->
-<div id="withdrawPage" class="hidden p-4">
-<h2 class="text-2xl font-bold mb-3">Withdrawal</h2>
-
+<div id="withdrawPage" class="hidden p-5 max-w-md mx-auto card">
+<h2 class="text-2xl font-bold mb-3">Withdraw</h2>
 <select id="withdrawMethod">
 <option value="jazz">JazzCash</option>
 <option value="easy">EasyPaisa</option>
 </select>
-
-<input id="wNumber" placeholder="Enter Your Number">
+<input id="wNumber" placeholder="Your Number">
 <input id="wAmount" placeholder="Enter Amount">
-
-<button class="btn w-full mt-4" onclick="submitted()">Submit Withdrawal</button>
+<button class="btn btn-withdraw w-full mt-4" onclick="submitWithdraw()">Submit Withdrawal</button>
 </div>
 
 <!-- SHARE PAGE -->
-<div id="sharePage" class="hidden p-4">
+<div id="sharePage" class="hidden p-5 max-w-md mx-auto card">
 <h2 class="text-xl font-bold mb-3">Share Your Link</h2>
-<input id="shareLink" value="https://yourwebsite.com?ref=ROCK123">
+<input id="shareLink" value="https://rockearn.com?ref=ROCK123">
 <button class="btn mt-3 w-full" onclick="copyLink()">Copy Link</button>
 </div>
 
 <!-- PROFILE PAGE -->
-<div id="profilePage" class="hidden p-4">
+<div id="profilePage" class="hidden p-5 max-w-md mx-auto card">
 <h2 class="text-xl font-bold mb-3">Your Profile</h2>
 <p id="pUser"></p>
 <p id="pMail"></p>
 </div>
 
 <!-- SUPPORT PAGE -->
-<div id="supportPage" class="hidden p-4">
+<div id="supportPage" class="hidden p-5 max-w-md mx-auto card">
 <h2 class="text-2xl font-bold mb-3">Customer Service</h2>
 <p>WhatsApp: <b>0318-7102225</b></p>
-
 <h2 class="text-xl font-bold mt-4 mb-2">Company Details</h2>
 <p>Company: <b>Rock Earn Digital Pvt Ltd</b></p>
 <p>Launched: <b>2024</b></p>
@@ -117,8 +124,11 @@ input, select {
 </div>
 
 <script>
+// ===== USER DATA =====
+let user = JSON.parse(localStorage.getItem("rockUser")) || null;
+let balance = Number(localStorage.getItem("rockBalance")) || 0;
 
-// ---- 20+ DAYS PLANS UPGRADED ----
+// ===== PLANS =====
 const plans = [
  {name:"Starter Plan", price:180, profit:20, days:20},
  {name:"Silver Plan", price:350, profit:40, days:25},
@@ -129,101 +139,127 @@ const plans = [
  {name:"Premium Plan", price:7000, profit:900, days:50}
 ];
 
-// -------- AUTO LOGIN SYSTEM --------
+// ===== ON LOAD =====
 window.onload = function(){
-    let savedUser = localStorage.getItem("rockUser");
-    if(savedUser){
-        document.getElementById("authPage").style.display="none";
-        document.getElementById("dashboard").style.display="block";
-        loadUser(JSON.parse(savedUser));
-        loadPlans();
-    } else {
-        document.getElementById("authPage").style.display="block";
-    }
+  if(user){
+    document.getElementById("authPage").style.display="none";
+    document.getElementById("dashboard").style.display="block";
+    updateHeader();
+    loadPlans();
+  } else {
+    document.getElementById("authPage").style.display="block";
+  }
+  updateBalance();
 }
 
+// ===== LOGIN =====
 function login(){
- let user = {
-   name: document.getElementById("username").value,
-   email: document.getElementById("email").value
- };
-
- localStorage.setItem("rockUser", JSON.stringify(user));
-
- loadUser(user);
-
- document.getElementById("authPage").style.display="none";
- document.getElementById("dashboard").style.display="block";
- loadPlans();
+  let uname = document.getElementById("username").value;
+  let email = document.getElementById("email").value;
+  if(!uname || !email){ alert("Fill all fields"); return; }
+  user = {name: uname, email: email};
+  localStorage.setItem("rockUser", JSON.stringify(user));
+  document.getElementById("authPage").style.display="none";
+  document.getElementById("dashboard").style.display="block";
+  updateHeader();
+  loadPlans();
 }
 
-function loadUser(user){
- document.getElementById("pUser").innerText = "Username: " + user.name;
- document.getElementById("pMail").innerText = "Gmail: " + user.email;
-}
-
-// ---- LOGOUT ----
+// ===== LOGOUT =====
 function logout(){
- localStorage.removeItem("rockUser");
- location.reload();
+  user = null;
+  localStorage.removeItem("rockUser");
+  localStorage.setItem("rockBalance", balance);
+  location.reload();
 }
 
-// ---- LOAD PLANS ----
+// ===== UPDATE HEADER =====
+function updateHeader(){
+  document.getElementById("headerUser").innerText = "Welcome, "+user.name;
+  document.getElementById("pUser")?.innerText = "Username: "+user.name;
+  document.getElementById("pMail")?.innerText = "Email: "+user.email;
+}
+
+// ===== BALANCE =====
+function updateBalance(){
+  document.getElementById("balance").innerText = "₨ "+balance;
+}
+
+// ===== LOAD PLANS =====
 function loadPlans(){
- let html="";
- plans.forEach((p,i)=>{
-   html += `
-   <div class='card mb-3'>
-     <h3 class='text-xl font-bold mb-1'>${p.name}</h3>
-     <p>Price: <b>${p.price} PKR</b></p>
-     <p>Daily Profit: <b>${p.profit} Rs/day</b></p>
-     <p>Duration: <b>${p.days} Days</b></p>
-     <p>Total Return: <b>${p.profit * p.days} Rs</b></p>
-     <button class='btn mt-2' onclick='openPlan(${i})'>View Details</button>
-   </div>`;
- });
- document.getElementById("plansArea").innerHTML = html;
+  let html="";
+  plans.forEach((p,i)=>{
+    html += `<div class='card'>
+      <h3 class='text-xl font-bold mb-1'>${p.name}</h3>
+      <p>Price: <b>${p.price} PKR</b></p>
+      <p>Daily Profit: <b>${p.profit} Rs/day</b></p>
+      <p>Duration: <b>${p.days} Days</b></p>
+      <p>Total Return: <b>${p.profit*p.days} Rs</b></p>
+      <button class='btn mt-2 w-full' onclick='openPlan(${i})'>View Details</button>
+    </div>`;
+  });
+  document.getElementById("plansArea").innerHTML = html;
 }
 
-// ---- PLAN DETAILS ----
+// ===== OPEN PLAN =====
 function openPlan(i){
- let p = plans[i];
- hideAll();
- document.getElementById("planPage").style.display="block";
- document.getElementById("planPage").innerHTML = `
- <h2 class='text-2xl font-bold mb-2'>${p.name}</h2>
- <p>Price: ${p.price} PKR</p>
- <p>Daily Profit: ${p.profit} Rs</p>
- <p>Duration: ${p.days} Days</p>
- <p>Total Profit: ${p.profit * p.days} Rs</p>
-
- <button class='btn w-full mt-4' onclick='openDeposit()'>Deposit</button>
- <button class='btn w-full mt-2' onclick='openWithdraw()'>Withdraw</button>
- <button class='btn w-full mt-2 bg-gray-500' onclick='backHome()'>Back</button>
- `;
+  let p = plans[i];
+  hideAll();
+  document.getElementById("planPage").style.display="block";
+  document.getElementById("planPage").innerHTML = `
+    <h2 class='text-2xl font-bold mb-2'>${p.name}</h2>
+    <p>Price: ${p.price} PKR</p>
+    <p>Daily Profit: ${p.profit} Rs</p>
+    <p>Duration: ${p.days} Days</p>
+    <p>Total Profit: ${p.profit*p.days} Rs</p>
+    <input id="depositAmount" type="number" placeholder="Amount (Default: ${p.price})" value="${p.price}">
+    <button class='btn btn-deposit w-full mt-4' onclick='showDeposit()'>Deposit</button>
+    <button class='btn btn-withdraw w-full mt-2' onclick='showWithdraw()'>Withdraw</button>
+    <button class='btn btn-back w-full mt-2' onclick='backHome()'>Back</button>
+  `;
 }
 
-// ---- NAVIGATION ----
-function openDeposit(){ hideAll(); document.getElementById("depositPage").style.display="block"; }
-function openWithdraw(){ hideAll(); document.getElementById("withdrawPage").style.display="block"; }
+// ===== NAVIGATION =====
+function showDeposit(){ hideAll(); document.getElementById("depositPage").style.display="block"; }
+function showWithdraw(){ hideAll(); document.getElementById("withdrawPage").style.display="block"; }
 function showShare(){ hideAll(); document.getElementById("sharePage").style.display="block"; }
 function showProfile(){ hideAll(); document.getElementById("profilePage").style.display="block"; }
 function showSupport(){ hideAll(); document.getElementById("supportPage").style.display="block"; }
 
-function submitted(){ alert("Submitted Successfully!"); }
-
-function copyLink(){
- let link = document.getElementById("shareLink");
- link.select(); document.execCommand("copy");
- alert("Link Copied!");
-}
-
 function backHome(){ hideAll(); document.getElementById("dashboard").style.display="block"; }
 
-function hideAll(){
- document.querySelectorAll("body > div").forEach(d=>d.style.display="none");
+function hideAll(){ document.querySelectorAll("body > div").forEach(d=>d.style.display="none"); }
+
+// ===== DEPOSIT =====
+function submitDeposit(){
+  let amt = Number(document.getElementById("depositAmount").value);
+  if(!amt || amt <=0){ alert("Enter valid amount"); return; }
+  balance += amt;
+  updateBalance();
+  localStorage.setItem("rockBalance", balance);
+  alert("Deposit successful! Balance updated.");
+  backHome();
 }
 
+// ===== WITHDRAW =====
+function submitWithdraw(){
+  let amt = Number(document.getElementById("wAmount").value);
+  if(!amt || amt <=0){ alert("Enter valid amount"); return; }
+  if(amt > balance){ alert("Insufficient balance"); return; }
+  balance -= amt;
+  updateBalance();
+  localStorage.setItem("rockBalance", balance);
+  alert("Withdrawal requested successfully!");
+  backHome();
+}
+
+// ===== COPY LINK =====
+function copyLink(){
+  let link = document.getElementById("shareLink");
+  link.select();
+  document.execCommand("copy");
+  alert("Link Copied!");
+}
 </script>
 
 </body>
