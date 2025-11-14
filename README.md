@@ -83,7 +83,9 @@ body{
 </div><script>
 let users = JSON.parse(localStorage.getItem("reUsers")) || [];
 let currentUser = JSON.parse(localStorage.getItem("reCurrent")) || null;
+
 if(currentUser){ loadDashboard(); }
+
 function signupUser(){
   let n=document.getElementById('authName').value.trim();
   let e=document.getElementById('authEmail').value.trim();
@@ -97,6 +99,7 @@ function signupUser(){
   localStorage.setItem('reCurrent',JSON.stringify(currentUser));
   loadDashboard();
 }
+
 function loginUser(){
   let e=document.getElementById('authEmail').value.trim();
   let p=document.getElementById('authPass').value.trim();
@@ -106,11 +109,13 @@ function loginUser(){
   localStorage.setItem('reCurrent',JSON.stringify(currentUser));
   loadDashboard();
 }
+
 function forgotPassword(){
   let email=prompt('Enter your registered email');
   let user=users.find(u=>u.email===email);
   if(user){ alert('Your password is: '+user.pass); } else { alert('Email not found');}
 }
+
 function logout(){
   currentUser=null;
   localStorage.removeItem('reCurrent');
@@ -144,11 +149,13 @@ const plans=[
 {name:'Coming Soon 1',price:0,daily:0},
 {name:'Coming Soon 2',price:0,daily:0}
 ];
+
 function loadDashboard(){
   document.getElementById('authBox').style.display='none';
   document.getElementById('welcomeName').innerText=currentUser.name;
   renderPlans();
 }
+
 function renderPlans(){
   let container=document.getElementById('plansContainer');
   container.innerHTML='';
@@ -163,6 +170,7 @@ function renderPlans(){
     container.appendChild(card);
   });
 }
+
 function openPanel(type){
   let panel=document.getElementById('sidePanel');
   panel.style.right='0px';
@@ -176,6 +184,7 @@ function openPanel(type){
     case 'settings': panel.innerHTML=`<h2 class='text-2xl font-bold mb-4'>Settings</h2>`; break;
   }
 }
+
 function buyPlan(amount){
   openPanel('deposit');
   document.getElementById('sidePanel').innerHTML+=`<p>Selected Plan Amount: ${amount} PKR</p>`;
