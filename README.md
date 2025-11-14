@@ -1,4 +1,4 @@
-<ROCK ON><html lang="en">
+<ROCK EARNING><html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -31,14 +31,20 @@ input, select{background:#1e213d;border:none;padding:10px;width:100%;border-radi
 <div class="card">
 <p id="welcome"></p>
 <p>Available Balance: <span id="balance">₨ 0</span></p>
-<button class="btn btn-deposit mt-2" onclick="showDeposit()">Deposit</button>
-<button class="btn btn-withdraw mt-2" onclick="showWithdraw()">Withdraw</button>
-<button class="btn mt-2" onclick="showPlans()">View Plans</button>
-<button class="btn btn-logout mt-2" onclick="logout()">Logout</button>
+<div class="flex gap-2 flex-wrap">
+<button class="btn btn-deposit" onclick="showDeposit()">Deposit</button>
+<button class="btn btn-withdraw" onclick="showWithdraw()">Withdraw</button>
+<button class="btn" onclick="showPlans()">Plans</button>
+<button class="btn" onclick="showShare()">Share Link</button>
+<button class="btn" onclick="showProfile()">Profile</button>
+<button class="btn btn-logout" onclick="logout()">Logout</button>
 </div>
-<div id="plansArea" class="scroll"></div>
+</div>
+<div id="plansArea" class="scroll hidden"></div>
 <div id="depositArea" class="hidden card"></div>
 <div id="withdrawArea" class="hidden card"></div>
+<div id="shareArea" class="hidden card"></div>
+<div id="profileArea" class="hidden card"></div>
 </div><script>
 // ===== USER DATA =====
 let users = JSON.parse(localStorage.getItem("rockUsers")) || [];
@@ -113,23 +119,33 @@ function hideAllSections(){
   document.getElementById("plansArea").classList.add("hidden");
   document.getElementById("depositArea").classList.add("hidden");
   document.getElementById("withdrawArea").classList.add("hidden");
+  document.getElementById("shareArea").classList.add("hidden");
+  document.getElementById("profileArea").classList.add("hidden");
 }
 
+// ===== PLANS =====
 function showPlans(){
   hideAllSections();
   let html = '';
-  plans.forEach(p=>{
-    html += `<div class='card'><h3>${p.name}</h3><p>Price: ${p.price} PKR</p><p>Daily Profit: ${p.profit}</p><p>Days: ${p.days}</p></div>`;
+  plans.forEach((p,i)=>{
+    html += `<div class='card'><h3>${p.name}</h3><p>Price: ${p.price} PKR</p><p>Daily Profit: ${p.profit}</p><p>Days: ${p.days}</p><button class='btn btn-deposit mt-2' onclick='showDeposit(${p.price})'>Buy Now</button></div>`;
   });
   let area = document.getElementById("plansArea");
   area.innerHTML = html;
   area.classList.remove("hidden");
 }
 
-function showDeposit(){
+// ===== DEPOSIT =====
+function showDeposit(amount=0){
   hideAllSections();
   let area = document.getElementById("depositArea");
-  area.innerHTML = `<h3>Deposit Amount</h3><input id='depAmt' type='number' placeholder='Enter Amount'><button class='btn btn-deposit mt-2' onclick='submitDeposit()'>Deposit</button>`;
+  area.innerHTML = `<h3>Deposit</h3>
+<select id='depMethod'><option value='jazz'>JazzCash</option><option value='easy'>EasyPaisa</option></select>
+<p>JazzCash: 03705519562 | EasyPaisa: 03379827882</p>
+<input id='depAmt' type='number' placeholder='Enter Amount' value='${amount}'>
+<input id='trxId' placeholder='Transaction ID'>
+<input id='proof' type='file'>
+<button class='btn btn-deposit mt-2' onclick='submitDeposit()'>Submit Deposit</button>`;
   area.classList.remove("hidden");
 }
 
@@ -143,15 +159,21 @@ function submitDeposit(){
   hideAllSections();
 }
 
+// ===== WITHDRAW =====
 function showWithdraw(){
   hideAllSections();
   let area = document.getElementById("withdrawArea");
-  area.innerHTML = `<h3>Withdraw Amount</h3><input id='withAmt' type='number' placeholder='Enter Amount'><button class='btn btn-withdraw mt-2' onclick='submitWithdraw()'>Withdraw</button>`;
+  area.innerHTML = `<h3>Withdraw</h3>
+<select id='withMethod'><option value='jazz'>JazzCash</option><option value='easy'>EasyPaisa</option><option value='bank'>Bank</option></select>
+<input id='wName' placeholder='Full Name'>
+<input id='wAcc' placeholder='Account / Number'>
+<input id='wAmt' type='number' placeholder='Enter Amount'>
+<button class='btn btn-withdraw mt-2' onclick='submitWithdraw()'>Withdraw</button>`;
   area.classList.remove("hidden");
 }
 
 function submitWithdraw(){
-  let amt = Number(document.getElementById('withAmt').value);
+  let amt = Number(document.getElementById('wAmt').value);
   if(!amt || amt<=0){alert('Enter valid amount'); return;}
   if(amt>balance){alert('Insufficient balance'); return;}
   balance -= amt;
@@ -159,6 +181,32 @@ function submitWithdraw(){
   updateBalance();
   alert('Withdrawal requested');
   hideAllSections();
+}
+
+// ===== SHARE =====
+function showShare(){
+  hideAllSections();
+  let area = document.getElementById('shareArea');
+  area.innerHTML = `<h3>Share Your Link</h3><input id='shareLink' value='https://rockearn.com?ref=ROCK123'><button class='btn mt-2' onclick='copyLink()'>Copy Link</button>`;
+  area.classList.remove('hidden');
+}
+
+function copyLink(){
+  let link = document.getElementById('shareLink');
+  link.select();
+  document.execCommand('copy');
+  alert('Link Copied!');
+}
+
+// ===== PROFILE =====
+function showProfile(){
+  hideAllSections();
+  let area = document.getElementById('profileArea');
+  area.innerHTML = `<h3>Profile</h3><p>Username: ${currentUser.name}</p><p>Email: ${currentUser.email}</p>
+<h4>Company Details</h4>
+<p>Rock Earn Inc, Founded: 2018, Based in California, USA</p>
+<p>Working with crypto & Binance</p>`;
+  area.classList.remove('hidden');
 }
 </script></body>
 </html>
