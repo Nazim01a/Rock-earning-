@@ -1,8 +1,8 @@
-<ROCK EARNING><html lang="en">
+<ROCK ON><html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Rock Earn - Dashboard</title>
+<title>Rock Earn Dashboard</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
 body{font-family:'Segoe UI',sans-serif;background:linear-gradient(120deg,#0f1123,#1c1f3b);color:white;margin:0;}
@@ -40,9 +40,12 @@ input, select{background:#1e213d;border:none;padding:10px;width:100%;border-radi
 <p id="welcome" class="text-xl font-semibold mb-4"></p>
 <p>Available Balance: <span id="balance">₨ 0</span></p>
 <div class="dashboard-icons">
+<div onclick="showPlans()">📈 Plans</div>
 <div onclick="showDeposit()">💰 Deposit</div>
 <div onclick="showWithdraw()">🏧 Withdraw</div>
-<div onclick="showPlans()">📈 Plans</div>
+<div onclick="showProfit()">📊 Daily Profit</div>
+<div onclick="showAccountDetails()">💳 Account Details</div>
+<div onclick="showSettings()">⚙️ Settings</div>
 <div onclick="showShare()">🔗 Share Link</div>
 <div onclick="showProfile()">👤 Profile</div>
 <div onclick="showCompany()">🏢 Company Details</div>
@@ -51,6 +54,9 @@ input, select{background:#1e213d;border:none;padding:10px;width:100%;border-radi
 <div id="plansArea" class="scroll hidden"></div>
 <div id="depositArea" class="hidden card"></div>
 <div id="withdrawArea" class="hidden card"></div>
+<div id="profitArea" class="hidden card"></div>
+<div id="accountArea" class="hidden card"></div>
+<div id="settingsArea" class="hidden card"></div>
 <div id="shareArea" class="hidden card"></div>
 <div id="profileArea" class="hidden card"></div>
 <div id="companyArea" class="hidden card"></div><script>
@@ -114,7 +120,7 @@ function logout(){
 function showDashboard(){
   document.getElementById("authPage").style.display="none";
   document.getElementById("dashboard").style.display="block";
-  document.getElementById("welcome").innerText="Welcome, "+currentUser.name;
+  document.getElementById("welcome").innerText="Welcome to Rock Earning, "+currentUser.name;
   updateBalance();
   hideAllSections();
 }
@@ -125,27 +131,36 @@ function updateBalance(){
 }
 
 function hideAllSections(){
-  document.getElementById("plansArea").classList.add("hidden");
-  document.getElementById("depositArea").classList.add("hidden");
-  document.getElementById("withdrawArea").classList.add("hidden");
-  document.getElementById("shareArea").classList.add("hidden");
-  document.getElementById("profileArea").classList.add("hidden");
-  document.getElementById("companyArea").classList.add("hidden");
+  document.querySelectorAll('#plansArea,#depositArea,#withdrawArea,#profitArea,#accountArea,#settingsArea,#shareArea,#profileArea,#companyArea').forEach(s=>s.classList.add('hidden'));
 }
 
-function showProfile(){
+function showPlans(){
   hideAllSections();
-  let html=`<div class='profile-content'><div class='profile-card'><h3>User Info</h3><p>Username: ${currentUser.name}</p><p>Email: ${currentUser.email}</p></div></div>`;
-  let area=document.getElementById("profileArea");
+  let html='';
+  plans.forEach(p=>{
+    if(p.price===0){ html+=`<div class='card'><h3>${p.name}</h3><p class='text-yellow-400'>Coming Soon</p></div>`; return; }
+    html+=`<div class='card'><h3>${p.name}</h3><p>Price: ${p.price}</p><p>Total Profit: ${p.profit}</p><button class='btn btn-deposit' onclick='showDeposit(${p.price})'>Buy Now</button></div>`;
+  });
+  let area=document.getElementById("plansArea");
   area.innerHTML=html;
   area.classList.remove("hidden");
 }
 
-function showCompany(){
+function showDeposit(amount=0){
   hideAllSections();
-  let html=`<h3>Company Details</h3><p>Company: Rock Earn Digital Pvt Ltd</p><p>Founded: 2018</p><p>Based in: California, United States</p><p>Services: Crypto, Binance integration, Earning Plans</p><p>Support: 24/7</p>`;
-  let area=document.getElementById("companyArea");
-  area.innerHTML=html;
-  area.classList.remove("hidden");
+  let html=`<h3>Deposit</h3><select id='depMethod'><option value='jazz'>JazzCash</option><option value='easy'>EasyPaisa</option></select>
+  <p>JazzCash: 03705519562 | EasyPaisa: 03379827882</p>
+  <input id='depAmount' placeholder='Amount' value='${amount}'>
+  <input id='trxid' placeholder='Transaction ID'>
+  <input type='file' id='proof'>
+  <button class='btn btn-deposit' onclick='submitDeposit()'>Submit</button>`;
+  let area=document.getElementById("depositArea"); area.innerHTML=html; area.classList.remove('hidden');
 }
-</script>
+
+function submitDeposit(){
+  let amt=Number(document.getElementById('depAmount').value);
+  if(!amt || amt<=0){alert('Enter valid amount'); return;}
+  balance+=amt; localStorage.setItem('rockBalance',balance); updateBalance(); alert('Deposit successful!'); hideAllSections();
+}
+</script></body>
+</html>
