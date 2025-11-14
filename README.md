@@ -35,24 +35,54 @@ input,select{padding:10px;border-radius:10px;width:100%;margin-bottom:10px;backg
 let users = JSON.parse(localStorage.getItem('reUsers'))||[];
 let currentUser = JSON.parse(localStorage.getItem('reCurrent'))||null;
 
-if(currentUser){openDashboard();} // auto-login after refresh
+if(currentUser){openDashboard();}
 
 function validateEmail(e){return/^\S+@\S+\.\S+$/.test(e);}
-function signupUser(){let n=document.getElementById('authName').value.trim();let e=document.getElementById('authEmail').value.trim();let p=document.getElementById('authPass').value.trim();if(!n||!e||!p)return alert('Fill all fields');if(!validateEmail(e))return alert('Invalid email');if(users.find(u=>u.email===e))return alert('Email already registered');let u={name:n,email:e,pass:p};users.push(u);localStorage.setItem('reUsers',JSON.stringify(users));currentUser=u;localStorage.setItem('reCurrent',JSON.stringify(u));openDashboard();}
+function signupUser(){let n=document.getElementById('authName').value.trim();let e=document.getElementById('authEmail').value.trim();let p=document.getElementById('authPass').value.trim();if(!n||!e||!p)return alert('Fill all fields');if(!validateEmail(e))return alert('Invalid email');if(users.find(u=>u.email===e))return alert('Email already registered');let u={name:n,email:e,pass:p,plans:[]};users.push(u);localStorage.setItem('reUsers',JSON.stringify(users));currentUser=u;localStorage.setItem('reCurrent',JSON.stringify(u));openDashboard();}
 function loginUser(){let e=document.getElementById('authEmail').value.trim();let p=document.getElementById('authPass').value.trim();let u=users.find(x=>x.email===e&&x.pass===p);if(!u)return alert('Invalid credentials');currentUser=u;localStorage.setItem('reCurrent',JSON.stringify(u));openDashboard();}
 function forgotPassword(){let e=prompt('Enter your email');if(!validateEmail(e))return alert('Invalid email');let u=users.find(x=>x.email===e);if(!u)return alert('Email not found');alert('Your password: '+u.pass);}
 
 function openDashboard(){document.getElementById('authBox').style.display='none';document.getElementById('welcomeBox').style.display='block';document.getElementById('dashboard').style.display='block';document.getElementById('welcomeBox').innerHTML=`<h2>Welcome, ${currentUser.name} 💖</h2><button onclick="logoutUser()" class='btn bg-red-600 w-full mt-2'><i class='fa fa-sign-out-alt'></i> Logout</button>`;loadPlans();}
 function logoutUser(){localStorage.removeItem('reCurrent');location.reload();}
 
-// PLANS DATA
-let plans=[{name:'Starter',amount:180},{name:'Basic',amount:350},{name:'Pro',amount:500},{name:'Premium',amount:1000},{name:'Ultra',amount:2500},{name:'Mega',amount:5000},{name:'Elite',amount:7000}];
-function loadPlans(){let box=document.getElementById('planList');box.innerHTML='';plans.forEach(p=>{box.innerHTML+=`<div class='card'><h3>${p.name}</h3><p>Price: ${p.amount} PKR</p><button class='btn' onclick="openPanel('deposit',${p.amount})"><i class='fa fa-cart-plus'></i> Buy Now</button></div>`;});}
+// PLANS DATA WITH DAILY PROFIT AND COMING SOON
+let plans=[
+  {name:'Starter',amount:180,daily:20},
+  {name:'Basic',amount:350,daily:50},
+  {name:'Pro',amount:500,daily:80},
+  {name:'Premium',amount:1000,daily:180},
+  {name:'Ultra',amount:2500,daily:450},
+  {name:'Mega',amount:5000,daily:950},
+  {name:'Elite',amount:7000,daily:1350},
+  {name:'Mega Booster',amount:10000,daily:1500,coming:true},
+  {name:'Ultra Pro',amount:15000,daily:2300,coming:true},
+  {name:'Crypto Miner',amount:20000,daily:3500,coming:true}
+];
 
-function openPanel(type,amount){let panel=document.getElementById('sidePanel');panel.classList.remove('hidden');panel.innerHTML='';if(type==='profile'){panel.innerHTML=`<h2>Profile</h2><p>Name: ${currentUser.name}</p><p>Email: ${currentUser.email}</p>`;}
-if(type==='deposit'){panel.innerHTML=`<h2>Deposit</h2><p>Amount: ${amount} PKR</p><p>JazzCash: 03705519562 <button onclick="copyText('03705519562')" class='btn'>Copy</button></p><p>EasyPaisa: 03379827882 <button onclick="copyText('03379827882')" class='btn'>Copy</button></p><input type='text' placeholder='Transaction ID' /><button class='btn w-full mt-2'>Upload Proof</button>`;}
+function loadPlans(){
+  let box=document.getElementById('planList');
+  box.innerHTML='';
+  plans.forEach(p=>{
+    box.innerHTML+=`<div class='card'>
+      <h3>${p.name}${p.coming? ' (Coming Soon)':''}</h3>
+      <p>Price: ${p.amount} PKR</p>
+      <p>Daily Profit: ${p.daily} PKR</p>
+      ${!p.coming? `<button class='btn' onclick="buyPlan(${p.amount},'${p.name}')"><i class='fa fa-cart-plus'></i> Buy Now</button>`:''}
+    </div>`;
+  });
+}
+
+function buyPlan(amount,name){
+  currentUser.plans.push({name:name,amount:amount});
+  localStorage.setItem('reCurrent',JSON.stringify(currentUser));
+  openPanel('deposit',amount,name);
+}
+
+function openPanel(type,amount=0,name=''){let panel=document.getElementById('sidePanel');panel.classList.remove('hidden');panel.innerHTML='';
+if(type==='profile'){panel.innerHTML=`<h2>Profile</h2><p>Name: ${currentUser.name}</p><p>Email: ${currentUser.email}</p><p>Plans Bought: ${currentUser.plans.map(p=>p.name).join(', ') || 'None'}</p>`;}
+if(type==='deposit'){panel.innerHTML=`<h2>Deposit</h2><p>Plan Selected: ${name}</p><p>Amount: ${amount} PKR</p><p>JazzCash: 03705519562 <button onclick="copyText('03705519562')" class='btn'>Copy</button></p><p>EasyPaisa: 03379827882 <button onclick="copyText('03379827882')" class='btn'>Copy</button></p><input type='text' placeholder='Transaction ID' /><button class='btn w-full mt-2'>Upload Proof</button>`;}
 if(type==='withdraw'){panel.innerHTML=`<h2>Withdraw</h2><input placeholder='Amount'/><select><option>JazzCash</option><option>EasyPaisa</option><option>Bank</option></select><input placeholder='Account Number'/><button class='btn w-full mt-2'>Withdraw</button>`;}
-if(type==='activity'){panel.innerHTML=`<h2>Activity</h2><ul><li>No activity yet</li></ul>`;}
+if(type==='activity'){panel.innerHTML=`<h2>Activity</h2><ul>${currentUser.plans.map(p=>`<li>${p.name} - ${p.amount} PKR</li>`).join('')}</ul>`;}
 if(type==='company'){panel.innerHTML=`<h2>Company Details</h2><p>Founded: 2018</p><p>Partnered: Binance & Crypto</p><p>Address: 3500 Deer Creek Road, Palo Alto, CA, USA</p>`;}
 if(type==='settings'){panel.innerHTML=`<h2>Settings</h2><input placeholder='Change Name'/><input placeholder='Change Email'/><input type='password' placeholder='Change Password'/><label><input type='checkbox'/> Enable Notifications</label><button class='btn w-full mt-2'>Save</button>`;}}
 
