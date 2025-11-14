@@ -1,8 +1,8 @@
-<!DOCTYPE html><html lang="en">
+<WELCOME TO ROCK><html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Rock Earn - Login / Signup</title>
+<title>Rock Earn - Persistent Login</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
 body{font-family:'Segoe UI',sans-serif;background:linear-gradient(120deg,#0f1123,#1c1f3b);color:white;margin:0;}
@@ -48,7 +48,6 @@ function signup(){
   localStorage.setItem("rockUsers", JSON.stringify(users));
   currentUser = u;
   localStorage.setItem("rockCurrentUser", JSON.stringify(currentUser));
-  alert("Signup successful!");
   showDashboard();
 }
 
@@ -60,7 +59,6 @@ function login(){
   if(!u){alert("Invalid credentials"); return;}
   currentUser = u;
   localStorage.setItem("rockCurrentUser", JSON.stringify(currentUser));
-  alert("Login successful!");
   showDashboard();
 }
 
