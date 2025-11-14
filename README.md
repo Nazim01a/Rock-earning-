@@ -162,14 +162,31 @@ function login(){
   let email = document.getElementById("email").value.trim();
   let pass = document.getElementById("password").value.trim();
   if(!uname || !email || !pass){ alert("Fill all fields"); return; }
-  user = {name: uname, email: email, password: pass};
-  localStorage.setItem("rockUser", JSON.stringify(user));
+
+  // Check existing user
+  let storedUser = JSON.parse(localStorage.getItem("rockUser"));
+  if(storedUser){
+    if(storedUser.email === email && storedUser.password === pass){
+      user = storedUser;
+    } else if(storedUser.email !== email){
+      // New email, create new user
+      user = {name: uname, email: email, password: pass};
+      localStorage.setItem("rockUser", JSON.stringify(user));
+    } else {
+      alert("Wrong password for this email"); return;
+    }
+  } else {
+    user = {name: uname, email: email, password: pass};
+    localStorage.setItem("rockUser", JSON.stringify(user));
+  }
+
   if(localStorage.getItem("rockBalance") === null){
     balance = 0;
     localStorage.setItem("rockBalance", balance);
   } else {
     balance = Number(localStorage.getItem("rockBalance"));
   }
+
   document.getElementById("authPage").style.display="none";
   document.getElementById("dashboard").style.display="block";
   updateHeader();
