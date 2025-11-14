@@ -2,12 +2,13 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Rock Earn Official — Final</title>
+<title>Rock Earn Official — Pro Final Enhanced</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
 body{font-family:'Segoe UI',sans-serif;background:#0d0f1d;color:white;}
-.card{background:#15172b;border-radius:18px;padding:20px;box-shadow:0 0 20px #0005;}
-.btn{background:#4f46e5;padding:10px 16px;border-radius:10px;font-weight:600;}
+.card{background:#15172b;border-radius:18px;padding:20px;box-shadow:0 0 20px #0005;transition:0.3s;}
+.card:hover{transform:scale(1.02);}
+.btn{background:#4f46e5;padding:10px 16px;border-radius:10px;font-weight:600;transition:0.2s;}
 .btn:hover{background:#4338ca;}
 </style>
 </head>
@@ -58,20 +59,14 @@ body{font-family:'Segoe UI',sans-serif;background:#0d0f1d;color:white;}
   </div></div><script>
 let users = JSON.parse(localStorage.getItem("reUsers")) || [];
 let currentUser = JSON.parse(localStorage.getItem("reCurrent")) || null;
-
-// EMAIL CHECK
 function validateEmail(m){return /^\S+@\S+\.\S+$/.test(m);}   
-
-// SIGNUP
 function signupUser(){
   let n=document.getElementById('authName').value.trim();
   let e=document.getElementById('authEmail').value.trim();
   let p=document.getElementById('authPass').value.trim();
-
   if(!n||!e||!p) return alert('Fill all fields');
   if(!validateEmail(e)) return alert('Invalid email');
   if(users.find(u=>u.email===e)) return alert('Email already registered');
-
   let u={name:n,email:e,pass:p};
   users.push(u);
   localStorage.setItem('reUsers',JSON.stringify(users));
@@ -79,20 +74,15 @@ function signupUser(){
   localStorage.setItem('reCurrent',JSON.stringify(u));
   openDashboard();
 }
-
-// LOGIN
 function loginUser(){
   let e=document.getElementById('authEmail').value.trim();
   let p=document.getElementById('authPass').value.trim();
-
   let u=users.find(x=>x.email===e && x.pass===p);
   if(!u) return alert('Invalid credentials');
   currentUser=u;
   localStorage.setItem('reCurrent',JSON.stringify(u));
   openDashboard();
 }
-
-// FORGOT PASSWORD
 function forgotPassword(){
   let e=prompt('Enter your email');
   if(!validateEmail(e)) return alert('Invalid email');
@@ -100,83 +90,43 @@ function forgotPassword(){
   if(!u) return alert('Email not found');
   alert('Your password: '+u.pass);
 }
-
-// DASHBOARD LOAD
 function openDashboard(){
   document.getElementById('authBox').style.display='none';
   document.getElementById('welcomeBox').style.display='block';
   document.getElementById('dashboard').style.display='block';
-
-  document.getElementById('welcomeBox').innerHTML = `
-    <h2 class='text-2xl font-bold mb-2'>Welcome, ${currentUser.name} 💖</h2>
-    <button onclick="logoutUser()" class="btn bg-red-600 hover:bg-red-700 w-full">Logout</button>
-  `;
-
-  document.getElementById('profName').innerText = "Name: "+currentUser.name;
-  document.getElementById('profEmail').innerText = "Email: "+currentUser.email;
+  document.getElementById('welcomeBox').innerHTML=`<h2 class='text-2xl font-bold mb-2'>Welcome, ${currentUser.name} 💖</h2><button onclick="logoutUser()" class="btn bg-red-600 hover:bg-red-700 w-full">Logout</button>`;
+  document.getElementById('profName').innerText="Name: "+currentUser.name;
+  document.getElementById('profEmail').innerText="Email: "+currentUser.email;
   loadPlans();
+  notify('Welcome back, '+currentUser.name+' ❤️');
 }
-
-// LOGOUT
 function logoutUser(){localStorage.removeItem('reCurrent');location.reload();}
-
-// PLANS
-let plans=[
-  {name:"Starter",amount:180},
-  {name:"Basic",amount:350},
-  {name:"Pro",amount:500},
-  {name:"Premium",amount:1000},
-  {name:"Ultra",amount:2500},
-  {name:"Mega",amount:5000},
-  {name:"Elite",amount:7000}
-];
-
+let plans=[{name:"Starter",amount:180},{name:"Basic",amount:350},{name:"Pro",amount:500},{name:"Premium",amount:1000},{name:"Ultra",amount:2500},{name:"Mega",amount:5000},{name:"Elite",amount:7000}];
 function loadPlans(){
   let box=document.getElementById('planList'); box.innerHTML="";
-  plans.forEach(p=>{
-    box.innerHTML+=`
-      <div class='card'>
-        <h3 class='text-xl font-bold mb-1'>${p.name}</h3>
-        <p class='mb-3'>Price: ${p.amount} PKR</p>
-        <button class='btn' onclick="openDeposit(${p.amount})">Buy Now</button>
-      </div>
-    `;
-  });
+  plans.forEach(p=>{box.innerHTML+=`<div class='card'><h3 class='text-xl font-bold mb-1'>${p.name}</h3><p class='mb-3'>Price: ${p.amount} PKR</p><button class='btn' onclick="openDeposit(${p.amount})">Buy Now</button></div>`;});
 }
+function openDeposit(a){document.getElementById('depositPanel').classList.remove('hidden');document.getElementById('depAmount').innerText=a;}
+function copyText(id){let i=document.getElementById(id);i.select();navigator.clipboard.writeText(i.value);alert('Copied');}
+function confirmDeposit(){let t=document.getElementById('trxId').value.trim();if(!t)return alert('Enter Transaction ID');alert('Deposit Submitted');}
+function withdrawNow(){let a=document.getElementById('wdAmount').value;let m=document.getElementById('wdMethod').value;let n=document.getElementById('wdNum').value;if(!a||!m||!n)return alert('Fill all fields');alert('Withdrawal Request Sent');}
 
-// OPEN DEPOSIT PANEL
-function openDeposit(a){
-  document.getElementById('depositPanel').classList.remove('hidden');
-  document.getElementById('depAmount').innerText=a;
-}
+// EXTRA ENHANCED FEATURES
+function notify(msg){let box=document.createElement('div');box.className='fixed top-4 right-4 bg-blue-600 p-3 rounded shadow text-white animate-pulse';box.innerText=msg;document.body.appendChild(box);setTimeout(()=>box.remove(),4000);}
+if(currentUser){notify('Welcome back, '+currentUser.name+' ❤️');}
 
-// COPY
-function copyText(id){
-  let i=document.getElementById(id);
-  i.select();
-  navigator.clipboard.writeText(i.value);
-  alert('Copied');
-}
+// Real-time Earnings Simulator
+let totalEarn=0;
+let earnBox=document.createElement('div');
+earnBox.className='fixed bottom-4 right-4 bg-green-600 p-4 rounded-xl shadow-xl text-black font-bold';
+document.body.appendChild(earnBox);
+setInterval(()=>{
+  totalEarn+=Math.floor(Math.random()*20)+5;
+  earnBox.innerHTML=`Daily Profit: ${Math.floor(totalEarn/30)} PKR<br>Total Earnings: ${totalEarn} PKR`;
+},5000);
 
-// CONFIRM DEPOSIT
-function confirmDeposit(){
-  let t=document.getElementById('trxId').value.trim();
-  if(!t) return alert('Enter Transaction ID');
-  alert('Deposit Submitted');
-}
-
-// WITHDRAW
-function withdrawNow(){
-  let a=document.getElementById('wdAmount').value;
-  let m=document.getElementById('wdMethod').value;
-  let n=document.getElementById('wdNum').value;
-
-  if(!a||!m||!n) return alert('Fill all fields');
-  alert('Withdrawal Request Sent');
-}
-
-// AUTO LOGIN RESTORE
+// Loader
+let loader=document.createElement('div');loader.style=`position:fixed;top:0;left:0;width:100%;height:100%;background:#000c;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:bold;z-index:9999;backdrop-filter:blur(4px);`;loader.innerHTML='Loading...';document.body.appendChild(loader);setTimeout(()=>loader.remove(),1200);
 if(currentUser) openDashboard();
-
 </script></body>
 </html>
