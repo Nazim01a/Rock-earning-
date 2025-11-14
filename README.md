@@ -2,30 +2,33 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Rock Earn Pro — Premium Dashboard</title>
+<title>Rock Earn Pro — Full Premium Animated</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 <style>
-body{font-family:'Segoe UI',sans-serif;background:linear-gradient(120deg,#0a0f1f,#1b1f3b);color:white;animation:bgAnim 15s infinite alternate;}
+body{font-family:'Segoe UI',sans-serif;background:linear-gradient(120deg,#0a0f1f,#1b1f3b);color:white;animation:bgAnim 20s infinite alternate;overflow-x:hidden;}
 @keyframes bgAnim{0%{background:linear-gradient(120deg,#0a0f1f,#1b1f3b);}50%{background:linear-gradient(120deg,#1b1f3b,#0a0f1f);}100%{background:linear-gradient(120deg,#0a0f1f,#1b1f3b);}}
-.card{background:rgba(255,255,255,0.05);border-radius:20px;padding:20px;backdrop-filter:blur(15px);box-shadow:0 0 30px #0ff6;transition:0.3s;transform:translateY(0);animation:fadeIn 0.8s ease forwards;}
-@keyframes fadeIn{0%{opacity:0;transform:translateY(20px);}100%{opacity:1;transform:translateY(0);}}
-.card:hover{transform:scale(1.03);box-shadow:0 0 35px #0ff;}
-.btn{background:#4f46e5;padding:10px 16px;border-radius:12px;font-weight:700;transition:0.2s;}
-.btn:hover{background:#4338ca;transform:scale(1.05);}
+.card{background:rgba(255,255,255,0.05);border-radius:20px;padding:20px;backdrop-filter:blur(15px);box-shadow:0 0 30px #0ff6;transition:0.3s;transform:translateY(0);animation:fadeIn 1s ease forwards;}
+@keyframes fadeIn{0%{opacity:0;transform:translateY(30px);}100%{opacity:1;transform:translateY(0);}}
+.card:hover{transform:scale(1.05);box-shadow:0 0 35px #0ff, 0 0 60px #4f46e5;}
+.btn{background:#4f46e5;padding:12px 18px;border-radius:12px;font-weight:700;transition:0.3s;animation:btnPulse 2s infinite;}
+.btn:hover{background:#4338ca;transform:scale(1.08);}
+@keyframes btnPulse{0%{box-shadow:0 0 5px #0ff;}50%{box-shadow:0 0 25px #4f46e5;}100%{box-shadow:0 0 5px #0ff;}}
 input,select{padding:12px;border-radius:12px;width:100%;margin-bottom:12px;background:#1b1e2f;color:white;border:none;transition:0.3s;}
-input:focus, select:focus{outline:none;box-shadow:0 0 10px #0ff;}
-.icon-btn{display:flex;align-items:center;gap:10px;font-weight:600;transition:0.3s;}
-.icon-btn:hover{transform:scale(1.05);}
-#sidePanel{position:fixed;top:0;right:-420px;width:400px;height:100vh;background:rgba(15,23,42,0.95);padding:20px;transition:0.4s;overflow-y:auto;z-index:999;}
+input:focus, select:focus{outline:none;box-shadow:0 0 12px #0ff;}
+.icon-btn{display:flex;align-items:center;gap:10px;font-weight:600;transition:0.3s;animation:iconHover 1.5s infinite alternate;}
+.icon-btn:hover{transform:scale(1.1);}
+@keyframes iconHover{0%{transform:translateY(0);}50%{transform:translateY(-5px);}100%{transform:translateY(0);}}
+#sidePanel{position:fixed;top:0;right:-450px;width:420px;height:100vh;background:rgba(15,23,42,0.95);padding:20px;transition:0.5s;overflow-y:auto;z-index:999;animation:panelSlide 0.8s ease forwards;}
 #sidePanel.active{right:0;}
+@keyframes panelSlide{0%{right:-450px;opacity:0;}100%{right:0;opacity:1;}}
 .plan-list{margin-top:20px;}
-.plan-item{border:1px solid #0ff;padding:12px;margin-bottom:10px;border-radius:12px;transition:0.2s;animation:planFade 0.5s ease forwards;}
+.plan-item{border:1px solid #0ff;padding:12px;margin-bottom:12px;border-radius:12px;transition:0.3s;animation:planFade 0.6s ease forwards;}
+.plan-item:hover{box-shadow:0 0 25px #0ff,0 0 50px #4f46e5;transform:scale(1.04);}
 @keyframes planFade{0%{opacity:0;transform:translateX(-20px);}100%{opacity:1;transform:translateX(0);}}
-.plan-item:hover{box-shadow:0 0 15px #0ff;transform:scale(1.02);}
-.header-logo{font-size:36px;font-weight:800;text-align:center;background:linear-gradient(90deg,#1e3a8a,#4f46e5);-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:logoGlow 2s infinite alternate;}
-@keyframes logoGlow{0%{text-shadow:0 0 5px #4f46e5;}50%{text-shadow:0 0 20px #4f46e5;}100%{text-shadow:0 0 5px #4f46e5;}}
-.logout-btn{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);width:200px;}
+.header-logo{font-size:40px;font-weight:900;text-align:center;background:linear-gradient(90deg,#1e3a8a,#4f46e5);-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:logoGlow 2.5s infinite alternate;}
+@keyframes logoGlow{0%{text-shadow:0 0 5px #4f46e5;}50%{text-shadow:0 0 20px #0ff;}100%{text-shadow:0 0 5px #4f46e5;}}
+.logout-btn{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);width:200px;animation:btnPulse 2s infinite;}
 </style>
 </head>
 <body class="p-4"><!-- HEADER --><header class="text-center py-6">
@@ -63,7 +66,7 @@ function signupUser(){let n=document.getElementById('authName').value.trim();let
 function loginUser(){let e=document.getElementById('authEmail').value.trim();let p=document.getElementById('authPass').value.trim();let u=users.find(x=>x.email===e&&x.pass===p);if(!u)return alert('Invalid credentials');currentUser=u;localStorage.setItem('reCurrent',JSON.stringify(u));openDashboard();}
 function openDashboard(){document.getElementById('authBox').style.display='none';document.getElementById('welcomeBox').style.display='block';document.getElementById('dashboard').style.display='grid';document.getElementById('welcomeBox').innerHTML=`<h2>Welcome, ${currentUser.name} 💎</h2><p>Balance: ${currentUser.balance} PKR</p><p>Total Profit: ${currentUser.profit} PKR</p>`;}
 function logoutUser(){currentUser=null;localStorage.removeItem('reCurrent');location.reload();}
-let plans=[{name:'Ulta Pro',amount:500, daily:80},{name:'Premium',amount:1000,daily:180},{name:'Gold',amount:2500,daily:450},{name:'Platinum',amount:5000,daily:950},{name:'Diamond',amount:7000,daily:1350},{name:'Elite',amount:10000,daily:2200},{name:'Mega Booster',amount:15000,daily:3500,coming:true},{name:'Ultra Pro',amount:20000,daily:4800,coming:true},{name:'Crypto Miner',amount:30000,daily:6500,coming:true}];
+let plans=[{name:'Ulta Pro',amount:500,daily:80},{name:'Premium',amount:1000,daily:180},{name:'Gold',amount:2500,daily:450},{name:'Platinum',amount:5000,daily:950},{name:'Diamond',amount:7000,daily:1350},{name:'Elite',amount:10000,daily:2200},{name:'Mega Booster',amount:15000,daily:3500,coming:true},{name:'Ultra Pro',amount:20000,daily:4800,coming:true},{name:'Crypto Miner',amount:30000,daily:6500,coming:true}];
 function openPanel(type,amount=0,name=''){let panel=document.getElementById('sidePanel');panel.classList.add('active');panel.innerHTML='';switch(type){case'plans':panel.innerHTML='<h2>All Plans</h2><div class="plan-list">'+plans.map(p=>`<div class='plan-item'><b>${p.name}</b> - ${p.amount} PKR - Daily Profit: ${p.daily} PKR ${p.coming?'(Coming Soon)':''}<button class='btn mt-1' onclick='buyPlan(${p.amount},"${p.name}")'>Buy Now</button></div>`).join('')+'</div>';break;case'profile':panel.innerHTML=`<h2>Your Profile</h2><p>Name: ${currentUser.name}</p><p>Email: ${currentUser.email}</p><button class='btn mt-2' onclick='copyText("https://rockearnpro.com/user/${currentUser.email}")'>Copy Profile Link</button>`;break;case'deposit':panel.innerHTML=`<h2>Deposit</h2><p>Amount Selected: <b>${amount}</b> PKR</p><p>JazzCash: 03705519562 <button class='btn' onclick='copyText("03705519562")'>Copy</button></p><p>EasyPaisa: 03379827882 <button class='btn' onclick='copyText("03379827882")'>Copy</button></p><input type='file' id='proofFile'><input type='text' placeholder='Transaction ID'><button class='btn mt-2' onclick='confirmDeposit()'>Submit</button>`;break;case'withdraw':panel.innerHTML=`<h2>Withdraw</h2><input type='number' placeholder='Amount'><select><option>JazzCash</option><option>EasyPaisa</option><option>Bank</option></select><input type='text' placeholder='Account Number'><button class='btn mt-2'>Withdraw</button>`;break;case'activity':panel.innerHTML=`<h2>Activity History</h2><p>• Deposit: 500 PKR</p><p>• Withdraw: 300 PKR</p><p>• Plan Bought: Basic Plan</p>`;break;case'company':panel.innerHTML=`<h2>Company Details</h2><p>Since: <b>2018</b></p><p>Industry: <b>Crypto & FinTech</b></p><p>Partner: <b>Binance</b></p><p>Address: <b>1234 Crypto Avenue, San Francisco, California, USA</b></p><p>Email: support@rockearnpro.com</p>`;break;case'settings':panel.innerHTML=`<h2>Settings</h2><input type='text' placeholder='Change Name'><input type='password' placeholder='Change Password'><button class='btn mt-2'>Save</button>`;break;case'referral':panel.innerHTML=`<h2>Referral</h2><p>Share your referral link:</p><input type='text' value='https://rockearnpro.com?ref=${currentUser.email}' readonly><button class='btn mt-2' onclick='copyText("https://rockearnpro.com?ref=${currentUser.email}")'>Copy Link</button>`;break;case'leaderboard':panel.innerHTML=`<h2>Leaderboard</h2><p>• User1 - 10,000 PKR</p><p>• User2 - 9,500 PKR</p>`;break;case'profit':panel.innerHTML=`<h2>Daily Profit</h2><p>Total Daily Profit: ${currentUser.profit} PKR</p>`;break;case'support':panel.innerHTML=`<h2>Support</h2><p>Contact us at support@rockearnpro.com</p>`;break;case'faq':panel.innerHTML=`<h2>FAQ</h2><p>Q1: How to deposit?</p><p>A1: Use JazzCash or EasyPaisa.</p>`;break;default:panel.innerHTML='';}}
 function buyPlan(amount,name){currentUser.plans.push({name:name,amount:amount});currentUser.balance+=amount;localStorage.setItem('reCurrent',JSON.stringify(currentUser));openPanel('deposit',amount,name);}
 function copyText(val){navigator.clipboard.writeText(val);alert('Copied: '+val);}
