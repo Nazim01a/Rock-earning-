@@ -1,4 +1,4 @@
-<ROCK>
+<ROCK EARNING>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
@@ -9,7 +9,7 @@
 body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(120deg,#0f1123,#1c1f3b); color:white; margin:0; }
 .card { background:#16182e; border-radius:14px; padding:18px; color:white; box-shadow:0 8px 20px rgba(0,0,0,0.5); transition: transform 0.2s;}
 .card:hover { transform: scale(1.02); }
-.btn { background:#5d5fef; padding:10px 18px; border-radius:10px; color:white; font-weight:600; cursor:pointer; text-align:center; display:inline-block; transition: transform 0.2s, opacity 0.2s; }
+.btn { background:#5d5fef; padding:10px 18px; border-radius:10px; color:white; font-weight:600; cursor:pointer; text-align:center; display:inline-block; transition: transform 0.2s, opacity 0.2s; margin-top:5px;}
 .btn:hover { opacity:0.85; transform: scale(1.05); }
 input, select { background:#1e213d; border:none; padding:10px; width:100%; border-radius:10px; color:white; margin-top:8px; }
 h2,h3 { margin:0; }
@@ -35,7 +35,8 @@ h2,h3 { margin:0; }
 <input id="username" placeholder="Enter Username">
 <input id="email" placeholder="Enter Gmail">
 <input id="password" placeholder="Enter Password" type="password">
-<button class="btn mt-4 w-full" onclick="login()">Continue</button>
+<button class="btn w-full" onclick="signup()">Sign Up</button>
+<button class="btn w-full" onclick="login()">Login</button>
 </div>
 
 <!-- DASHBOARD -->
@@ -58,7 +59,6 @@ h2,h3 { margin:0; }
 
 <h3 class="text-xl font-bold mb-2">Investment Plans</h3>
 <div id="plansArea" class="grid md:grid-cols-2 gap-4 scroll"></div>
-
 </div>
 
 <!-- PLAN PAGE -->
@@ -146,50 +146,57 @@ const plans = [
 // ===== ON LOAD =====
 window.onload = function(){
   if(user){
-    document.getElementById("authPage").style.display="none";
-    document.getElementById("dashboard").style.display="block";
-    updateHeader();
-    loadPlans();
+    showDashboard();
   } else {
     document.getElementById("authPage").style.display="block";
   }
   updateBalance();
 }
 
-// ===== LOGIN =====
-function login(){
+// ===== SIGNUP =====
+function signup(){
   let uname = document.getElementById("username").value.trim();
   let email = document.getElementById("email").value.trim();
   let pass = document.getElementById("password").value.trim();
   if(!uname || !email || !pass){ alert("Fill all fields"); return; }
 
-  // Check existing user
   let storedUser = JSON.parse(localStorage.getItem("rockUser"));
-  if(storedUser){
-    if(storedUser.email === email && storedUser.password === pass){
-      user = storedUser;
-    } else if(storedUser.email !== email){
-      // New email, create new user
-      user = {name: uname, email: email, password: pass};
-      localStorage.setItem("rockUser", JSON.stringify(user));
-    } else {
-      alert("Wrong password for this email"); return;
-    }
-  } else {
-    user = {name: uname, email: email, password: pass};
-    localStorage.setItem("rockUser", JSON.stringify(user));
+  if(storedUser && storedUser.email === email){
+    alert("Email already exists. Please login."); return;
+  }
+  
+  user = {name: uname, email: email, password: pass};
+  localStorage.setItem("rockUser", JSON.stringify(user));
+  localStorage.setItem("rockBalance", 0);
+  balance = 0;
+  alert("Sign Up successful!");
+  showDashboard();
+}
+
+// ===== LOGIN =====
+function login(){
+  let email = document.getElementById("email").value.trim();
+  let pass = document.getElementById("password").value.trim();
+  if(!email || !pass){ alert("Fill all fields"); return; }
+
+  let storedUser = JSON.parse(localStorage.getItem("rockUser"));
+  if(!storedUser || storedUser.email !== email || storedUser.password !== pass){
+    alert("Invalid credentials"); return;
   }
 
-  if(localStorage.getItem("rockBalance") === null){
-    balance = 0;
-    localStorage.setItem("rockBalance", balance);
-  } else {
-    balance = Number(localStorage.getItem("rockBalance"));
-  }
+  user = storedUser;
+  balance = Number(localStorage.getItem("rockBalance")) || 0;
+  alert("Login successful!");
+  showDashboard();
+}
 
+// ===== DASHBOARD SHOW =====
+function showDashboard(){
   document.getElementById("authPage").style.display="none";
   document.getElementById("dashboard").style.display="block";
-  updateHeader();
+  document.getElementById("headerUser").innerText = "Welcome, "+user.name;
+  document.getElementById("pUser")?.innerText = "Username: "+user.name;
+  document.getElementById("pMail")?.innerText = "Email: "+user.email;
   loadPlans();
   updateBalance();
 }
@@ -200,13 +207,6 @@ function logout(){
   localStorage.removeItem("rockUser");
   localStorage.setItem("rockBalance", balance);
   location.reload();
-}
-
-// ===== UPDATE HEADER =====
-function updateHeader(){
-  document.getElementById("headerUser").innerText = "Welcome, "+user.name;
-  document.getElementById("pUser")?.innerText = "Username: "+user.name;
-  document.getElementById("pMail")?.innerText = "Email: "+user.email;
 }
 
 // ===== BALANCE =====
