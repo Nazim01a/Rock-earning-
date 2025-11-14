@@ -7,18 +7,18 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
 body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(120deg,#0f1123,#1c1f3b); color:white; margin:0; }
-.card { background:#16182e; border-radius:14px; padding:18px; color:white; box-shadow:0 8px 20px rgba(0,0,0,0.5);}
-.btn { background:#5d5fef; padding:10px 18px; border-radius:10px; color:white; font-weight:600; cursor:pointer; text-align:center; display:inline-block; }
-.btn:hover { opacity:0.85; }
-input, select { background:#1e213d; border:none; padding:10px; width:100%; border-radius:10px; color:white; margin-top:8px;}
+.card { background:#16182e; border-radius:14px; padding:18px; color:white; box-shadow:0 8px 20px rgba(0,0,0,0.5); transition: transform 0.2s;}
+.card:hover { transform: scale(1.02); }
+.btn { background:#5d5fef; padding:10px 18px; border-radius:10px; color:white; font-weight:600; cursor:pointer; text-align:center; display:inline-block; transition: transform 0.2s, opacity 0.2s; }
+.btn:hover { opacity:0.85; transform: scale(1.05); }
+input, select { background:#1e213d; border:none; padding:10px; width:100%; border-radius:10px; color:white; margin-top:8px; }
 h2,h3 { margin:0; }
-.logo { font-size:28px; font-weight:bold; background: linear-gradient(90deg,#5d5fef,#00ffe0); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+.logo { font-size:28px; font-weight:bold; background: linear-gradient(90deg,#5d5fef,#00ffe0); -webkit-background-clip:text; -webkit-text-fill-color:transparent; animation: glow 2s infinite alternate;}
+@keyframes glow { 0% { filter: drop-shadow(0 0 5px #5d5fef);} 100% { filter: drop-shadow(0 0 20px #00ffe0);} }
 .scroll { max-height:300px; overflow-y:auto; }
 .btn-deposit { background:#1dd11d; }
 .btn-withdraw { background:#f5b700; color:black; }
 .btn-back { background:#555; }
-.table { width:100%; border-collapse:collapse; margin-top:10px;}
-.table th, .table td { border:1px solid #444; padding:8px; text-align:left; }
 </style>
 </head>
 <body>
@@ -40,6 +40,8 @@ h2,h3 { margin:0; }
 
 <!-- DASHBOARD -->
 <div id="dashboard" class="hidden p-5 max-w-5xl mx-auto">
+
+<!-- BALANCE + ACTIONS -->
 <div class="card mb-4 flex justify-between items-center">
   <div>
     <div class="text-gray-400">Available Balance</div>
@@ -57,6 +59,7 @@ h2,h3 { margin:0; }
 
 <h3 class="text-xl font-bold mb-2">Investment Plans</h3>
 <div id="plansArea" class="grid md:grid-cols-2 gap-4 scroll"></div>
+
 </div>
 
 <!-- PLAN PAGE -->
@@ -69,35 +72,30 @@ h2,h3 { margin:0; }
 <select id="depositMethod">
 <option value="jazz">JazzCash</option>
 <option value="easy">EasyPaisa</option>
+<option value="bank">Bank Account</option>
 </select>
 <div class="mt-2">
 <p><b>JazzCash Number:</b> 03705519562</p>
 <p><b>EasyPaisa Number:</b> 03379827882</p>
+<p><b>Bank Account:</b> 1234567890 | Bank XYZ</p>
 </div>
 <input id="depositAmount" placeholder="Enter Amount">
 <input id="trxid" placeholder="Transaction ID">
 <input id="proof" type="file">
 <button class="btn btn-deposit w-full mt-4" onclick="submitDeposit()">Submit Deposit</button>
-
-<h3 class="text-xl font-bold mt-4">Deposit History</h3>
-<div id="depositHistory"></div>
 </div>
 
 <!-- WITHDRAW PAGE -->
 <div id="withdrawPage" class="hidden p-5 max-w-md mx-auto card">
 <h2 class="text-2xl font-bold mb-3">Withdraw</h2>
-<label>Select Method:</label>
 <select id="withdrawMethod">
 <option value="jazz">JazzCash</option>
 <option value="easy">EasyPaisa</option>
 <option value="bank">Bank Account</option>
 </select>
-<input id="wNumber" placeholder="Your Number / Bank Acc">
+<input id="wNumber" placeholder="Your Number / Account">
 <input id="wAmount" placeholder="Enter Amount">
 <button class="btn btn-withdraw w-full mt-4" onclick="submitWithdraw()">Submit Withdrawal</button>
-
-<h3 class="text-xl font-bold mt-4">Withdrawal History</h3>
-<div id="withdrawHistory"></div>
 </div>
 
 <!-- SHARE PAGE -->
@@ -129,8 +127,6 @@ h2,h3 { margin:0; }
 // ===== USER DATA =====
 let user = JSON.parse(localStorage.getItem("rockUser")) || null;
 let balance = Number(localStorage.getItem("rockBalance")) || 0;
-let depositHistoryArr = JSON.parse(localStorage.getItem("rockDeposit")) || [];
-let withdrawHistoryArr = JSON.parse(localStorage.getItem("rockWithdraw")) || [];
 
 // ===== PLANS =====
 const plans = [
@@ -140,7 +136,12 @@ const plans = [
  {name:"Pro Plan", price:1200, profit:150, days:35},
  {name:"Advance Plan", price:2500, profit:320, days:40},
  {name:"Ultra Plan", price:4000, profit:520, days:45},
- {name:"Premium Plan", price:7000, profit:900, days:50}
+ {name:"Premium Plan", price:7000, profit:900, days:50},
+ {name:"Coming Soon 1", price:0, profit:0, days:0},
+ {name:"Coming Soon 2", price:0, profit:0, days:0},
+ {name:"Coming Soon 3", price:0, profit:0, days:0},
+ {name:"Coming Soon 4", price:0, profit:0, days:0},
+ {name:"Coming Soon 5", price:0, profit:0, days:0}
 ];
 
 // ===== ON LOAD =====
@@ -154,8 +155,6 @@ window.onload = function(){
     document.getElementById("authPage").style.display="block";
   }
   updateBalance();
-  renderDepositHistory();
-  renderWithdrawHistory();
 }
 
 // ===== LOGIN =====
@@ -169,7 +168,6 @@ function login(){
   document.getElementById("dashboard").style.display="block";
   updateHeader();
   loadPlans();
-  updateBalance();
 }
 
 // ===== LOGOUT =====
@@ -196,12 +194,15 @@ function updateBalance(){
 function loadPlans(){
   let html="";
   plans.forEach((p,i)=>{
+    let isComing = p.price === 0;
     html += `<div class='card'>
       <h3 class='text-xl font-bold mb-1'>${p.name}</h3>
+      ${isComing ? `<p class="text-yellow-400 font-semibold">Coming Soon</p>` : `
       <p>Price: <b>${p.price} PKR</b></p>
       <p>Daily Profit: <b>${p.profit} Rs/day</b></p>
       <p>Duration: <b>${p.days} Days</b></p>
       <p>Total Return: <b>${p.profit*p.days} Rs</b></p>
+      `}
       <button class='btn mt-2 w-full' onclick='openPlan(${i})'>View Details</button>
     </div>`;
   });
@@ -213,12 +214,21 @@ function openPlan(i){
   let p = plans[i];
   hideAll();
   document.getElementById("planPage").style.display="block";
+  if(p.price === 0){
+    document.getElementById("planPage").innerHTML = `
+      <h2 class='text-2xl font-bold mb-2'>${p.name}</h2>
+      <p class="text-yellow-400 font-semibold">This plan is coming soon!</p>
+      <button class='btn btn-back w-full mt-4' onclick='backHome()'>Back</button>
+    `;
+    return;
+  }
   document.getElementById("planPage").innerHTML = `
     <h2 class='text-2xl font-bold mb-2'>${p.name}</h2>
     <p>Price: ${p.price} PKR</p>
     <p>Daily Profit: ${p.profit} Rs</p>
     <p>Duration: ${p.days} Days</p>
     <p>Total Profit: ${p.profit*p.days} Rs</p>
+    <input id="depositAmount" type="number" placeholder="Amount (Default: ${p.price})" value="${p.price}">
     <button class='btn btn-deposit w-full mt-4' onclick='showDeposit()'>Deposit</button>
     <button class='btn btn-withdraw w-full mt-2' onclick='showWithdraw()'>Withdraw</button>
     <button class='btn btn-back w-full mt-2' onclick='backHome()'>Back</button>
@@ -232,56 +242,29 @@ function showShare(){ hideAll(); document.getElementById("sharePage").style.disp
 function showProfile(){ hideAll(); document.getElementById("profilePage").style.display="block"; }
 function showSupport(){ hideAll(); document.getElementById("supportPage").style.display="block"; }
 function backHome(){ hideAll(); document.getElementById("dashboard").style.display="block"; }
-function hideAll(){ const pages=["dashboard","planPage","depositPage","withdrawPage","sharePage","profilePage","supportPage"]; pages.forEach(id=>document.getElementById(id).style.display="none"); }
+function hideAll(){ document.querySelectorAll("body > div").forEach(d=>d.style.display="none"); }
 
 // ===== DEPOSIT =====
 function submitDeposit(){
   let amt = Number(document.getElementById("depositAmount").value);
-  let method = document.getElementById("depositMethod").value;
-  let trx = document.getElementById("trxid").value;
-  let proofFile = document.getElementById("proof").files[0]?.name || "No file";
-  if(!amt || amt<=0 || !trx){ alert("Enter valid amount & trxID"); return; }
+  if(!amt || amt <=0){ alert("Enter valid amount"); return; }
   balance += amt;
   updateBalance();
   localStorage.setItem("rockBalance", balance);
-  depositHistoryArr.push({amount:amt, method:method, trxID:trx, proof:proofFile, date:new Date().toLocaleString()});
-  localStorage.setItem("rockDeposit", JSON.stringify(depositHistoryArr));
-  renderDepositHistory();
-  alert("Deposit successful!");
+  alert("Deposit successful! Balance updated.");
   backHome();
-}
-
-function renderDepositHistory(){
-  if(depositHistoryArr.length===0){ document.getElementById("depositHistory").innerHTML="No deposits yet."; return; }
-  let html="<table class='table'><tr><th>Date</th><th>Amount</th><th>Method</th><th>TrxID</th><th>Proof</th></tr>";
-  depositHistoryArr.forEach(d=>{ html+=`<tr><td>${d.date}</td><td>${d.amount}</td><td>${d.method}</td><td>${d.trxID}</td><td>${d.proof}</td></tr>`; });
-  html+="</table>";
-  document.getElementById("depositHistory").innerHTML = html;
 }
 
 // ===== WITHDRAW =====
 function submitWithdraw(){
   let amt = Number(document.getElementById("wAmount").value);
-  let method = document.getElementById("withdrawMethod").value;
-  let number = document.getElementById("wNumber").value;
-  if(!amt || amt<=0 || !number){ alert("Enter valid amount & number/account"); return; }
-  if(amt>balance){ alert("Insufficient balance"); return; }
+  if(!amt || amt <=0){ alert("Enter valid amount"); return; }
+  if(amt > balance){ alert("Insufficient balance"); return; }
   balance -= amt;
   updateBalance();
-  withdrawHistoryArr.push({amount:amt, method:method, number:number, date:new Date().toLocaleString(), status:"Pending"});
   localStorage.setItem("rockBalance", balance);
-  localStorage.setItem("rockWithdraw", JSON.stringify(withdrawHistoryArr));
-  renderWithdrawHistory();
-  alert("Withdrawal requested!");
+  alert("Withdrawal requested successfully!");
   backHome();
-}
-
-function renderWithdrawHistory(){
-  if(withdrawHistoryArr.length===0){ document.getElementById("withdrawHistory").innerHTML="No withdrawals yet."; return; }
-  let html="<table class='table'><tr><th>Date</th><th>Amount</th><th>Method</th><th>Number/Acc</th><th>Status</th></tr>";
-  withdrawHistoryArr.forEach(d=>{ html+=`<tr><td>${d.date}</td><td>${d.amount}</td><td>${d.method}</td><td>${d.number}</td><td>${d.status}</td></tr>`; });
-  html+="</table>";
-  document.getElementById("withdrawHistory").innerHTML = html;
 }
 
 // ===== COPY LINK =====
@@ -292,5 +275,6 @@ function copyLink(){
   alert("Link Copied!");
 }
 </script>
+
 </body>
 </html>
