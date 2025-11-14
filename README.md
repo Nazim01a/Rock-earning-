@@ -7,9 +7,10 @@
 <style>
 body{
   font-family:'Segoe UI',sans-serif;
-  background:#0a0f1e;
+  background:#0a0a0a;
   color:white;
   overflow-x:hidden;
+  margin:0;
 }
 .neon-card{
   transition:0.3s;
@@ -25,15 +26,15 @@ body{
 #sidePanel{
   position:fixed;
   top:0;
-  right:-450px;
-  width:450px;
+  right:0;
+  width:400px;
   height:100vh;
-  background:#0c1230;
+  background:#0b0b0b;
   padding:25px;
-  transition:0.4s;
   overflow-y:auto;
   z-index:999;
-  animation: slideIn 0.5s ease forwards;
+  box-shadow:-5px 0 30px rgba(0,255,255,0.5);
+  animation: slideIn 0.7s ease forwards;
 }
 .btn-primary{
   background:#00ffe0;
@@ -55,8 +56,8 @@ body{
   100% {text-shadow:0 0 5px #00ffe0,0 0 10px #00bfff;}
 }
 @keyframes slideIn{
-  from {right:-450px;}
-  to {right:0px;}
+  from {right:-400px;}
+  to {right:0;}
 }
 .glow-text{
   background: linear-gradient(90deg, #00ffe0, #00bfff, #ff00ff);
@@ -114,6 +115,11 @@ function forgotPassword(){
   let user=users.find(u=>u.email===email);
   if(user){ alert('Your password is: '+user.pass); } else { alert('Email not found');}
 }
+function logout(){
+  currentUser=null;
+  localStorage.removeItem('reCurrent');
+  location.reload();
+}
 </script><!-- HEADER --><header class="text-center py-6 animated">
   <h1 class="text-5xl font-bold mb-2 glow-text">🚀 Rock Earn Ultra Pro Premium</h1>
   <p class="opacity-70">Welcome, <span id="welcomeName">Guest</span> • Since 2018 • Crypto FinTech</p>
@@ -129,7 +135,7 @@ function forgotPassword(){
 </div><!-- PLANS SECTION --><section class="mt-10 text-center animated" id="plansSection">
   <h2 class="text-3xl font-bold mb-6 glow-text">Investment Plans</h2>
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="plansContainer"></div>
-</section><!-- SIDE PANEL --><div id="sidePanel"></div><script>
+</section><!-- SIDE PANEL ALWAYS VISIBLE --><div id="sidePanel"></div><script>
 const plans=[
 {name:'Starter Plan',price:180,daily:20},
 {name:'Basic Plan',price:500,daily:60},
@@ -146,6 +152,7 @@ function loadDashboard(){
   document.getElementById('authBox').style.display='none';
   document.getElementById('welcomeName').innerText=currentUser.name;
   renderPlans();
+  openPanel('profile'); // Side panel visible by default
 }
 function renderPlans(){
   let container=document.getElementById('plansContainer');
@@ -163,7 +170,6 @@ function renderPlans(){
 }
 function openPanel(type){
   let panel=document.getElementById('sidePanel');
-  panel.style.right='0px';
   switch(type){
     case 'profile': panel.innerHTML=`<h2 class='text-2xl font-bold mb-4'>Profile</h2><p>Name: ${currentUser.name}</p>`; break;
     case 'plans': panel.innerHTML=`<h2 class='text-2xl font-bold mb-4'>Plans</h2><p>Check available plans below</p>`; break;
@@ -175,12 +181,7 @@ function openPanel(type){
   }
 }
 function buyPlan(amount){
-  openPanel('deposit');
   document.getElementById('sidePanel').innerHTML+=`<p>Selected Plan Amount: ${amount} PKR</p>`;
-}
-function logout(){
-  localStorage.removeItem('reCurrent');
-  location.reload();
 }
 </script></body>
 </html>
