@@ -18,7 +18,8 @@ button { cursor:pointer; padding:8px 12px; border:none; border-radius:8px; }
 #sidebar i { font-size:20px; }
 #contentSection { position:fixed; left:100px; top:120px; right:20px; bottom:20px; background:rgba(0,0,0,0.5); border-radius:14px; padding:20px; overflow:auto; display:none; }
 #backBtn { position:absolute; left:12px; top:12px; background:#ff4766; color:white; padding:8px 10px; border-radius:8px; cursor:pointer; display:none; }
-#logoutBtn { position:fixed; bottom:20px; left:20px; background:#ff4766; color:white; padding:10px 14px; border-radius:10px; display:none; cursor:pointer; }
+#logoutBtn { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:#ff4766; color:white; padding:10px 14px; border-radius:10px; cursor:pointer; display:none; }
+#refreshBtn { position:fixed; bottom:20px; right:20px; background:#00f7ef; color:#001; padding:10px 14px; border-radius:10px; cursor:pointer; display:none; }
 #welcomeBox { position:fixed; left:100px; top:20px; right:20px; padding:18px; border-radius:14px; background:rgba(255,255,255,0.02); backdrop-filter:blur(8px); box-shadow:0 4px 30px rgba(0,0,0,0.5); display:none; }
 .stats { display:flex; gap:18px; margin-top:12px; }
 .stat-card { background:rgba(0,247,239,0.03); padding:12px 16px; border-radius:10px; min-width:120px; }
@@ -26,7 +27,7 @@ button { cursor:pointer; padding:8px 12px; border:none; border-radius:8px; }
 .stat-value { font-size:16px; font-weight:700; margin:0; }
 .plan-card { border:1px solid rgba(0,247,239,0.1); border-radius:10px; padding:12px; margin-bottom:12px; background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0)); }
 .muted { color:#9fcfda; font-size:13px; }
-input[type="file"]{color:#fff;}
+input[type="file"], input, select{color:#fff; margin-bottom:6px; border-radius:6px; border:none; padding:6px; background:#0f1320; width:100%;}
 table{width:100%; border-collapse:collapse;}
 th,td{border:1px solid rgba(0,247,239,0.2); padding:6px 8px; text-align:left;}
 th{background:rgba(0,247,239,0.05);}
@@ -71,6 +72,7 @@ th{background:rgba(0,247,239,0.05);}
 </div>
 
 <button id="logoutBtn" onclick="logoutUser()">Logout</button>
+<button id="refreshBtn" onclick="refreshDashboard()"><i class="fa fa-sync"></i> Refresh</button>
 
 <script>
 // =====================
@@ -79,29 +81,17 @@ th{background:rgba(0,247,239,0.05);}
 let users = JSON.parse(localStorage.getItem('reUsers')) || [];
 let currentUser = JSON.parse(localStorage.getItem('reCurrent')) || null;
 
-// Default admin
 if(!users.find(u=>u.email==='admin@rockearn.com')){
 users.push({name:'Administrator',email:'admin@rockearn.com',pass:'admin123',role:'admin',plans:[],deposits:[],withdrawals:[],balance:0,profit:0});
 localStorage.setItem('reUsers',JSON.stringify(users));
 }
 
-// Plans
 const plans = [
-{name:'Basic',amount:200,daily:30,days:20},
-{name:'Starter',amount:500,daily:75,days:20},
-{name:'Pro',amount:1000,daily:180,days:20},
-{name:'Advanced',amount:1500,daily:250,days:25},
-{name:'Silver',amount:2000,daily:350,days:30},
-{name:'Gold',amount:3000,daily:550,days:30},
-{name:'Platinum',amount:5000,daily:950,days:40},
-{name:'Diamond',amount:7000,daily:1350,days:50},
-{name:'VIP',amount:10000,daily:2000,days:60},
-{name:'Elite',amount:12000,daily:2400,days:60},
-{name:'Master',amount:15000,daily:3000,days:70},
-{name:'Ultimate',amount:18000,daily:3500,days:75},
-{name:'Legend',amount:20000,daily:4000,days:80},
-{name:'Supreme',amount:25000,daily:5000,days:90},
-{name:'Titan',amount:30000,daily:6000,days:100}
+{name:'Basic',amount:200,daily:30,days:20},{name:'Starter',amount:500,daily:75,days:20},{name:'Pro',amount:1000,daily:180,days:20},
+{name:'Advanced',amount:1500,daily:250,days:25},{name:'Silver',amount:2000,daily:350,days:30},{name:'Gold',amount:3000,daily:550,days:30},
+{name:'Platinum',amount:5000,daily:950,days:40},{name:'Diamond',amount:7000,daily:1350,days:50},{name:'VIP',amount:10000,daily:2000,days:60},
+{name:'Elite',amount:12000,daily:2400,days:60},{name:'Master',amount:15000,daily:3000,days:70},{name:'Ultimate',amount:18000,daily:3500,days:75},
+{name:'Legend',amount:20000,daily:4000,days:80},{name:'Supreme',amount:25000,daily:5000,days:90},{name:'Titan',amount:30000,daily:6000,days:100}
 ];
 
 // =====================
@@ -110,7 +100,7 @@ const plans = [
 function showNotif(msg){ const el=document.getElementById('notif'); el.innerText=msg; el.classList.add('show'); setTimeout(()=>el.classList.remove('show'),3000); }
 
 // =====================
-// Auth Functions
+// Auth
 // =====================
 function signupUser(){
 const n=document.getElementById('authName').value.trim();
@@ -145,15 +135,14 @@ document.getElementById('authBox').style.display='none';
 document.getElementById('sidebar').style.display='flex';
 document.getElementById('welcomeBox').style.display='block';
 document.getElementById('logoutBtn').style.display='block';
+document.getElementById('refreshBtn').style.display='block';
 document.getElementById('userName').innerText=currentUser.name;
 document.getElementById('balValue').innerText=(currentUser.balance||0)+' PKR';
 document.getElementById('profValue').innerText=(currentUser.profit||0)+' PKR';
-if(currentUser.role==='admin'){document.getElementById('adminBtn').style.display='block';}else{document.getElementById('adminBtn').style.display='none';}
+if(currentUser.role==='admin'){document.getElementById('adminBtn').style.display='block';} else {document.getElementById('adminBtn').style.display='none';}
 document.getElementById('contentSection').style.display='none';
 document.getElementById('backBtn').style.display='none';
-}
-
-// =====================
+}// =====================
 // Sections
 // =====================
 function openSection(type){
@@ -162,76 +151,67 @@ document.getElementById('contentSection').style.display='block';
 document.getElementById('backBtn').style.display='inline-block';
 content.innerHTML='';
 
-// -----------------
-// Plans Section
-// -----------------
 if(type==='plans'){
 plans.forEach((p,idx)=>{
 content.innerHTML+=`<div class='plan-card'><b>${p.name}</b><br>Amount: ${p.amount} PKR<br>Daily: ${p.daily} PKR<br>Days: ${p.days}<br><button onclick="openDeposit(${p.amount},'${p.name}',${p.daily},${p.days},${idx})">Buy Now</button></div>`;
 });
-
-// -----------------
-// Deposit Section
 } else if(type==='deposit'){
 content.innerHTML='<h3>Deposit Section</h3>';
-(currentUser.deposits||[]).forEach(d=>{
-content.innerHTML+=`<p>${d.plan} - ${d.amount} PKR - ${d.status} - TXN: ${d.txn}</p>`;
+(currentUser.deposits||[]).forEach((d,i)=>{
+content.innerHTML+=`<p>${d.plan} - ${d.amount} PKR - ${d.status}</p>`;
 });
-
-// -----------------
-// Withdraw Section
 } else if(type==='withdraw'){
 content.innerHTML='<h3>Withdraw Section</h3>';
-(currentUser.withdrawals||[]).forEach(w=>{
-content.innerHTML+=`<p>${w.amount} PKR - ${w.status}</p>`;
+(currentUser.withdrawals||[]).forEach((w,i)=>{
+content.innerHTML+=`<p>${w.method} - ${w.amount} PKR - ${w.status}</p>`;
 });
-content.innerHTML+=`<div style="margin-top:10px"><input id="withAmount" placeholder="Amount to withdraw"><button onclick="requestWithdraw()">Request Withdrawal</button></div>`;
-
-// -----------------
-// Profit Section
+content.innerHTML+=`
+<input id="withdrawAmount" type="number" placeholder="Amount">
+<select id="withdrawMethod">
+<option value="JazzCash">JazzCash</option>
+<option value="EasyPaisa">EasyPaisa</option>
+<option value="Bank">Bank</option>
+</select>
+<input id="withdrawAcc" placeholder="Account / Number">
+<button onclick="submitWithdraw()">Submit Withdraw</button>`;
 } else if(type==='profit'){
 content.innerHTML=`<h3>Total Profit: ${currentUser.profit} PKR</h3>`;
-
-// -----------------
-// History Section
 } else if(type==='history'){
 let html='<h3>History</h3>';
 (currentUser.deposits||[]).forEach(d=>{html+=`<p>Deposit: ${d.plan} - ${d.amount} PKR - ${d.status}</p>`});
-(currentUser.withdrawals||[]).forEach(w=>{html+=`<p>Withdraw: ${w.amount} PKR - ${w.status}</p>`});
+(currentUser.withdrawals||[]).forEach(w=>{html+=`<p>Withdraw: ${w.method} - ${w.amount} PKR - ${w.status}</p>`});
 content.innerHTML=html;
-
-// -----------------
-// Admin Panel
 } else if(type==='admin' && currentUser.role==='admin'){
-let html='<h3>Admin Panel</h3><table><tr><th>Name</th><th>Email</th><th>Balance</th><th>Profit</th><th>Deposits</th><th>Withdrawals</th><th>Actions</th></tr>';
-users.forEach((u,ui)=>{
-html+=`<tr>
-<td>${u.name}</td>
-<td>${u.email}</td>
-<td>${u.balance}</td>
-<td>${u.profit}</td>
-<td>${(u.deposits||[]).map(d=>d.plan+'('+d.status+')').join('<br>')}</td>
-<td>${(u.withdrawals||[]).map(w=>w.amount+'('+w.status+')').join('<br>')}</td>
-<td>
-${(u.deposits||[]).filter(d=>d.status==='pending').map((d,di)=>`<button onclick="approveDeposit(${ui},${di})">Approve</button>`).join('')}
-${(u.withdrawals||[]).filter(w=>w.status==='pending').map((w,wi)=>`<button onclick="approveWithdraw(${ui},${wi})">Approve</button>`).join('')}
-</td>
-</tr>`;
+let html='<h3>Admin Panel</h3>';
+html+=`<button onclick="refreshDashboard()">Refresh</button>`;
+users.forEach((u,i)=>{
+html+=`<hr><b>${u.name} (${u.email})</b><br>Balance: ${u.balance} PKR<br>`;
+(u.deposits||[]).forEach((d,j)=>{
+if(d.status==='pending'){
+html+=`${d.plan} - ${d.amount} PKR - ${d.status} 
+<button onclick="approveDeposit(${i},${j})">Approve</button>
+<button onclick="rejectDeposit(${i},${j})">Reject</button><br>`;
+}else{
+html+=`${d.plan} - ${d.amount} PKR - ${d.status}<br>`;
+}
 });
-html+='</table>';
+(u.withdrawals||[]).forEach((w,k)=>{
+if(w.status==='pending'){
+html+=`Withdraw: ${w.amount} PKR (${w.method}) - ${w.status} 
+<button onclick="approveWithdraw(${i},${k})">Approve</button>
+<button onclick="rejectWithdraw(${i},${k})">Reject</button><br>`;
+}else{
+html+=`Withdraw: ${w.amount} PKR (${w.method}) - ${w.status}<br>`;
+}
+});
+});
 content.innerHTML=html;
-
 } else {content.innerHTML='<h3>Coming Soon</h3>';}
 }
 
-// -----------------
-// Close Section
-// -----------------
-function closeSection(){document.getElementById('contentSection').style.display='none';document.getElementById('backBtn').style.display='none';}
-
-// -----------------
+// =====================
 // Deposit / Buy Plan
-// -----------------
+// =====================
 function openDeposit(amount=0,name='',daily=0,days=0,planIndex=0){
 const content=document.getElementById('sectionContent');
 document.getElementById('contentSection').style.display='block';
@@ -259,50 +239,85 @@ showNotif('Deposit submitted — waiting admin approval');
 openSection('plans');
 }
 
-// -----------------
+// =====================
 // Withdraw
-// -----------------
-function requestWithdraw(){
-const amt=parseFloat(document.getElementById('withAmount').value);
-if(!amt || amt<=0){showNotif('Enter valid amount'); return;}
+// =====================
+function submitWithdraw(){
+let amt=parseInt(document.getElementById('withdrawAmount').value);
+let method=document.getElementById('withdrawMethod').value;
+let acc=document.getElementById('withdrawAcc').value.trim();
+if(!amt || !method || !acc){showNotif('Fill all withdrawal fields'); return;}
 if(amt>currentUser.balance){showNotif('Insufficient balance'); return;}
-const w={amount:amt,status:'pending',ts:Date.now()};
+const w={amount:amt,method:method,account:acc,status:'pending',ts:Date.now()};
 currentUser.withdrawals=currentUser.withdrawals||[]; currentUser.withdrawals.push(w);
 users=users.map(u=>u.email===currentUser.email?currentUser:u);
 localStorage.setItem('reUsers',JSON.stringify(users));
 localStorage.setItem('reCurrent',JSON.stringify(currentUser));
-showNotif('Withdrawal requested — waiting admin');
+showNotif('Withdraw submitted — waiting admin approval');
 openSection('withdraw');
 }
 
-// -----------------
-// Admin Approve
-// -----------------
-function approveDeposit(uIndex,dIndex){
-users[uIndex].deposits[dIndex].status='approved';
-users[uIndex].balance+=users[uIndex].deposits[dIndex].amount;
+// =====================
+// Admin Approve / Reject
+// =====================
+function approveDeposit(userIdx,depIdx){
+let d=users[userIdx].deposits[depIdx];
+if(d.status!=='pending') return;
+d.status='approved';
+users[userIdx].balance+=d.amount;
+users[userIdx].profit+=d.daily*d.days;
 localStorage.setItem('reUsers',JSON.stringify(users));
+if(users[userIdx].email===currentUser.email){currentUser=users[userIdx]; localStorage.setItem('reCurrent',JSON.stringify(currentUser));}
+openSection('admin');
 showNotif('Deposit approved');
-openSection('admin');
 }
 
-function approveWithdraw(uIndex,wIndex){
-users[uIndex].withdrawals[wIndex].status='approved';
-users[uIndex].balance-=users[uIndex].withdrawals[wIndex].amount;
+function rejectDeposit(userIdx,depIdx){
+users[userIdx].deposits[depIdx].status='rejected';
 localStorage.setItem('reUsers',JSON.stringify(users));
-showNotif('Withdrawal approved');
 openSection('admin');
+showNotif('Deposit rejected');
 }
 
-// -----------------
-// Copy helper
-// -----------------
+function approveWithdraw(userIdx,wIdx){
+let w=users[userIdx].withdrawals[wIdx];
+if(w.status!=='pending') return;
+if(users[userIdx].balance<w.amount){showNotif('Insufficient user balance'); return;}
+w.status='approved';
+users[userIdx].balance-=w.amount;
+localStorage.setItem('reUsers',JSON.stringify(users));
+if(users[userIdx].email===currentUser.email){currentUser=users[userIdx]; localStorage.setItem('reCurrent',JSON.stringify(currentUser));}
+openSection('admin');
+showNotif('Withdraw approved');
+}
+
+function rejectWithdraw(userIdx,wIdx){
+users[userIdx].withdrawals[wIdx].status='rejected';
+localStorage.setItem('reUsers',JSON.stringify(users));
+openSection('admin');
+showNotif('Withdraw rejected');
+}
+
+// =====================
+// Refresh Dashboard
+// =====================
+function refreshDashboard(){
+users = JSON.parse(localStorage.getItem('reUsers')) || [];
+currentUser = JSON.parse(localStorage.getItem('reCurrent')) || currentUser;
+openDashboard();
+openSection('plans');
+showNotif('Dashboard refreshed');
+}
+
+// =====================
+// Copy Helper
+// =====================
 function copyText(txt){navigator.clipboard.writeText(txt);showNotif('Copied!');}
 
 // =====================
-// Auto login if session exists
+// Init
 // =====================
-if(currentUser){openDashboard();}
+if(currentUser){openDashboard(); openSection('plans');}
 </script>
 
 </body>
