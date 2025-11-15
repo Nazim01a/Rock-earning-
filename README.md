@@ -143,10 +143,16 @@ function openSection(type){
     case 'wallet': content.innerHTML='<h2>Wallet</h2><p>Balance: '+currentUser.balance+' PKR</p><p>Total Profit: '+currentUser.profit+' PKR</p>'; break;
     case 'deposit': content.innerHTML='<h2>Deposit</h2><p>Deposit form coming soon...</p>'; break;
     case 'withdraw': content.innerHTML='<h2>Withdraw</h2><p>Withdraw form coming soon...</p>'; break;
+    case 'profit': content.innerHTML='<h2>Profit</h2><p>Daily and total profits displayed here.</p>'; break;
+    case 'history': content.innerHTML='<h2>History</h2><p>Activity history will appear here.</p>'; break;
+    case 'support': content.innerHTML='<h2>Support</h2><p>Contact: support@rockearnpro.com</p>'; break;
+    case 'referral': content.innerHTML='<h2>Referral</h2><p>Share your referral link!</p>'; break;
+    case 'share': content.innerHTML='<h2>Share Link</h2><input type="text" value="https://rockearnpro.com?ref='+currentUser.email+'" readonly><button class="btn mt-2" onclick="copyText(\'https://rockearnpro.com?ref='+currentUser.email+'\')">Copy Link</button>'; break;
     default: content.innerHTML='<h2>'+type+'</h2><p>Coming Soon...</p>';
   }
 }
 function closeSection(){document.getElementById('contentSection').style.display='none';}
+function copyText(val){navigator.clipboard.writeText(val);showNotif('Copied: '+val);}
 </script>
 </body>
 </html>
