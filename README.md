@@ -27,14 +27,15 @@ button { cursor:pointer; padding:8px 12px; border:none; border-radius:8px; }
 .plan-card { border:1px solid rgba(0,247,239,0.1); border-radius:10px; padding:12px; margin-bottom:12px; background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0)); }
 .muted { color:#9fcfda; font-size:13px; }
 input[type="file"]{color:#fff;}
+table{width:100%; border-collapse:collapse;}
+th,td{border:1px solid rgba(0,247,239,0.2); padding:6px 8px; text-align:left;}
+th{background:rgba(0,247,239,0.05);}
 </style>
 </head>
 <body>
 
-<!-- Notification -->
 <div id="notif"></div>
 
-<!-- Auth Box -->
 <div id="authBox">
 <h3 style="text-align:center">Login / Sign Up</h3>
 <input id="authName" placeholder="Full Name">
@@ -47,7 +48,6 @@ input[type="file"]{color:#fff;}
 <p class="muted" style="margin-top:10px; font-size:13px;">Default admin: <strong>admin@rockearn.com</strong></p>
 </div>
 
-<!-- Sidebar -->
 <div id="sidebar">
 <div class="icon-btn" onclick="openSection('plans')"><i class="fa fa-gem"></i><br>Plans</div>
 <div class="icon-btn" onclick="openSection('deposit')"><i class="fa fa-money-bill"></i><br>Deposit</div>
@@ -57,7 +57,6 @@ input[type="file"]{color:#fff;}
 <div class="icon-btn" onclick="openSection('admin')" id="adminBtn" style="display:none"><i class="fa fa-cog"></i><br>Admin</div>
 </div>
 
-<!-- Welcome Box -->
 <div id="welcomeBox">
 <h2 id="welcomeTxt">🎉 Welcome, <strong id="userName"></strong> 💎</h2>
 <div class="stats">
@@ -66,19 +65,17 @@ input[type="file"]{color:#fff;}
 </div>
 </div>
 
-<!-- Content Section -->
 <div id="contentSection">
 <button id="backBtn" onclick="closeSection()">← Back</button>
 <div id="sectionContent"></div>
 </div>
 
-<!-- Logout Button -->
 <button id="logoutBtn" onclick="logoutUser()">Logout</button>
 
 <script>
-// ----------------------
+// =====================
 // Users & Storage
-// ----------------------
+// =====================
 let users = JSON.parse(localStorage.getItem('reUsers')) || [];
 let currentUser = JSON.parse(localStorage.getItem('reCurrent')) || null;
 
@@ -107,14 +104,14 @@ const plans = [
 {name:'Titan',amount:30000,daily:6000,days:100}
 ];
 
-// ----------------------
+// =====================
 // Notifications
-// ----------------------
+// =====================
 function showNotif(msg){ const el=document.getElementById('notif'); el.innerText=msg; el.classList.add('show'); setTimeout(()=>el.classList.remove('show'),3000); }
 
-// ----------------------
+// =====================
 // Auth Functions
-// ----------------------
+// =====================
 function signupUser(){
 const n=document.getElementById('authName').value.trim();
 const e=document.getElementById('authEmail').value.trim().toLowerCase();
@@ -140,9 +137,9 @@ function logoutUser(){
 currentUser=null; localStorage.removeItem('reCurrent'); location.reload();
 }
 
-// ----------------------
-// Dashboard & Sections
-// ----------------------
+// =====================
+// Dashboard
+// =====================
 function openDashboard(){
 document.getElementById('authBox').style.display='none';
 document.getElementById('sidebar').style.display='flex';
@@ -156,47 +153,88 @@ document.getElementById('contentSection').style.display='none';
 document.getElementById('backBtn').style.display='none';
 }
 
-// ----------------------
-// Open Section
-// ----------------------
+// =====================
+// Sections
+// =====================
 function openSection(type){
 const content=document.getElementById('sectionContent');
 document.getElementById('contentSection').style.display='block';
 document.getElementById('backBtn').style.display='inline-block';
 content.innerHTML='';
 
+// -----------------
+// Plans Section
+// -----------------
 if(type==='plans'){
 plans.forEach((p,idx)=>{
 content.innerHTML+=`<div class='plan-card'><b>${p.name}</b><br>Amount: ${p.amount} PKR<br>Daily: ${p.daily} PKR<br>Days: ${p.days}<br><button onclick="openDeposit(${p.amount},'${p.name}',${p.daily},${p.days},${idx})">Buy Now</button></div>`;
 });
+
+// -----------------
+// Deposit Section
 } else if(type==='deposit'){
 content.innerHTML='<h3>Deposit Section</h3>';
+(currentUser.deposits||[]).forEach(d=>{
+content.innerHTML+=`<p>${d.plan} - ${d.amount} PKR - ${d.status} - TXN: ${d.txn}</p>`;
+});
+
+// -----------------
+// Withdraw Section
 } else if(type==='withdraw'){
 content.innerHTML='<h3>Withdraw Section</h3>';
+(currentUser.withdrawals||[]).forEach(w=>{
+content.innerHTML+=`<p>${w.amount} PKR - ${w.status}</p>`;
+});
+content.innerHTML+=`<div style="margin-top:10px"><input id="withAmount" placeholder="Amount to withdraw"><button onclick="requestWithdraw()">Request Withdrawal</button></div>`;
+
+// -----------------
+// Profit Section
 } else if(type==='profit'){
 content.innerHTML=`<h3>Total Profit: ${currentUser.profit} PKR</h3>`;
+
+// -----------------
+// History Section
 } else if(type==='history'){
 let html='<h3>History</h3>';
 (currentUser.deposits||[]).forEach(d=>{html+=`<p>Deposit: ${d.plan} - ${d.amount} PKR - ${d.status}</p>`});
 (currentUser.withdrawals||[]).forEach(w=>{html+=`<p>Withdraw: ${w.amount} PKR - ${w.status}</p>`});
 content.innerHTML=html;
+
+// -----------------
+// Admin Panel
 } else if(type==='admin' && currentUser.role==='admin'){
-let html='<h3>Admin Panel</h3>';
-users.forEach(u=>{html+=`<div>${u.name} (${u.email}) - Balance: ${u.balance} PKR</div>`});
+let html='<h3>Admin Panel</h3><table><tr><th>Name</th><th>Email</th><th>Balance</th><th>Profit</th><th>Deposits</th><th>Withdrawals</th><th>Actions</th></tr>';
+users.forEach((u,ui)=>{
+html+=`<tr>
+<td>${u.name}</td>
+<td>${u.email}</td>
+<td>${u.balance}</td>
+<td>${u.profit}</td>
+<td>${(u.deposits||[]).map(d=>d.plan+'('+d.status+')').join('<br>')}</td>
+<td>${(u.withdrawals||[]).map(w=>w.amount+'('+w.status+')').join('<br>')}</td>
+<td>
+${(u.deposits||[]).filter(d=>d.status==='pending').map((d,di)=>`<button onclick="approveDeposit(${ui},${di})">Approve</button>`).join('')}
+${(u.withdrawals||[]).filter(w=>w.status==='pending').map((w,wi)=>`<button onclick="approveWithdraw(${ui},${wi})">Approve</button>`).join('')}
+</td>
+</tr>`;
+});
+html+='</table>';
 content.innerHTML=html;
+
 } else {content.innerHTML='<h3>Coming Soon</h3>';}
 }
 
-// ----------------------
+// -----------------
 // Close Section
-// ----------------------
+// -----------------
 function closeSection(){document.getElementById('contentSection').style.display='none';document.getElementById('backBtn').style.display='none';}
 
-// ----------------------
+// -----------------
 // Deposit / Buy Plan
-// ----------------------
+// -----------------
 function openDeposit(amount=0,name='',daily=0,days=0,planIndex=0){
 const content=document.getElementById('sectionContent');
+document.getElementById('contentSection').style.display='block';
 content.innerHTML=`<h3>Deposit — ${name}</h3>
 <p>Amount: <strong>${amount} PKR</strong></p>
 <p>JazzCash: <strong>03705519562</strong> <button onclick="copyText('03705519562')">Copy</button></p>
@@ -221,16 +259,50 @@ showNotif('Deposit submitted — waiting admin approval');
 openSection('plans');
 }
 
+// -----------------
+// Withdraw
+// -----------------
+function requestWithdraw(){
+const amt=parseFloat(document.getElementById('withAmount').value);
+if(!amt || amt<=0){showNotif('Enter valid amount'); return;}
+if(amt>currentUser.balance){showNotif('Insufficient balance'); return;}
+const w={amount:amt,status:'pending',ts:Date.now()};
+currentUser.withdrawals=currentUser.withdrawals||[]; currentUser.withdrawals.push(w);
+users=users.map(u=>u.email===currentUser.email?currentUser:u);
+localStorage.setItem('reUsers',JSON.stringify(users));
+localStorage.setItem('reCurrent',JSON.stringify(currentUser));
+showNotif('Withdrawal requested — waiting admin');
+openSection('withdraw');
+}
+
+// -----------------
+// Admin Approve
+// -----------------
+function approveDeposit(uIndex,dIndex){
+users[uIndex].deposits[dIndex].status='approved';
+users[uIndex].balance+=users[uIndex].deposits[dIndex].amount;
+localStorage.setItem('reUsers',JSON.stringify(users));
+showNotif('Deposit approved');
+openSection('admin');
+}
+
+function approveWithdraw(uIndex,wIndex){
+users[uIndex].withdrawals[wIndex].status='approved';
+users[uIndex].balance-=users[uIndex].withdrawals[wIndex].amount;
+localStorage.setItem('reUsers',JSON.stringify(users));
+showNotif('Withdrawal approved');
+openSection('admin');
+}
+
+// -----------------
 // Copy helper
+// -----------------
 function copyText(txt){navigator.clipboard.writeText(txt);showNotif('Copied!');}
 
-// ----------------------
-// Auto open dashboard on refresh if logged in
-// ----------------------
-window.onload = () => {
+// =====================
+// Auto login if session exists
+// =====================
 if(currentUser){openDashboard();}
-};
-
 </script>
 
 </body>
