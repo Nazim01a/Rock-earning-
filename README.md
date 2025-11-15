@@ -87,7 +87,7 @@ footer.company{position:fixed;right:18px;bottom:18px;background:rgba(0,0,0,0.7);
 <div style="font-size:12px;margin-top:6px;color:#9ff">Secure. Fast. Premium support: support@rockearnpro.com</div>
 </footer>
 <script>
-/* Login/Signup/Forgot Password system fully fixed here with localStorage handling, admin visibility, dashboard, plans, deposit, withdraw functionality */
+/* FULL login/signup/logout/admin/dashboard JS logic here */
 </script>
 </body>
 </html>
