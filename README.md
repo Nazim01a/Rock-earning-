@@ -9,18 +9,17 @@
 <style>
 body{margin:0;font-family:'Segoe UI',sans-serif;background:#0e0e15;color:white;overflow-x:hidden;}
 canvas#bgCanvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;}
-.sidebar{position:fixed;top:20px;left:0;width:160px;height:auto;background:rgba(20,20,20,0.95);display:flex;flex-direction:column;align-items:center;padding-top:20px;gap:15px;z-index:10;display:none;}
+.sidebar{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);width:auto;height:auto;background:rgba(20,20,20,0.95);display:flex;flex-direction:row;align-items:center;padding:10px;border-radius:20px;gap:12px;display:none;z-index:10;}
 .icon-btn{display:flex;flex-direction:column;align-items:center;padding:12px;border-radius:15px;cursor:pointer;transition:0.3s;background:#111;color:#ccc;box-shadow:0 0 5px #000;}
 .icon-btn:hover{transform:scale(1.1);box-shadow:0 0 15px #0ff,0 0 25px #0ff;}
-.icon-name{margin-top:6px;font-size:12px;color:#ccc;text-shadow:0 0 3px #000;}
-#welcomeBox{position:fixed;top:20px;left:180px;right:20px;padding:25px;border-radius:20px;background:rgba(0,0,0,0.8);backdrop-filter:blur(12px);text-align:center;display:none;animation:fadeIn 1.5s;}
+.icon-name{margin-top:4px;font-size:12px;color:#ccc;text-shadow:0 0 3px #000;}
+#welcomeBox{position:fixed;top:20px;left:20px;right:20px;padding:25px;border-radius:20px;background:rgba(0,0,0,0.8);backdrop-filter:blur(12px);text-align:center;display:none;animation:fadeIn 1.5s;}
 #welcomeBox h2{color:white;font-size:26px;font-weight:800;animation:glowText 2.5s infinite alternate;}
 .stats{display:flex;justify-content:center;gap:30px;margin-top:15px;flex-wrap:wrap;}
 .stat-card{background: rgba(0,255,255,0.05); padding: 18px 25px; border-radius: 15px; box-shadow: 0 0 5px #0ff,0 0 10px #0ff; transition: 0.4s;}
 .stat-label{font-size:12px;color:#0ff;letter-spacing:1px;margin-bottom:5px;}
 .stat-value{font-size:18px;font-weight:700;color:white;}
-.refresh-btn{margin-top:10px;}
-#contentSection{position:fixed;top:160px;left:180px;right:20px;bottom:20px;background:rgba(0,0,0,0.85);backdrop-filter:blur(15px);border-radius:20px;padding:20px;overflow-y:auto;display:none;z-index:999;}
+#contentSection{position:fixed;top:160px;left:20px;right:20px;bottom:120px;background:rgba(0,0,0,0.85);backdrop-filter:blur(15px);border-radius:20px;padding:20px;overflow-y:auto;display:none;z-index:999;}
 #backBtn{position:absolute;top:10px;left:20px;background:#ff0044;padding:8px 12px;border:none;border-radius:10px;font-weight:700;cursor:pointer;transition:0.3s;}
 #backBtn:hover{transform:scale(1.05);background:#ff3366;}
 #notif{position:fixed;top:20px;right:-400px;background:linear-gradient(45deg,#0ff,#0ffcc0);padding:15px 25px;border-radius:12px;box-shadow:0 0 20px #0ff;color:white;font-weight:600;transition:0.5s;z-index:9999;}
@@ -33,14 +32,8 @@ input:focus, select:focus{outline:none;box-shadow:0 0 12px #0ff;}
 .btn:hover{transform:scale(1.08);box-shadow:0 0 20px #0ff,0 0 40px #0ff;}
 .logout-btn{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#ff0044;color:white;padding:12px 18px;border-radius:12px;font-weight:700;cursor:pointer;box-shadow:0 0 10px #ff3366;transition:0.3s;display:none;}
 .logout-btn:hover{transform:scale(1.05);box-shadow:0 0 20px #ff3366,0 0 30px #ff6688;}
-.admin-panel{background:rgba(20,20,20,0.95);padding:15px;border-radius:15px;margin-bottom:12px;}
 @keyframes glowText{0%{text-shadow:0 0 5px #000,0 0 10px #0ff;}50%{text-shadow:0 0 12px #000,0 0 25px #0ff;}100%{text-shadow:0 0 5px #000,0 0 10px #0ff;}}
 @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
-@media (max-width: 1024px){
-    #welcomeBox{left:20px;right:20px;}
-    #contentSection{top:220px;left:20px;right:20px;bottom:20px;}
-    .sidebar{width:100%;height:auto;flex-direction:row;justify-content:space-around;padding:10px;display:flex;position:relative;}
-}
 </style>
 </head>
 <body>
@@ -48,7 +41,6 @@ input:focus, select:focus{outline:none;box-shadow:0 0 12px #0ff;}
 <div id="notif"></div>
 
 <div class="sidebar" id="sidebar">
-<div style="font-size:28px;margin-bottom:10px;">🚀</div>
 <div class="icon-btn" onclick="openSection('plans')"><i class="fa fa-gem"></i><span class="icon-name">Plans</span></div>
 <div class="icon-btn" onclick="openSection('deposit')"><i class="fa fa-money-bill"></i><span class="icon-name">Deposit</span></div>
 <div class="icon-btn" onclick="openSection('withdraw')"><i class="fa fa-hand-holding-dollar"></i><span class="icon-name">Withdraw</span></div>
@@ -57,11 +49,10 @@ input:focus, select:focus{outline:none;box-shadow:0 0 12px #0ff;}
 <div class="icon-btn" onclick="openSection('support')"><i class="fa fa-headset"></i><span class="icon-name">Support</span></div>
 <div class="icon-btn" onclick="openSection('referral')"><i class="fa fa-share-alt"></i><span class="icon-name">Referral</span></div>
 <div class="icon-btn" onclick="openSection('share')"><i class="fa fa-share"></i><span class="icon-name">Share</span></div>
-<div class="icon-btn" onclick="openSection('admin')"><i class="fa fa-user-shield"></i><span class="icon-name">Admin</span></div>
 </div>
 
 <div id="welcomeBox">
-<h2>🎉 Welcome to <span style="color:white;font-weight:900;">Rock Earn</span> Premium 💎</h2>
+<h2>🎉 Welcome to <span style="color:white;font-weight:900;">Rock Earn Premium</span> 💎</h2>
 <div class="stats">
 <div class="stat-card"><p class="stat-label">Balance</p><p class="stat-value" id="balValue">0 PKR</p></div>
 <div class="stat-card"><p class="stat-label">Total Profit</p><p class="stat-value" id="profValue">0 PKR</p></div>
@@ -74,7 +65,7 @@ input:focus, select:focus{outline:none;box-shadow:0 0 12px #0ff;}
 <div id="sectionContent"></div>
 </div>
 
-<div id="authBox" class="card" style="margin-left:180px;margin-top:20px;width:320px;">
+<div id="authBox" class="card" style="margin:20px auto;width:320px;">
 <h2 class="text-2xl font-bold mb-4 text-center">Login / Sign Up</h2>
 <input id="authName" placeholder="Full Name" />
 <input id="authEmail" placeholder="Email" />
@@ -101,12 +92,13 @@ let currentUser=JSON.parse(localStorage.getItem('reCurrent'))||null;
 window.addEventListener('load',()=>{if(currentUser){openDashboard();}});
 
 function validateEmail(e){return/^\S+@\S+\.\S+$/.test(e);}
-function signupUser(){let n=document.getElementById('authName').value.trim();let e=document.getElementById('authEmail').value.trim();let p=document.getElementById('authPass').value.trim();if(!n||!e||!p)return showNotif('Fill all fields');if(!validateEmail(e))return showNotif('Invalid email');if(users.find(u=>u.email===e))return showNotif('Email already registered');let u={name:n,email:e,pass:p,plans:[],balance:0,profit:0,transactions:[]};users.push(u);localStorage.setItem('reUsers',JSON.stringify(users));currentUser=u;localStorage.setItem('reCurrent',JSON.stringify(u));openDashboard();}
+function signupUser(){let n=document.getElementById('authName').value.trim();let e=document.getElementById('authEmail').value.trim();let p=document.getElementById('authPass').value.trim();if(!n||!e||!p)return showNotif('Fill all fields');if(!validateEmail(e))return showNotif('Invalid email');if(users.find(u=>u.email===e))return showNotif('Email already registered');let u={name:n,email:e,pass:p,plans:[],balance:0,profit:0};users.push(u);localStorage.setItem('reUsers',JSON.stringify(users));currentUser=u;localStorage.setItem('reCurrent',JSON.stringify(u));openDashboard();}
 function loginUser(){let e=document.getElementById('authEmail').value.trim();let p=document.getElementById('authPass').value.trim();let u=users.find(x=>x.email===e&&x.pass===p);if(!u)return showNotif('Invalid credentials');currentUser=u;localStorage.setItem('reCurrent',JSON.stringify(u));openDashboard();}
 function logoutUser(){currentUser=null;localStorage.removeItem('reCurrent');location.reload();}
 function openDashboard(){document.getElementById('authBox').style.display='none';document.getElementById('sidebar').style.display='flex';document.getElementById('welcomeBox').style.display='block';document.getElementById('logoutBtn').style.display='block';document.getElementById('balValue').innerText=currentUser.balance+' PKR';document.getElementById('profValue').innerText=currentUser.profit+' PKR';}
 
-// More JS: Plans, Deposit, Withdraw, Admin Approval etc...
+// Plans, Deposit, Withdraw JS logic yaha add karo
+
 </script>
 </body>
 </html>
