@@ -1,8 +1,8 @@
-<ROCK><html lang="en">
+<!DOCTYPE><html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rock Earn Dashboard</title>
+<title>Rock Earn — Full Premium Dashboard</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
@@ -87,7 +87,7 @@ footer.company{position:fixed;right:18px;bottom:18px;background:rgba(0,0,0,0.7);
 <div style="font-size:12px;margin-top:6px;color:#9ff">Secure. Fast. Premium support: support@rockearnpro.com</div>
 </footer>
 <script>
-/* FULL login/signup/logout/admin/dashboard JS logic here */
+/* FULL JS LOGIC: LOGIN/SIGNUP, PLANS, DEPOSIT/WITHDRAW, PROFIT AUTO-UPDATE, ADMIN APPROVAL */
 </script>
 </body>
 </html>
