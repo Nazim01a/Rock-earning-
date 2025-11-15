@@ -13,7 +13,7 @@ button { cursor:pointer; padding:8px 12px; border:none; border-radius:8px; }
 #authBox { position:fixed; left:50%; top:150px; transform:translateX(-50%); width:320px; background:rgba(0,0,0,0.6); padding:20px; border-radius:14px; }
 #authBox input { width:100%; margin-bottom:10px; padding:10px; border-radius:10px; border:none; background:#0f1320; color:#dff7fb; }
 #sidebar { position:fixed; left:0; top:0; bottom:0; width:80px; background:rgba(10,10,12,0.9); display:none; flex-direction:column; align-items:center; padding:20px 0; gap:14px; z-index:50; }
-.icon-btn { width:64px; height:64px; border-radius:14px; background:linear-gradient(180deg,#0b0b10,#0f1220); display:flex; flex-direction:column; align-items:center; justify-content:center; color:#bcdbe3; font-size:14px; transition:.2s; }
+.icon-btn { width:64px; height:64px; border-radius:14px; background:linear-gradient(180deg,#0b0b10,#0f1220); display:flex; flex-direction:column; align-items:center; justify-content:center; color:#bcdbe3; font-size:14px; transition:.2s; text-align:center; }
 .icon-btn:hover { transform:translateY(-6px); box-shadow:0 12px 30px rgba(0,247,239,0.2); }
 #sidebar i { font-size:20px; }
 #contentSection { position:fixed; left:100px; top:120px; right:20px; bottom:20px; background:rgba(0,0,0,0.5); border-radius:14px; padding:20px; overflow:auto; display:none; }
@@ -26,6 +26,7 @@ button { cursor:pointer; padding:8px 12px; border:none; border-radius:8px; }
 .stat-value { font-size:16px; font-weight:700; margin:0; }
 .plan-card { border:1px solid rgba(0,247,239,0.1); border-radius:10px; padding:12px; margin-bottom:12px; background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0)); }
 .muted { color:#9fcfda; font-size:13px; }
+input[type="file"]{color:#fff;}
 </style>
 </head>
 <body>
@@ -150,12 +151,17 @@ document.getElementById('logoutBtn').style.display='block';
 document.getElementById('userName').innerText=currentUser.name;
 document.getElementById('balValue').innerText=(currentUser.balance||0)+' PKR';
 document.getElementById('profValue').innerText=(currentUser.profit||0)+' PKR';
-if(currentUser.role==='admin'){document.getElementById('adminBtn').style.display='block';}
+if(currentUser.role==='admin'){document.getElementById('adminBtn').style.display='block';}else{document.getElementById('adminBtn').style.display='none';}
+document.getElementById('contentSection').style.display='none';
 document.getElementById('backBtn').style.display='none';
 }
 
+// ----------------------
+// Open Section
+// ----------------------
 function openSection(type){
 const content=document.getElementById('sectionContent');
+document.getElementById('contentSection').style.display='block';
 document.getElementById('backBtn').style.display='inline-block';
 content.innerHTML='';
 
@@ -181,6 +187,9 @@ content.innerHTML=html;
 } else {content.innerHTML='<h3>Coming Soon</h3>';}
 }
 
+// ----------------------
+// Close Section
+// ----------------------
 function closeSection(){document.getElementById('contentSection').style.display='none';document.getElementById('backBtn').style.display='none';}
 
 // ----------------------
@@ -188,7 +197,6 @@ function closeSection(){document.getElementById('contentSection').style.display=
 // ----------------------
 function openDeposit(amount=0,name='',daily=0,days=0,planIndex=0){
 const content=document.getElementById('sectionContent');
-document.getElementById('contentSection').style.display='block';
 content.innerHTML=`<h3>Deposit — ${name}</h3>
 <p>Amount: <strong>${amount} PKR</strong></p>
 <p>JazzCash: <strong>03705519562</strong> <button onclick="copyText('03705519562')">Copy</button></p>
@@ -213,14 +221,15 @@ showNotif('Deposit submitted — waiting admin approval');
 openSection('plans');
 }
 
-// Copy text helper
+// Copy helper
 function copyText(txt){navigator.clipboard.writeText(txt);showNotif('Copied!');}
 
 // ----------------------
-// Event Listeners
+// Auto open dashboard on refresh if logged in
 // ----------------------
-document.getElementById('signupBtn').onclick=signupUser;
-document.getElementById('loginBtn').onclick=loginUser;
+window.onload = () => {
+if(currentUser){openDashboard();}
+};
 
 </script>
 
