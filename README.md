@@ -5,7 +5,20 @@
 <title>Rock Earn — Full Dashboard</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-body{font-family:Arial,sans-serif;margin:0;padding:20px;background:#f0f0f0;color:#000}
+body{
+  font-family:Arial,sans-serif;
+  margin:0;
+  padding:20px;
+  color:#fff;
+  background:linear-gradient(120deg,#0a0227,#24006e,#4e0bb3);
+  background-size:400% 400%;
+  animation:bgAnim 12s ease infinite;
+}
+@keyframes bgAnim{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
 button{padding:8px 12px;margin:4px;cursor:pointer}
 #sidebar{display:none;margin-top:20px}
 .icon-btn{display:inline-block;width:100px;height:80px;text-align:center;border:1px solid #000;border-radius:8px;padding:8px;margin:4px;cursor:pointer}
@@ -75,7 +88,11 @@ function logoutUser(){currentUser=null;localStorage.removeItem('reCurrent');loca
 function openDashboard(){
   document.getElementById('authBox').style.display='none';
   document.getElementById('sidebar').style.display='block';
-  if(currentUser.role==='admin'){document.getElementById('adminBtn').style.display='inline-block';}
+  document.getElementById('contentSection').innerHTML = `<h2 style='text-shadow:0 0 8px #fff;'>🎉 Welcome, <b>${currentUser.name}</b> 🎉</h2>`;
+  if(currentUser.role==='admin'){
+    document.getElementById('adminBtn').style.display='inline-block';
+  }
+}
 }
 
 function openSection(type){
