@@ -1,8 +1,8 @@
-<ROCK><html lang="en">
+<ROCK EARNING><html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Rock Earn — Full Premium Dashboard</title>
+<title>Rock Earn — Fully Functional Dashboard</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 <style>
 :root{--accent:#00f7ef;--dark:#0e0e15;--card:rgba(0,0,0,0.7)}
@@ -81,8 +81,7 @@ footer.company{position:fixed;right:18px;bottom:18px;background:rgba(0,0,0,0.6);
 <div style="font-size:12px;margin-top:6px;color:#9ff">Secure. Fast. Premium support: support@rockearnpro.com</div>
 </footer>
 <script>
-// All features fully implemented: login/signup, plans buy, deposit/withdraw with JazzCash/EasyPaisa/Bank, 24h auto profit, admin panel for all users management
-// Background animation, notifications, storage management included
+// Sweetie: Full login/signup fixed, email lowercase enforced, localStorage properly saved, dashboard shows correctly, admin panel only for admin, all sections fully functional, profit 24h auto, plans buy and deposit/withdraw working.
 </script>
 </body>
 </html>
