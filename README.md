@@ -91,10 +91,17 @@ function showNotif(msg){const n=document.getElementById('notif');n.innerText=msg
 let users=JSON.parse(localStorage.getItem('reUsers'))||[];
 let currentUser=JSON.parse(localStorage.getItem('reCurrent'))||null;
 
+// ✅ Fix: page load par check karo agar currentUser exist karta hai to dashboard open karo
+window.addEventListener('load', () => {
+  if (currentUser) {
+    openDashboard();
+    document.getElementById('sidebar').classList.add('active');
+  }
+});
+
 function validateEmail(e){return/^\S+@\S+\.\S+$/.test(e);}
 function signupUser(){let n=document.getElementById('authName').value.trim();let e=document.getElementById('authEmail').value.trim();let p=document.getElementById('authPass').value.trim();if(!n||!e||!p)return showNotif('Fill all fields');if(!validateEmail(e))return showNotif('Invalid email');if(users.find(u=>u.email===e))return showNotif('Email already registered');let u={name:n,email:e,pass:p,plans:[],referrals:[],balance:0,profit:0};users.push(u);localStorage.setItem('reUsers',JSON.stringify(users));currentUser=u;localStorage.setItem('reCurrent',JSON.stringify(u));openDashboard();}
 function loginUser(){let e=document.getElementById('authEmail').value.trim();let p=document.getElementById('authPass').value.trim();let u=users.find(x=>x.email===e&&x.pass===p);if(!u)return showNotif('Invalid credentials');currentUser=u;localStorage.setItem('reCurrent',JSON.stringify(u));openDashboard();}
-
 function openDashboard(){document.getElementById('authBox').style.display='none';document.getElementById('sidebar').classList.add('active');document.getElementById('welcomeBox').style.display='block';document.getElementById('welcomeBox').innerHTML=`<h2>Welcome, ${currentUser.name} 💎</h2><p>Balance: ${currentUser.balance} PKR</p><p>Total Profit: ${currentUser.profit} PKR</p>`;}
 function logoutUser(){currentUser=null;localStorage.removeItem('reCurrent');location.reload();}
 function refreshBalance(){openDashboard();showNotif('Balance refreshed!');}
