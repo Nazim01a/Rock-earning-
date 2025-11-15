@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<ROCK>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -36,9 +36,9 @@ input:focus, select:focus{outline:none;box-shadow:0 0 12px #0ff;}
 @keyframes glowText{0%{text-shadow:0 0 5px #000,0 0 10px #0ff;}50%{text-shadow:0 0 12px #000,0 0 25px #0ff;}100%{text-shadow:0 0 5px #000,0 0 10px #0ff;}}
 @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
 @media (max-width: 1024px){
-    #welcomeBox{left:20px;right:20px;}
-    #contentSection{top:220px;left:20px;right:20px;bottom:20px;}
-    .sidebar{width:100%;height:auto;flex-direction:row;justify-content:space-around;padding:10px;display:flex;position:relative;}
+#welcomeBox{left:20px;right:20px;}
+#contentSection{top:220px;left:20px;right:20px;bottom:20px;}
+.sidebar{width:100%;height:auto;flex-direction:row;justify-content:space-around;padding:10px;display:flex;position:relative;}
 }
 </style>
 </head>
@@ -149,4 +149,8 @@ function confirmDeposit(amount,name,daily,days){let file=document.getElementById
 function copyText(txt){navigator.clipboard.writeText(txt);showNotif('Copied!');}
 
 // Auto daily profit
-setInterval(()=>{if(currentUser){let now=Date.now();currentUser.plans.forEach(p=>{let elapsed=Math.floor((now-p.ts)/(1000*60*60*24));if(elapsed>=1 && !p.profitAdded){currentUser.balance+=p.daily;currentUser.profit+=p.daily;p.profitAdded=true;localStorage.setItem('reCurrent',JSON.stringify(currentUser));refreshBalance();}}
+setInterval(()=>{if(currentUser){let now=Date.now();currentUser.plans.forEach(p=>{let elapsed=Math.floor((now-p.ts)/(1000*60*60*24));if(elapsed>=1 && !p.profitAdded){currentUser.balance+=p.daily;currentUser.profit+=p.daily;p.profitAdded=true;localStorage.setItem('reCurrent',JSON.stringify(currentUser));refreshBalance();}})},10000);
+</script>
+</body>
+</html>
+``
