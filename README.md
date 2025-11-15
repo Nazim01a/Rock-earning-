@@ -9,21 +9,34 @@
 <style>
 body{font-family:'Segoe UI',sans-serif;color:white;margin:0;overflow-x:hidden;height:100vh;background:#0f0f20;}
 canvas#bgCanvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;}
+
+/* Sidebar */
 .sidebar{position:fixed;top:0;left:0;width:120px;height:100vh;background:rgba(0,0,0,0.3);display:flex;flex-direction:column;align-items:center;padding-top:20px;gap:15px;z-index:10;opacity:0;transition:1s;}
 .sidebar.active{opacity:1;}
 .icon-btn{display:flex;flex-direction:column;align-items:center;padding:12px;border-radius:15px;cursor:pointer;transition:0.3s;background:linear-gradient(45deg,#00f,#0ff);box-shadow:0 0 10px #0ff,0 0 20px #00f;}
 .icon-btn:hover{transform:scale(1.1);box-shadow:0 0 20px #0ff,0 0 40px #00f;}
 .icon-name{margin-top:6px;font-size:12px;color:#0ff;text-shadow:0 0 5px #0ff;}
+
+/* Sub-icons / dropdown */
+.sub-icons{display:none;flex-direction:column;gap:10px;margin-top:5px;}
+.sub-icons.active{display:flex;}
+.sub-icon{background:linear-gradient(45deg,#0ff,#00f);padding:6px 12px;border-radius:12px;text-align:center;cursor:pointer;transition:0.3s;font-size:12px;}
+.sub-icon:hover{transform:scale(1.05);box-shadow:0 0 15px #0ff,0 0 30px #00f;}
+
+/* Cards / Buttons */
 .card{background:rgba(255,255,255,0.05);border-radius:20px;padding:20px;backdrop-filter:blur(15px);box-shadow:0 0 30px #0ff6;transition:0.3s;}
 .btn{background:linear-gradient(45deg,#00f,#0ff);padding:12px 18px;border-radius:12px;font-weight:700;transition:0.3s;box-shadow:0 0 10px #0ff,0 0 20px #00f;cursor:pointer;}
 .btn:hover{transform:scale(1.08);box-shadow:0 0 20px #0ff,0 0 40px #0ff;}
 .plan-card{border:1px solid #0ff;padding:12px;margin-bottom:12px;border-radius:12px;transition:0.3s;}
 .plan-card:hover{box-shadow:0 0 25px #0ff,0 0 50px #0ff;transform:scale(1.04);}
+
+/* Welcome Box Neon */
 @keyframes neonGlow {from { text-shadow:0 0 5px #0ff,0 0 10px #0ff,0 0 20px #0ff,0 0 30px #00f,0 0 40px #0ff; } to { text-shadow:0 0 10px #0ff,0 0 20px #0ff,0 0 30px #0ff,0 0 40px #00f,0 0 50px #0ff; }}
 .stat-card {background: rgba(0,255,255,0.1); padding: 18px 25px; border-radius: 15px; box-shadow: 0 0 10px #0ff, 0 0 20px #0ff; transition: 0.4s; min-width:140px; cursor:default;}
 .stat-card:hover {transform: scale(1.05); box-shadow: 0 0 25px #0ff, 0 0 50px #00f;}
 .stat-label {font-size:12px;color:#0ff;letter-spacing:1px;margin-bottom:5px;}
 .stat-value {font-size:18px;font-weight:700;color:white;}
+
 #contentSection{position:fixed;top:20px;left:140px;right:20px;bottom:20px;background:rgba(0,0,0,0.8);backdrop-filter:blur(15px);border-radius:20px;padding:20px;overflow-y:auto;display:none;z-index:999;}
 #backBtn{position:absolute;top:10px;left:20px;background:#ff0044;padding:8px 12px;border:none;border-radius:10px;font-weight:700;cursor:pointer;transition:0.3s;}
 #backBtn:hover{transform:scale(1.05);background:#ff3366;}
@@ -31,26 +44,37 @@ canvas#bgCanvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;}
 #notif.show{right:20px;}
 input,select{padding:10px;border-radius:12px;width:100%;margin-bottom:10px;background:#1b1e2f;color:white;border:none;transition:0.3s;}
 input:focus, select:focus{outline:none;box-shadow:0 0 12px #0ff;}
+
+/* Video Overlay */
+#videoOverlay{position:fixed;top:0;left:0;width:100%;height:100%;background:black;display:flex;justify-content:center;align-items:center;z-index:9999;display:none;}
+#videoOverlay video{width:90%;border-radius:15px;box-shadow:0 0 50px #0ff;}
 </style>
 </head>
 <body>
 <canvas id="bgCanvas"></canvas>
 <div id="notif"></div>
 
+<!-- Video Overlay -->
+<div id="videoOverlay">
+<video id="loginVideo" autoplay muted>
+<source src="https://assets.mixkit.co/videos/preview/mixkit-sport-car-driving-on-road-1225-large.mp4" type="video/mp4">
+</video>
+</div>
+
 <!-- Sidebar -->
 <div class="sidebar" id="sidebar">
 <div style="font-size:28px;margin-bottom:10px;">🚀</div>
 <div class="icon-btn" onclick="openSection('home')"><i class="fa fa-home"></i><span class="icon-name">Dashboard</span></div>
 <div class="icon-btn" onclick="openSection('plans')"><i class="fa fa-gem"></i><span class="icon-name">Plans</span></div>
-<div class="icon-btn" onclick="openSection('wallet')"><i class="fa fa-wallet"></i><span class="icon-name">Wallet</span></div>
-<div class="icon-btn" onclick="openSection('deposit')"><i class="fa fa-money-bill"></i><span class="icon-name">Deposit</span></div>
-<div class="icon-btn" onclick="openSection('withdraw')"><i class="fa fa-hand-holding-dollar"></i><span class="icon-name">Withdraw</span></div>
-<div class="icon-btn" onclick="openSection('history')"><i class="fa fa-clock"></i><span class="icon-name">History</span></div>
+<div class="icon-btn" onclick="toggleSubIcons()"><i class="fa fa-wallet"></i><span class="icon-name">Finance</span></div>
+<div class="sub-icons" id="financeSub">
+<div class="sub-icon" onclick="openSection('wallet')"><i class="fa fa-wallet"></i> Wallet</div>
+<div class="sub-icon" onclick="openSection('deposit')"><i class="fa fa-money-bill"></i> Deposit</div>
+<div class="sub-icon" onclick="openSection('withdraw')"><i class="fa fa-hand-holding-dollar"></i> Withdraw</div>
+<div class="sub-icon" onclick="openSection('profit')"><i class="fa fa-coins"></i> Profit</div>
+</div>
 <div class="icon-btn" onclick="openSection('support')"><i class="fa fa-headset"></i><span class="icon-name">Support</span></div>
-<div class="icon-btn" onclick="openSection('company')"><i class="fa fa-building"></i><span class="icon-name">Company</span></div>
-<div class="icon-btn" onclick="openSection('invite')"><i class="fa fa-gift"></i><span class="icon-name">Referral</span></div>
-<div class="icon-btn" onclick="openSection('share')"><i class="fa fa-share-alt"></i><span class="icon-name">Share</span></div>
-<div class="icon-btn" onclick="refreshBalance()"><i class="fa fa-sync"></i><span class="icon-name">Refresh</span></div>
+<div class="icon-btn" onclick="openSection('share')"><i class="fa fa-share-alt"></i><span class="icon-name">Referral</span></div>
 </div>
 
 <!-- Auth Box -->
@@ -74,7 +98,7 @@ input:focus, select:focus{outline:none;box-shadow:0 0 12px #0ff;}
 <button onclick="logoutUser()" class="btn bg-red-600" style="position:fixed;bottom:20px;left:50%;transform:translateX(-50%);width:200px;">Logout</button>
 
 <script>
-// BG Animation Particles
+// BG Animation
 const canvas=document.getElementById('bgCanvas');
 const ctx=canvas.getContext('2d');
 canvas.width=window.innerWidth;canvas.height=window.innerHeight;
@@ -89,54 +113,40 @@ function showNotif(msg){const n=document.getElementById('notif');n.innerText=msg
 // Users + Auth
 let users=JSON.parse(localStorage.getItem('reUsers'))||[];
 let currentUser=JSON.parse(localStorage.getItem('reCurrent'))||null;
-window.addEventListener('load', () => { if (currentUser) { openDashboard(); document.getElementById('sidebar').classList.add('active'); } });
+window.addEventListener('load', () => { if (currentUser) { showLoginVideo(); } });
+
 function validateEmail(e){return/^\S+@\S+\.\S+$/.test(e);}
-function signupUser(){let n=document.getElementById('authName').value.trim();let e=document.getElementById('authEmail').value.trim();let p=document.getElementById('authPass').value.trim();if(!n||!e||!p)return showNotif('Fill all fields');if(!validateEmail(e))return showNotif('Invalid email');if(users.find(u=>u.email===e))return showNotif('Email already registered');let u={name:n,email:e,pass:p,plans:[],referrals:[],balance:0,profit:0};users.push(u);localStorage.setItem('reUsers',JSON.stringify(users));currentUser=u;localStorage.setItem('reCurrent',JSON.stringify(u));openDashboard();}
-function loginUser(){let e=document.getElementById('authEmail').value.trim();let p=document.getElementById('authPass').value.trim();let u=users.find(x=>x.email===e&&x.pass===p);if(!u)return showNotif('Invalid credentials');currentUser=u;localStorage.setItem('reCurrent',JSON.stringify(u));openDashboard();}
-function openDashboard(){document.getElementById('authBox').style.display='none';document.getElementById('sidebar').classList.add('active');document.getElementById('welcomeBox').style.display='block';document.getElementById('welcomeBox').innerHTML=`<div style="text-align:center;"><h2 style="font-size:28px;font-weight:800;color:#0ff;text-shadow:0 0 5px #0ff,0 0 10px #0ff,0 0 20px #0ff,0 0 30px #00f,0 0 40px #0ff; animation: neonGlow 1.5s ease-in-out infinite alternate;">Welcome, <span style="color:#fff;text-shadow:0 0 5px #fff;">${currentUser.name}</span> 💎</h2><div style="display:flex;justify-content:center;gap:20px;margin-top:20px;flex-wrap:wrap;"><div class="stat-card"><p class="stat-label">Balance</p><p class="stat-value">${currentUser.balance} PKR</p></div><div class="stat-card"><p class="stat-label">Total Profit</p><p class="stat-value">${currentUser.profit} PKR</p></div></div></div>`;}
+function signupUser(){let n=document.getElementById('authName').value.trim();let e=document.getElementById('authEmail').value.trim();let p=document.getElementById('authPass').value.trim();if(!n||!e||!p)return showNotif('Fill all fields');if(!validateEmail(e))return showNotif('Invalid email');if(users.find(u=>u.email===e))return showNotif('Email already registered');let u={name:n,email:e,pass:p,plans:[],balance:0,profit:0};users.push(u);localStorage.setItem('reUsers',JSON.stringify(users));currentUser=u;localStorage.setItem('reCurrent',JSON.stringify(u));showLoginVideo();}
+function loginUser(){let e=document.getElementById('authEmail').value.trim();let p=document.getElementById('authPass').value.trim();let u=users.find(x=>x.email===e&&x.pass===p);if(!u)return showNotif('Invalid credentials');currentUser=u;localStorage.setItem('reCurrent',JSON.stringify(u));showLoginVideo();}
+
+function showLoginVideo(){
+const overlay=document.getElementById('videoOverlay');
+overlay.style.display='flex';
+const video=document.getElementById('loginVideo');
+video.currentTime=0;
+video.play();
+video.onended=()=>{overlay.style.display='none';openDashboard();}
+}
+
+// Dashboard
+function openDashboard(){
+document.getElementById('authBox').style.display='none';
+document.getElementById('sidebar').classList.add('active');
+document.getElementById('welcomeBox').style.display='block';
+document.getElementById('welcomeBox').innerHTML=`
+<h2 style="font-size:28px;font-weight:800;color:#0ff;text-shadow:0 0 5px #0ff,0 0 10px #0ff; animation: neonGlow 1.5s ease-in-out infinite alternate;">Welcome, <span style="color:#fff;">${currentUser.name}</span> 💎</h2>
+<div style="display:flex;justify-content:center;gap:20px;margin-top:20px;flex-wrap:wrap;">
+<div class="stat-card"><p class="stat-label">Balance</p><p class="stat-value">${currentUser.balance} PKR</p></div>
+<div class="stat-card"><p class="stat-label">Profit</p><p class="stat-value">${currentUser.profit} PKR</p></div>
+</div>`;}
+
 function logoutUser(){currentUser=null;localStorage.removeItem('reCurrent');location.reload();}
 function refreshBalance(){openDashboard();showNotif('Balance refreshed!');}
-
-// Copy Text
-function copyText(txt){navigator.clipboard.writeText(txt);showNotif('Copied!');}
-
-// Plans
-let plans=[{name:'Basic',amount:200,daily:30,days:22},{name:'Pro',amount:500,daily:80,days:25},{name:'Premium',amount:1000,daily:180,days:30},{name:'Gold',amount:2500,daily:450,days:28},{name:'Platinum',amount:5000,daily:950,days:32},{name:'Diamond',amount:7000,daily:1350,days:27},{name:'Elite X',amount:10000,daily:2200,days:35,coming:true}];
-
-// Sections
-function openSection(type){
-const sec=document.getElementById('contentSection');const content=document.getElementById('sectionContent');sec.style.display='block';content.innerHTML='';
-switch(type){
-case 'home':content.innerHTML='<h2>Dashboard Home</h2><p>Quick overview of your balance, plans, and profits.</p>';break;
-case 'plans':content.innerHTML='<h2>Plans</h2>'+plans.map(p=>{if(p.coming){return `<div class="plan-card"><b>${p.name}</b> - ${p.amount} PKR - Daily: ${p.daily} PKR - <span class="countdown">${p.days} Days</span><br><button class="btn mt-2" disabled>Coming Soon</button></div>`;}return `<div class="plan-card"><b>${p.name}</b> - ${p.amount} PKR - Daily: ${p.daily} PKR - <span class="countdown">${p.days} Days</span><br><button class="btn mt-2" onclick="openDeposit(${p.amount},'${p.name}',${p.daily},${p.days})">Buy Now</button></div>`;}).join('');break;
-case 'wallet':content.innerHTML=`<h2>Wallet</h2><p>Balance: ${currentUser.balance} PKR</p><p>Total Profit: ${currentUser.profit} PKR</p>`;break;
-case 'deposit':openDeposit();break;
-case 'withdraw':content.innerHTML=`<h2>Withdraw</h2><input type='number' placeholder='Amount'><select><option>JazzCash</option><option>EasyPaisa</option><option>Bank</option></select><input type='text' placeholder='Account Number'><button class='btn mt-2'>Withdraw</button>`;break;
-case 'history':content.innerHTML=`<h2>Activity History</h2><p>• Deposit: 500 PKR</p><p>• Withdraw: 300 PKR</p><p>• Plan Bought: Basic Plan</p>`;break;
-case 'support':content.innerHTML=`<h2>Support</h2><p>Contact us at support@rockearnpro.com</p>`;break;
-case 'company':content.innerHTML=`<h2>Company</h2><p>Since: 2018</p><p>Industry: Crypto & FinTech</p>`;break;
-case 'invite':content.innerHTML=`<h2>Invite Bonus</h2><p>Share your referral link and earn bonuses!</p>`;break;
-case 'share':content.innerHTML=`<h2>Share Link</h2><input type='text' value='https://rockearnpro.com?ref=${currentUser.email}' readonly><button class='btn mt-2' onclick='copyText("https://rockearnpro.com?ref=${currentUser.email}")'>Copy Link</button>`;break;
-default:content.innerHTML=`<h2>${type}</h2><p>Coming Soon...</p>`;}
-}
+function toggleSubIcons(){document.getElementById('financeSub').classList.toggle('active');}
+function openSection(type){const sec=document.getElementById('contentSection');const content=document.getElementById('sectionContent');sec.style.display='block';
+switch(type){case 'home':content.innerHTML='<h2>Dashboard</h2><p>Overview of balance and plans.</p>';break;case 'plans':content.innerHTML='<h2>Plans</h2><p>Plans content here.</p>';break;case 'wallet':content.innerHTML=`<h2>Wallet</h2><p>Balance: ${currentUser.balance} PKR</p><p>Total Profit: ${currentUser.profit} PKR</p>`;break;case 'deposit':content.innerHTML=`<h2>Deposit</h2><input type="number" placeholder="Amount"><input type="file"><input type="text" placeholder="Transaction ID"><button class="btn mt-2">Submit Deposit</button>`;break;case 'withdraw':content.innerHTML=`<h2>Withdraw</h2><input type="number" placeholder="Amount"><select><option>JazzCash</option><option>EasyPaisa</option><option>Bank</option></select><input type="text" placeholder="Account Number"><button class="btn mt-2">Submit Withdraw</button>`;break;case 'profit':content.innerHTML=`<h2>Profit</h2><p>Daily profit tracking and details here.</p>`;break;case 'support':content.innerHTML='<h2>Support</h2><p>Contact support@rockearnpro.com</p>';break;case 'share':content.innerHTML=`<h2>Referral / Share</h2><input type='text' value='https://rockearnpro.com?ref=${currentUser.email}' readonly><button class='btn mt-2' onclick='copyText("https://rockearnpro.com?ref=${currentUser.email}")'>Copy Link</button>`;break;default:content.innerHTML='<h2>Coming Soon...</h2>';break;}}
 function closeSection(){document.getElementById('contentSection').style.display='none';}
-
-// Deposit
-function openDeposit(amount=0,name='',daily=0,days=0){
-const sec=document.getElementById('contentSection');const content=document.getElementById('sectionContent');sec.style.display='block';
-content.innerHTML=`<h2>Deposit for ${name}</h2>
-<p>Amount: <b>${amount} PKR</b></p>
-<p>JazzCash: 03705519562 <button class='btn' onclick='copyText("03705519562")'>Copy</button></p>
-<p>EasyPaisa: 03379827882 <button class='btn' onclick='copyText("03379827882")'>Copy</button></p>
-<input type='file' id='proofFile'><input type='text' id='txnId' placeholder='Transaction ID'>
-<button class='btn mt-2' onclick='confirmDeposit(${amount},"${name}",${daily},${days})'>Submit Deposit</button>`;}
-
-function confirmDeposit(amount,name,daily,days){
-let file=document.getElementById('proofFile').files[0];let txn=document.getElementById('txnId').value.trim();
-if(!file||!txn){showNotif('Please upload proof & enter transaction ID');return;}
-currentUser.balance+=amount;currentUser.profit+=daily*days;localStorage.setItem('reCurrent',JSON.stringify(currentUser));
-users=users.map(u=>u.email===currentUser.email?currentUser:u);localStorage.setItem('reUsers',JSON.stringify(users));
-showNotif(`Deposit successful! ${amount} PKR added.`);openDashboard();closeSection();}
+function copyText(val){navigator.clipboard.writeText(val);showNotif('Copied: '+val);}
 </script>
 </body>
 </html>
