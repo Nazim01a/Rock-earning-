@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<ROCK>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -9,7 +9,7 @@
 <style>
 body{margin:0;font-family:'Segoe UI',sans-serif;background:#0e0e15;color:white;overflow-x:hidden;}
 canvas#bgCanvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;}
-.sidebar{position:fixed;top:100px;left:0;width:160px;height:auto;background:rgba(20,20,20,0.95);display:flex;flex-direction:column;align-items:center;padding-top:20px;gap:15px;z-index:10;display:none;}
+.sidebar{position:fixed;top:20px;left:0;width:160px;height:auto;background:rgba(20,20,20,0.95);display:flex;flex-direction:column;align-items:center;padding-top:20px;gap:15px;z-index:10;display:none;}
 .icon-btn{display:flex;flex-direction:column;align-items:center;padding:12px;border-radius:15px;cursor:pointer;transition:0.3s;background:#111;color:#ccc;box-shadow:0 0 5px #000;}
 .icon-btn:hover{transform:scale(1.1);box-shadow:0 0 15px #0ff,0 0 25px #0ff;}
 .icon-name{margin-top:6px;font-size:12px;color:#ccc;text-shadow:0 0 3px #000;}
@@ -33,14 +33,13 @@ input:focus, select:focus{outline:none;box-shadow:0 0 12px #0ff;}
 .btn:hover{transform:scale(1.08);box-shadow:0 0 20px #0ff,0 0 40px #0ff;}
 .logout-btn{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#ff0044;color:white;padding:12px 18px;border-radius:12px;font-weight:700;cursor:pointer;box-shadow:0 0 10px #ff3366;transition:0.3s;display:none;}
 .logout-btn:hover{transform:scale(1.05);box-shadow:0 0 20px #ff3366,0 0 30px #ff6688;}
-.company-details{position:fixed;bottom:0;left:180px;padding:15px;background:rgba(0,0,0,0.8);border-radius:12px;color:#0ff;font-size:12px;}
+.admin-panel{background:rgba(20,20,20,0.95);padding:15px;border-radius:15px;margin-bottom:12px;}
 @keyframes glowText{0%{text-shadow:0 0 5px #000,0 0 10px #0ff;}50%{text-shadow:0 0 12px #000,0 0 25px #0ff;}100%{text-shadow:0 0 5px #000,0 0 10px #0ff;}}
 @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
 @media (max-width: 1024px){
-#welcomeBox{left:20px;right:20px;}
-#contentSection{top:220px;left:20px;right:20px;bottom:20px;}
-.sidebar{width:100%;height:auto;flex-direction:row;justify-content:space-around;padding:10px;display:flex;position:relative;}
-.company-details{left:20px;}
+    #welcomeBox{left:20px;right:20px;}
+    #contentSection{top:220px;left:20px;right:20px;bottom:20px;}
+    .sidebar{width:100%;height:auto;flex-direction:row;justify-content:space-around;padding:10px;display:flex;position:relative;}
 }
 </style>
 </head>
@@ -58,10 +57,11 @@ input:focus, select:focus{outline:none;box-shadow:0 0 12px #0ff;}
 <div class="icon-btn" onclick="openSection('support')"><i class="fa fa-headset"></i><span class="icon-name">Support</span></div>
 <div class="icon-btn" onclick="openSection('referral')"><i class="fa fa-share-alt"></i><span class="icon-name">Referral</span></div>
 <div class="icon-btn" onclick="openSection('share')"><i class="fa fa-share"></i><span class="icon-name">Share</span></div>
+<div class="icon-btn" onclick="openSection('admin')"><i class="fa fa-user-shield"></i><span class="icon-name">Admin</span></div>
 </div>
 
 <div id="welcomeBox">
-<h2>🎉 Welcome to <span style="color:#0ff;font-weight:900;">Rock Earn</span> Premium 💎</h2>
+<h2>🎉 Welcome to <span style="color:white;font-weight:900;">Rock Earn</span> Premium 💎</h2>
 <div class="stats">
 <div class="stat-card"><p class="stat-label">Balance</p><p class="stat-value" id="balValue">0 PKR</p></div>
 <div class="stat-card"><p class="stat-label">Total Profit</p><p class="stat-value" id="profValue">0 PKR</p></div>
@@ -74,7 +74,7 @@ input:focus, select:focus{outline:none;box-shadow:0 0 12px #0ff;}
 <div id="sectionContent"></div>
 </div>
 
-<div id="authBox" style="margin-left:180px;margin-top:20px;width:320px;">
+<div id="authBox" class="card" style="margin-left:180px;margin-top:20px;width:320px;">
 <h2 class="text-2xl font-bold mb-4 text-center">Login / Sign Up</h2>
 <input id="authName" placeholder="Full Name" />
 <input id="authEmail" placeholder="Email" />
@@ -85,13 +85,28 @@ input:focus, select:focus{outline:none;box-shadow:0 0 12px #0ff;}
 
 <button class="logout-btn" id="logoutBtn" onclick="logoutUser()">Logout</button>
 
-<div class="company-details">
-<b>Company:</b> Rock Earn | <b>Launch:</b> 25 Main St, California, USA
-</div>
-
 <script>
-// Particle background
+// Particle Background
 const canvas=document.getElementById('bgCanvas'),ctx=canvas.getContext('2d');
 canvas.width=window.innerWidth;canvas.height=window.innerHeight;
 let particles=[];for(let i=0;i<150;i++){particles.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*2+1,s:Math.random()*0.5+0.5,color:`rgba(0,255,255,${Math.random()})`});}
 function animateParticles(){ctx.clearRect(0,0,canvas.width,canvas.height);particles.forEach(p=>{ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,2*Math.PI);ctx.fillStyle=p.color;ctx.fill();p.y-=p.s;if(p.y<0)p.y=canvas.height;});requestAnimationFrame(animateParticles);}animateParticles();
+
+// Notifications
+function showNotif(msg){const n=document.getElementById('notif');n.innerText=msg;n.classList.add('show');setTimeout(()=>{n.classList.remove('show');},3000);}
+
+// Users / Auth
+let users=JSON.parse(localStorage.getItem('reUsers'))||[];
+let currentUser=JSON.parse(localStorage.getItem('reCurrent'))||null;
+window.addEventListener('load',()=>{if(currentUser){openDashboard();}});
+
+function validateEmail(e){return/^\S+@\S+\.\S+$/.test(e);}
+function signupUser(){let n=document.getElementById('authName').value.trim();let e=document.getElementById('authEmail').value.trim();let p=document.getElementById('authPass').value.trim();if(!n||!e||!p)return showNotif('Fill all fields');if(!validateEmail(e))return showNotif('Invalid email');if(users.find(u=>u.email===e))return showNotif('Email already registered');let u={name:n,email:e,pass:p,plans:[],balance:0,profit:0,transactions:[]};users.push(u);localStorage.setItem('reUsers',JSON.stringify(users));currentUser=u;localStorage.setItem('reCurrent',JSON.stringify(u));openDashboard();}
+function loginUser(){let e=document.getElementById('authEmail').value.trim();let p=document.getElementById('authPass').value.trim();let u=users.find(x=>x.email===e&&x.pass===p);if(!u)return showNotif('Invalid credentials');currentUser=u;localStorage.setItem('reCurrent',JSON.stringify(u));openDashboard();}
+function logoutUser(){currentUser=null;localStorage.removeItem('reCurrent');location.reload();}
+function openDashboard(){document.getElementById('authBox').style.display='none';document.getElementById('sidebar').style.display='flex';document.getElementById('welcomeBox').style.display='block';document.getElementById('logoutBtn').style.display='block';document.getElementById('balValue').innerText=currentUser.balance+' PKR';document.getElementById('profValue').innerText=currentUser.profit+' PKR';}
+
+// More JS: Plans, Deposit, Withdraw, Admin Approval etc...
+</script>
+</body>
+</html>
