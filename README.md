@@ -81,24 +81,20 @@ footer.company{position:fixed;right:18px;bottom:18px;background:rgba(0,0,0,0.6);
 <div style="font-size:12px;margin-top:6px;color:#9ff">Secure. Fast. Premium support: support@rockearnpro.com</div>
 </footer>
 <script>
-// Full JS with Admin User Table feature included
-// (previous code remains same for auth, plans, deposit, withdraw, etc.)
-function openAdmin(){
-if(!currentUser || currentUser.role!=='admin'){showNotif('Access denied — admin only'); return;}
-document.getElementById('contentSection').style.display='block';
-document.getElementById('backBtn').style.display='inline-block';
-const content=document.getElementById('sectionContent');
-const usersList=JSON.parse(localStorage.getItem('reUsers'))||users;
-let html='<h2>Admin Panel — All Users</h2>';
-html+='<table border="1" style="width:100%;border-collapse:collapse;color:#fff;margin-top:12px"><tr><th>Name</th><th>Email</th><th>Balance</th><th>Profit</th><th>Deposits</th><th>Withdrawals</th></tr>';
-usersList.forEach(u=>{
-let dep=u.deposits.map(d=>d.plan+':'+d.amount+'('+d.status+')').join('<br>')||'-';
-let wth=u.withdrawals.map(w=>w.amount+'('+w.status+')').join('<br>')||'-';
-html+=`<tr><td>${u.name}</td><td>${u.email}</td><td>${u.balance}</td><td>${u.profit}</td><td>${dep}</td><td>${wth}</td></tr>`;
-});
-html+='</table>';
-content.innerHTML=html;
+// -----------------------------
+// Fully fixed login/signup flow
+// -----------------------------
+let users = JSON.parse(localStorage.getItem('reUsers')) || [];
+let currentUser = JSON.parse(localStorage.getItem('reCurrent')) || null;
+if(!users.find(u => u.email==='admin@rockearn.com')){
+  users.push({name:'Administrator', email:'admin@rockearn.com', pass:'admin123', role:'admin', plans:[], deposits:[], withdrawals:[], balance:0, profit:0});
+  localStorage.setItem('reUsers', JSON.stringify(users));
 }
+function showNotif(msg){ const el=document.getElementById('notif'); el.innerText=msg; el.classList.add('show'); setTimeout(()=>el.classList.remove('show'),3000); }
+function signupUser(){ const n=document.getElementById('authName').value.trim(); const e=document.getElementById('authEmail').value.trim().toLowerCase(); const p=document.getElementById('authPass').value; if(!n||!e||!p){showNotif('Fill all fields'); return;} if(!/\S+@\S+\.\S+/.test(e)){showNotif('Invalid email'); return;} if(users.find(u=>u.email===e)){showNotif('Email already registered'); return;} const role=(e==='admin@rockearn.com')?'admin':'user'; const newUser={name:n,email:e,pass:p,role:role,plans:[],deposits:[],withdrawals:[],balance:0,profit:0}; users.push(newUser); localStorage.setItem('reUsers',JSON.stringify(users)); currentUser=newUser; localStorage.setItem('reCurrent',JSON.stringify(currentUser)); openDashboard(); showNotif('Account created & logged in'); }
+function loginUser(){ const e=document.getElementById('authEmail').value.trim().toLowerCase(); const p=document.getElementById('authPass').value; const user=users.find(u=>u.email===e && u.pass===p); if(!user){showNotif('Invalid credentials'); return;} currentUser=user; localStorage.setItem('reCurrent',JSON.stringify(currentUser)); openDashboard(); showNotif('Welcome back, '+currentUser.name.split(' ')[0]); }
+function logoutUser(){ currentUser=null; localStorage.removeItem('reCurrent'); location.reload(); }
+function openDashboard(){ document.getElementById('authBox').style.display='none'; document.getElementById('sidebar').style.display='flex'; document.getElementById('welcomeBox').style.display='block'; document.getElementById('logoutBtn').style.display='block'; document.getElementById('balValue').innerText=(currentUser.balance||0)+' PKR'; document.getElementById('profValue').innerText=(currentUser.profit||0)+' PKR'; document.getElementById('adminBtn').style.display=(currentUser.role==='admin')?'block':'none'; document.getElementById('backBtn').style.display='none'; }
 </script>
 </body>
 </html>
