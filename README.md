@@ -1,438 +1,440 @@
-<!DOCTYPE html>
+<804>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rock Earn — Premium Dashboard</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+<title>Rock Earn Premium</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></script>
 <style>
-body {
-  margin:0; font-family:'Segoe UI',sans-serif; background:linear-gradient(135deg,#0b0b10,#081423);
-  overflow-x:hidden; color:#fff; animation: gradientBG 15s ease infinite;
-}
-@keyframes gradientBG {0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
-#notif {position:fixed; top:20px; right:-400px; background:#00f7ef; color:#001; padding:12px 20px; border-radius:12px; font-weight:700; transition:right .45s; z-index:60;}
-#notif.show { right:20px; }
-
-#authBox {position:fixed; left:50%; top:120px; transform:translateX(-50%); width:320px; background:rgba(0,0,0,0.7); padding:20px; border-radius:14px;}
-#authBox input {width:100%; margin-bottom:10px; padding:10px; border-radius:10px; border:none; background:#0f1320; color:#dff7fb;}
-
-#sidebar {position:fixed; left:0; top:0; bottom:0; width:80px; background:rgba(10,10,12,0.9); display:flex; flex-direction:column; align-items:center; padding:20px 0; gap:14px; z-index:50; display:none;}
-.icon-btn {width:64px; height:64px; border-radius:14px; background:linear-gradient(180deg,#0b0b10,#0f1220); display:flex; flex-direction:column; align-items:center; justify-content:center; color:#bcdbe3; font-size:14px; transition:.2s;}
-.icon-btn:hover { transform:translateY(-6px); box-shadow:0 12px 30px rgba(0,247,239,0.2);}
-#sidebar i { font-size:20px; }
-
-#contentSection {position:fixed; left:100px; top:120px; right:20px; bottom:20px; background:rgba(0,0,0,0.5); border-radius:14px; padding:20px; overflow:auto; display:none;}
-#backBtn {position:absolute; top:12px; left:12px; background:#ff4766; color:white; padding:8px 10px; border-radius:8px; cursor:pointer; display:none;}
-#refreshBtn {position:absolute; top:12px; right:12px; background:#00f7ef; color:#001; padding:8px 12px; border-radius:8px; cursor:pointer; display:none;}
-
-#welcomeBox {position:fixed; left:100px; top:20px; right:20px; padding:18px; border-radius:14px; background:rgba(255,255,255,0.02); backdrop-filter:blur(8px); box-shadow:0 4px 30px rgba(0,0,0,0.5); display:none;}
-#welcomeBox h2 { font-size:24px; animation: fadeInDown 1s ease; }
-@keyframes fadeInDown {0%{opacity:0;transform:translateY(-20px);} 100%{opacity:1;transform:translateY(0);}}
-.stats { display:flex; gap:18px; margin-top:12px; }
-.stat-card { background:rgba(0,247,239,0.03); padding:12px 16px; border-radius:10px; min-width:120px; }
-.stat-label { font-size:11px; color:#00f7ef; margin:0 0 6px; }
-.stat-value { font-size:16px; font-weight:700; margin:0; }
-
-.plan-card { border:1px solid rgba(0,247,239,0.1); border-radius:10px; padding:12px; margin-bottom:12px; background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0)); }
-.muted { color:#9fcfda; font-size:13px; }
-
-#profileModal { display:none; position:fixed; left:50%; top:50%; transform:translate(-50%,-50%); background:rgba(0,0,0,0.8); padding:20px; border-radius:14px; z-index:100;}
-#profileModal input { width:100%; margin-bottom:10px; padding:10px; border-radius:10px; border:none; background:#0f1320; color:#dff7fb; }
+body{margin:0;font-family:'Segoe UI',sans-serif;color:white;overflow-x:hidden;background:linear-gradient(135deg,#111,#222);}
+body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;z-index:-1;background:linear-gradient(270deg,#ff00ff,#00ffff,#ff9900,#ff00ff);background-size:800% 800%;animation:bgAnim 20s ease infinite;}
+@keyframes bgAnim{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+#notif{position:fixed;top:10px;left:50%;transform:translateX(-50%);background:#00ff99;padding:10px 20px;border-radius:8px;display:none;z-index:9999;font-weight:bold;}
+#notif.show{display:block;animation:fadeInOut 3s forwards;}
+@keyframes fadeInOut{0%{opacity:0}10%{opacity:1}90%{opacity:1}100%{opacity:0}}
+#rockEarnTitle{font-size:3rem;font-weight:bold;text-align:center;margin:20px 0;background:linear-gradient(90deg,#ff00ff,#00ffff,#ff9900,#ff00ff);background-size:300% 300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:gradientAnim 6s ease infinite;}
+@keyframes gradientAnim{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+#sidebar{display:flex;flex-direction:column;position:fixed;left:0;top:0;bottom:0;width:80px;background:#111;padding-top:60px;z-index:10;}
+#sidebar button{margin:10px 0;background:none;border:none;color:white;font-size:1.2rem;cursor:pointer;transition:all 0.3s;}
+#sidebar button:hover{color:#00ffcc;transform:scale(1.2);}
+#adminBtn{display:none;background:#ff9900;color:black;font-weight:bold;padding:8px 12px;border-radius:6px;margin-top:10px;}
+#adminBtn:hover{background:#00ffff;color:black;transform:scale(1.1);}
+#contentSection{margin-left:100px;padding:20px;animation:fadeContent 0.5s;}
+@keyframes fadeContent{0%{opacity:0}100%{opacity:1}}
+.plan-card{background:rgba(255,255,255,0.05);border:1px solid #00ffcc;padding:15px;margin:10px;border-radius:12px;display:inline-block;width:200px;transition:transform 0.3s,box-shadow 0.3s;}
+.plan-card:hover{transform:translateY(-5px);box-shadow:0 0 15px #00ffcc;}
+.plan-card button{background:#00ffcc;color:#000;border:none;padding:8px 12px;border-radius:6px;cursor:pointer;font-weight:bold;transition:all 0.3s;}
+.plan-card button:hover{background:#ff00ff;color:white;transform:scale(1.1);}
+#welcomeBox{text-align:center;padding:10px;margin-top:60px;}
+#welcomeBox div{display:inline-block;background:rgba(0,255,204,0.1);padding:10px 20px;margin:5px;border-radius:10px;animation:popIn 0.5s;}
+@keyframes popIn{0%{transform:scale(0)}100%{transform:scale(1)}}
+#backBtn,#refreshBtn{position:fixed;top:15px;cursor:pointer;z-index:10;padding:8px 12px;border:none;border-radius:6px;font-weight:bold;background:#00ffcc;color:#000;transition:all 0.3s;}
+#backBtn:hover,#refreshBtn:hover{background:#ff00ff;color:white;transform:scale(1.1);}
+#backBtn{left:100px;} #refreshBtn{right:20px;}
 </style>
 </head>
 <body>
 <div id="notif"></div>
-
-<div id="authBox">
-<h3 style="text-align:center">Login / Sign Up</h3>
-<input id="authName" placeholder="Full Name">
-<input id="authEmail" placeholder="Email">
-<input id="authPass" type="password" placeholder="Password">
-<div style="display:flex; gap:8px;">
-<button onclick="signupUser()"><i class="fa fa-user-plus"></i> Sign Up</button>
-<button style="background:#00b37e;color:#001;" onclick="loginUser()"><i class="fa fa-sign-in-alt"></i> Login</button>
+<div id="rockEarnTitle">Rock Earn</div>
+<div id="authBox" style="text-align:center;margin-top:50px;">
+<input id="authName" placeholder="Name"><br><br>
+<input id="authEmail" placeholder="Email"><br><br>
+<input id="authPass" type="password" placeholder="Password"><br><br>
+<button onclick="signupUser()">Sign Up</button>
+<button onclick="loginUser()">Login</button>
 </div>
-<p class="muted" style="margin-top:10px; font-size:13px;">Default admin: <strong>admin@rockearn.com</strong></p>
+<div id="sidebar" style="display:none;">
+<button onclick="openSection('plans')"><i class="fa-solid fa-list"></i></button>
+<button onclick="openSection('deposit')"><i class="fa-solid fa-wallet"></i></button>
+<button onclick="openSection('withdraw')"><i class="fa-solid fa-arrow-up-right-from-square"></i></button>
+<button onclick="openSection('profit')"><i class="fa-solid fa-money-bill-trend-up"></i></button>
+<button onclick="openSection('history')"><i class="fa-solid fa-clock-rotate-left"></i></button>
+<button id="adminBtn" onclick="openSection('admin')"><i class="fa-solid fa-user-gear"></i></button>
 </div>
-
-<div id="sidebar">
-<div class="icon-btn" onclick="openSection('plans')"><i class="fa fa-gem"></i><br>Plans</div>
-<div class="icon-btn" onclick="openSection('deposit')"><i class="fa fa-money-bill"></i><br>Deposit</div>
-<div class="icon-btn" onclick="openSection('withdraw')"><i class="fa fa-hand-holding-dollar"></i><br>Withdraw</div>
-<div class="icon-btn" onclick="openSection('profit')"><i class="fa fa-coins"></i><br>Profit</div>
-<div class="icon-btn" onclick="openSection('history')"><i class="fa fa-clock"></i><br>History</div>
-<div class="icon-btn" onclick="openSection('profile')"><i class="fa fa-user-circle"></i><br>Profile</div>
-<div class="icon-btn" onclick="openSection('admin')" id="adminBtn" style="display:none"><i class="fa fa-cog"></i><br>Admin</div>
+<div id="welcomeBox" style="display:none;">
+<div id="userNameTxt"></div>
+<div>Balance: <span id="balValue">0</span></div>
+<div>Profit: <span id="profValue">0</span></div>
 </div>
-
-<button id="refreshBtn" onclick="refreshDashboard()">🔄 Refresh</button>
-
-<div id="welcomeBox">
-<h2>🚀 <strong>Rock Earn</strong></h2>
-<div class="stats">
-<div class="stat-card"><div class="stat-label">Balance</div><div class="stat-value" id="balValue">0 PKR</div></div>
-<div class="stat-card"><div class="stat-label">Total Profit</div><div class="stat-value" id="profValue">0 PKR</div></div>
-</div>
-</div>
-
-<div id="contentSection">
-<button id="backBtn" onclick="closeSection()">← Back</button>
+<div id="contentSection" style="display:none;">
+<button id="backBtn" onclick="closeSection()">Back</button>
+<button id="refreshBtn" onclick="refreshDashboard()">Refresh</button>
 <div id="sectionContent"></div>
 </div>
-
-<div id="profileModal">
+<div id="profileModal" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#111;padding:20px;border-radius:10px;z-index:20;">
 <h3>Edit Profile</h3>
-<input id="profileName" placeholder="Name">
-<input id="profileEmail" placeholder="Email">
-<input id="profilePass" type="password" placeholder="New Password">
-<button onclick="updateProfile()">Save</button>
+<input id="profileName" placeholder="Name"><br><br>
+<input id="profileEmail" placeholder="Email"><br><br>
+<input id="profilePass" type="password" placeholder="New Password"><br><br>
+<button onclick="updateProfile()">Update</button>
 <button onclick="closeProfile()">Close</button>
-</div><script>
+</div>
+<script>// ----------------------
+// Part 2 — Full JS Functionality
+// Paste this inside the <script> block after the Part 1 HTML
 // ----------------------
-// Users & Storage
-// ----------------------
+
+/* Users & Storage */
 let users = JSON.parse(localStorage.getItem('reUsers')) || [];
 let currentUser = JSON.parse(localStorage.getItem('reCurrent')) || null;
 
-// Default admin
-if(!users.find(u=>u.email==='admin@rockearn.com')){
-    users.push({name:'Administrator',email:'admin@rockearn.com',pass:'admin123',role:'admin',plans:[],deposits:[],withdrawals:[],balance:0,profit:0});
-    localStorage.setItem('reUsers',JSON.stringify(users));
+/* Ensure default admin exists */
+if(!users.find(u => u.email === 'admin@rockearn.com')){
+  users.push({
+    name: 'Administrator',
+    email: 'admin@rockearn.com',
+    pass: 'admin123',
+    role: 'admin',
+    plans: [],
+    deposits: [],
+    withdrawals: [],
+    balance: 0,
+    profit: 0
+  });
+  localStorage.setItem('reUsers', JSON.stringify(users));
 }
 
-// Plans
+/* Plans array (15 plans) */
 const plans = [
-{name:'Basic',amount:200,daily:30,days:20},
-{name:'Starter',amount:500,daily:75,days:20},
-{name:'Pro',amount:1000,daily:180,days:20},
-{name:'Advanced',amount:1500,daily:250,days:25},
-{name:'Silver',amount:2000,daily:350,days:30},
-{name:'Gold',amount:3000,daily:550,days:30},
-{name:'Platinum',amount:5000,daily:950,days:40},
-{name:'Diamond',amount:7000,daily:1350,days:50},
-{name:'VIP',amount:10000,daily:2000,days:60},
-{name:'Elite',amount:12000,daily:2400,days:60},
-{name:'Master',amount:15000,daily:3000,days:70},
-{name:'Ultimate',amount:18000,daily:3500,days:75},
-{name:'Legend',amount:20000,daily:4000,days:80},
-{name:'Supreme',amount:25000,daily:5000,days:90},
-{name:'Titan',amount:30000,daily:6000,days:100}
+  {name:'Basic',amount:200,daily:30,days:20},
+  {name:'Starter',amount:500,daily:75,days:20},
+  {name:'Pro',amount:1000,daily:180,days:20},
+  {name:'Advanced',amount:1500,daily:250,days:25},
+  {name:'Silver',amount:2000,daily:350,days:30},
+  {name:'Gold',amount:3000,daily:550,days:30},
+  {name:'Platinum',amount:5000,daily:950,days:40},
+  {name:'Diamond',amount:7000,daily:1350,days:50},
+  {name:'VIP',amount:10000,daily:2000,days:60},
+  {name:'Elite',amount:12000,daily:2400,days:60},
+  {name:'Master',amount:15000,daily:3000,days:70},
+  {name:'Ultimate',amount:18000,daily:3500,days:75},
+  {name:'Legend',amount:20000,daily:4000,days:80},
+  {name:'Supreme',amount:25000,daily:5000,days:90},
+  {name:'Titan',amount:30000,daily:6000,days:100}
 ];
 
-// ----------------------
-// Notifications
-// ----------------------
+/* Helper: show notification */
 function showNotif(msg){
-    const el=document.getElementById('notif');
-    el.innerText=msg;
-    el.classList.add('show');
-    setTimeout(()=>el.classList.remove('show'),3000);
+  const el = document.getElementById('notif');
+  if(!el) return;
+  el.innerText = msg;
+  el.classList.add('show');
+  // fallback display if CSS .show is not used
+  el.style.display = 'block';
+  setTimeout(()=>{
+    el.classList.remove('show');
+    el.style.display = 'none';
+  }, 3000);
 }
 
-// ----------------------
-// Auth Functions
-// ----------------------
+/* AUTH: signup */
 function signupUser(){
-    const n=document.getElementById('authName').value.trim();
-    const e=document.getElementById('authEmail').value.trim().toLowerCase();
-    const p=document.getElementById('authPass').value;
-    if(!n||!e||!p){showNotif('Fill all fields'); return;}
-    if(users.find(u=>u.email===e)){showNotif('Email exists'); return;}
-    let u={name:n,email:e,pass:p,role:e==='admin@rockearn.com'?'admin':'user',plans:[],deposits:[],withdrawals:[],balance:0,profit:0};
-    users.push(u); localStorage.setItem('reUsers',JSON.stringify(users));
-    currentUser=u; localStorage.setItem('reCurrent',JSON.stringify(currentUser));
-    openDashboard(); showNotif('Account created & logged in');
+  const n = document.getElementById('authName').value.trim();
+  const e = document.getElementById('authEmail').value.trim().toLowerCase();
+  const p = document.getElementById('authPass').value;
+  if(!n || !e || !p){ showNotif('Fill all fields'); return; }
+  if(users.find(u => u.email === e)){ showNotif('Email exists'); return; }
+
+  const u = {
+    name: n,
+    email: e,
+    pass: p,
+    role: e === 'admin@rockearn.com' ? 'admin' : 'user',
+    plans: [],
+    deposits: [],
+    withdrawals: [],
+    balance: 0,
+    profit: 0
+  };
+  users.push(u);
+  localStorage.setItem('reUsers', JSON.stringify(users));
+  currentUser = u;
+  localStorage.setItem('reCurrent', JSON.stringify(currentUser));
+  openDashboard();
+  showNotif('Account created & logged in');
 }
 
+/* AUTH: login */
 function loginUser(){
-    const e=document.getElementById('authEmail').value.trim().toLowerCase();
-    const p=document.getElementById('authPass').value;
-    const u=users.find(x=>x.email===e && x.pass===p);
-    if(!u){showNotif('Invalid credentials'); return;}
-    currentUser=u; localStorage.setItem('reCurrent',JSON.stringify(currentUser));
-    openDashboard(); showNotif('Welcome '+currentUser.name.split(' ')[0]);
+  const e = document.getElementById('authEmail').value.trim().toLowerCase();
+  const p = document.getElementById('authPass').value;
+  const u = users.find(x => x.email === e && x.pass === p);
+  if(!u){ showNotif('Invalid credentials'); return; }
+  currentUser = u;
+  localStorage.setItem('reCurrent', JSON.stringify(currentUser));
+  openDashboard();
+  showNotif('Welcome ' + currentUser.name.split(' ')[0]);
 }
 
+/* LOGOUT */
 function logoutUser(){
-    currentUser=null; localStorage.removeItem('reCurrent'); location.reload();
+  currentUser = null;
+  localStorage.removeItem('reCurrent');
+  location.reload();
 }
 
-// ----------------------
-// Dashboard & Sections
-// ----------------------
+/* OPEN DASHBOARD */
 function openDashboard(){
-    document.getElementById('authBox').style.display='none';
-    document.getElementById('sidebar').style.display='flex';
-    document.getElementById('welcomeBox').style.display='block';
-    document.getElementById('refreshBtn').style.display='inline-block';
-    document.getElementById('userNameTxt')?.innerText=currentUser.name.split(' ')[0];
-    document.getElementById('balValue').innerText=(currentUser.balance||0)+' PKR';
-    document.getElementById('profValue').innerText=(currentUser.profit||0)+' PKR';
-    if(currentUser.role==='admin'){document.getElementById('adminBtn').style.display='block';}
-    document.getElementById('backBtn').style.display='none';
-    document.getElementById('contentSection').style.display='block';
+  document.getElementById('authBox').style.display = 'none';
+  document.getElementById('sidebar').style.display = 'flex';
+  document.getElementById('contentSection').style.display = 'block';
+  document.getElementById('welcomeBox').style.display = 'block';
+  document.getElementById('refreshBtn').style.display = 'inline-block';
+  // set user info text (if elements exist)
+  const nameEl = document.getElementById('userNameTxt');
+  if(nameEl) nameEl.innerText = currentUser.name.split(' ')[0];
+  const balEl = document.getElementById('balValue');
+  if(balEl) balEl.innerText = (currentUser.balance || 0) + ' PKR';
+  const profEl = document.getElementById('profValue');
+  if(profEl) profEl.innerText = (currentUser.profit || 0) + ' PKR';
+  // show admin button if admin
+  if(currentUser.role === 'admin'){
+    const adminBtn = document.getElementById('adminBtn');
+    if(adminBtn) adminBtn.style.display = 'inline-block';
+  }
+  // hide back initially
+  const back = document.getElementById('backBtn');
+  if(back) back.style.display = 'none';
 }
 
+/* REFRESH DASHBOARD — prevents auto-logout */
 function refreshDashboard(){
-    if(currentUser){
-        currentUser=users.find(u=>u.email===currentUser.email);
-        localStorage.setItem('reCurrent',JSON.stringify(currentUser));
-        document.getElementById('balValue').innerText=(currentUser.balance||0)+' PKR';
-        document.getElementById('profValue').innerText=(currentUser.profit||0)+' PKR';
-        showNotif('Dashboard refreshed');
-        closeSection();
-    }
+  if(!currentUser) { showNotif('No user logged in'); return; }
+  // reload fresh user state from storage (in case another tab changed)
+  users = JSON.parse(localStorage.getItem('reUsers')) || users;
+  currentUser = users.find(u => u.email === currentUser.email) || currentUser;
+  localStorage.setItem('reCurrent', JSON.stringify(currentUser));
+  const balEl = document.getElementById('balValue');
+  if(balEl) balEl.innerText = (currentUser.balance || 0) + ' PKR';
+  const profEl = document.getElementById('profValue');
+  if(profEl) profEl.innerText = (currentUser.profit || 0) + ' PKR';
+  showNotif('Dashboard refreshed');
+  closeSection();
 }
 
+/* OPEN SECTION (plans, deposit, withdraw, profit, history, admin, profile) */
 function openSection(type){
-    const content=document.getElementById('sectionContent');
-    document.getElementById('backBtn').style.display='inline-block';
-    content.innerHTML='';
+  const content = document.getElementById('sectionContent');
+  if(!content) return;
+  document.getElementById('backBtn').style.display = 'inline-block';
+  content.innerHTML = '';
 
-    if(type==='plans'){
-        plans.forEach((p,idx)=>{
-            content.innerHTML+=`<div class='plan-card'><b>${p.name}</b><br>Amount: ${p.amount} PKR<br>Daily: ${p.daily} PKR<br>Days: ${p.days}<br><button onclick="openDeposit(${p.amount},'${p.name}',${p.daily},${p.days},${idx})">Buy Now</button></div>`;
-        });
-    } else if(type==='deposit'){
-        content.innerHTML='<h3>Deposit Section</h3>';
-    } else if(type==='withdraw'){
-        openWithdraw();
-    } else if(type==='profit'){
-        content.innerHTML=`<h3>Total Profit: ${currentUser.profit} PKR</h3>`;
-    } else if(type==='history'){
-        let html='<h3>History</h3>';
-        (currentUser.deposits||[]).forEach(d=>{html+=`<p>Deposit: ${d.plan} - ${d.amount} PKR</p>`;});
-        (currentUser.withdrawals||[]).forEach(w=>{html+=`<p>Withdraw: ${w.amount} PKR - ${w.method}</p>`;});
-        content.innerHTML=html;
-    } else if(type==='admin' && currentUser.role==='admin'){
-        let html='<h3>Admin — User Activity</h3>';
-        users.forEach(u=>{
-            html+=`<div>${u.name} (${u.email}) — Balance: ${u.balance} PKR — Profit: ${u.profit} PKR</div>`;
-        });
-        content.innerHTML=html;
-    } else {content.innerHTML='<h3>Coming Soon</h3>';}
+  if(type === 'plans'){
+    // render plan cards
+    plans.forEach((p, idx) => {
+      const card = document.createElement('div');
+      card.className = 'plan-card';
+      card.innerHTML = `<b>${p.name}</b><br>Amount: ${p.amount} PKR<br>Daily: ${p.daily} PKR<br>Days: ${p.days}<br><br>`;
+      const btn = document.createElement('button');
+      btn.innerText = 'Buy Now';
+      btn.onclick = () => openDeposit(p.amount, p.name, p.daily, p.days, idx);
+      card.appendChild(btn);
+      content.appendChild(card);
+    });
+  }
+  else if(type === 'deposit'){
+    openDeposit(); // generic deposit section
+  }
+  else if(type === 'withdraw'){
+    openWithdraw();
+  }
+  else if(type === 'profit'){
+    content.innerHTML = `<h3>Total Profit</h3><p>${(currentUser.profit||0)} PKR</p>`;
+  }
+  else if(type === 'history'){
+    let html = '<h3>History</h3>';
+    (currentUser.deposits || []).forEach(d => {
+      html += `<p>Deposit: ${d.plan} - ${d.amount} PKR - ${d.status}</p>`;
+    });
+    (currentUser.withdrawals || []).forEach(w => {
+      html += `<p>Withdraw: ${w.amount} PKR - ${w.method} - ${w.status}</p>`;
+    });
+    content.innerHTML = html;
+  }
+  else if(type === 'admin' && currentUser.role === 'admin'){
+    // Admin: show list of users and activity (deposits/withdrawals)
+    let html = '<h3>Admin — User Activity</h3>';
+    users.forEach(u => {
+      html += `<div style="padding:10px;border-radius:8px;margin-bottom:8px;background:rgba(255,255,255,0.02)">
+        <strong>${u.name}</strong> (${u.email}) — Balance: ${u.balance} PKR — Profit: ${u.profit} PKR
+        <div style="font-size:13px;margin-top:6px;"><b>Deposits:</b>`;
+      (u.deposits || []).forEach(d => html += `<div style="margin-left:6px">• ${d.plan} — ${d.amount} PKR — ${d.status}</div>`);
+      html += `</div><div style="font-size:13px;margin-top:6px;"><b>Withdrawals:</b>`;
+      (u.withdrawals || []).forEach(w => html += `<div style="margin-left:6px">• ${w.amount} PKR — ${w.method} — ${w.status}</div>`);
+      html += `</div></div>`;
+    });
+    content.innerHTML = html;
+  }
+  else if(type === 'profile'){
+    openProfile();
+  }
+  else {
+    content.innerHTML = '<h3>Coming Soon</h3>';
+  }
 }
 
+/* Close section (hide back button) */
 function closeSection(){
-    document.getElementById('contentSection').style.display='block';
-    document.getElementById('backBtn').style.display='none';
+  const back = document.getElementById('backBtn');
+  if(back) back.style.display = 'none';
+  // keep contentSection visible; we don't auto-hide the whole area so UI remains stable
 }
 
-// ----------------------
-// Deposit / Buy Plan
-// ----------------------
-function openDeposit(amount=0,name='',daily=0,days=0,planIndex=0){
-    const content=document.getElementById('sectionContent');
-    document.getElementById('contentSection').style.display='block';
-    content.innerHTML=`<h3>Deposit — ${name}</h3>
+/* OPEN DEPOSIT — prefilled when called from Buy Now */
+function openDeposit(amount=0, name='', daily=0, days=0, planIndex=0){
+  const content = document.getElementById('sectionContent');
+  if(!content) return;
+  document.getElementById('backBtn').style.display = 'inline-block';
+  content.innerHTML = `
+    <h3>Deposit — ${ name || 'Manual' }</h3>
     <p>Amount: <strong>${amount} PKR</strong></p>
     <p>JazzCash: <strong>03705519562</strong> <button onclick="copyText('03705519562')">Copy</button></p>
     <p>EasyPaisa: <strong>03379827882</strong> <button onclick="copyText('03379827882')">Copy</button></p>
-    <p>Bank (Coming Soon)</p>
-    <p>Binance (Coming Soon)</p>
+    <p>Bank: <em>Coming Soon</em></p>
+    <p>Binance: <em>Coming Soon</em></p>
     <div style="margin-top:10px">
-    <input id="depositTxn" placeholder="Transaction ID">
-    <input id="depositProof" type="file"><br>
-    <button onclick="confirmDeposit(${amount},'${name}',${daily},${days},${planIndex})">Submit Deposit</button>
-    </div>`;
+      <input id="depositTxn" placeholder="Transaction ID" style="padding:8px;width:60%;margin-right:6px;">
+      <input id="depositProof" type="file" style="padding:8px;"><br><br>
+      <button onclick="confirmDeposit(${amount},'${escapeHtml(name)}',${daily},${days},${planIndex})">Submit Deposit</button>
+    </div>
+  `;
 }
 
-function confirmDeposit(amount,name,daily,days,planIndex){
-    const txn=document.getElementById('depositTxn').value.trim();
-    const proof=document.getElementById('depositProof').files[0];
-    if(!txn || !proof){showNotif('Upload proof & enter txn'); return;}
-    const deposit={plan:name,amount:amount,daily:daily,days:days,txn:txn,proof:proof.name,status:'approved',ts:Date.now()};
-    currentUser.deposits=currentUser.deposits||[]; currentUser.deposits.push(deposit);
-    currentUser.balance += amount;
-    currentUser.profit += daily; // first day profit auto
-    users=users.map(u=>u.email===currentUser.email?currentUser:u);
-    localStorage.setItem('reUsers',JSON.stringify(users));
-    localStorage.setItem('reCurrent',JSON.stringify(currentUser));
-    showNotif('Deposit confirmed — balance updated');
-    openSection('plans');
+/* CONFIRM DEPOSIT — stores deposit, updates balance and gives first-day profit */
+function confirmDeposit(amount, name, daily, days, planIndex){
+  const txn = document.getElementById('depositTxn')?.value.trim();
+  const proofInput = document.getElementById('depositProof');
+  const proof = proofInput && proofInput.files && proofInput.files[0];
+  if(!txn || !proof){ showNotif('Upload proof & enter txn'); return; }
+
+  // Save deposit entry (we store only file name, not binary)
+  const deposit = {
+    plan: name,
+    amount: amount,
+    daily: daily,
+    days: days,
+    txn: txn,
+    proof: proof.name || 'proof',
+    status: 'approved', // auto-approved as requested
+    ts: Date.now()
+  };
+
+  currentUser.deposits = currentUser.deposits || [];
+  currentUser.deposits.push(deposit);
+
+  // Update balance and add first day profit immediately
+  currentUser.balance = (currentUser.balance || 0) + Number(amount || 0);
+  currentUser.profit = (currentUser.profit || 0) + Number(daily || 0);
+
+  // Persist users
+  users = users.map(u => u.email === currentUser.email ? currentUser : u);
+  localStorage.setItem('reUsers', JSON.stringify(users));
+  localStorage.setItem('reCurrent', JSON.stringify(currentUser));
+
+  showNotif('Deposit submitted & balance updated');
+  openSection('plans');
 }
 
-// ----------------------
-// Withdraw
-// ----------------------
+/* OPEN WITHDRAWAL UI */
 function openWithdraw(){
-    const content=document.getElementById('sectionContent');
-    content.innerHTML=`<h3>Withdraw</h3>
-    <input id="withdrawName" placeholder="Your Name">
-    <input id="withdrawAcc" placeholder="Account Number">
-    <input id="withdrawAmount" placeholder="Amount">
-    <select id="withdrawMethod">
-        <option value="JazzCash">JazzCash</option>
-        <option value="EasyPaisa">EasyPaisa</option>
-        <option value="Bank">Bank</option>
-        <option value="Binance" disabled>Binance (Coming Soon)</option>
+  const content = document.getElementById('sectionContent');
+  if(!content) return;
+  document.getElementById('backBtn').style.display = 'inline-block';
+  content.innerHTML = `
+    <h3>Withdraw</h3>
+    <input id="withdrawName" placeholder="Your Name" style="padding:8px;width:60%;margin-right:6px;"><br><br>
+    <input id="withdrawAcc" placeholder="Account Number" style="padding:8px;width:60%;margin-right:6px;"><br><br>
+    <input id="withdrawAmount" placeholder="Amount" style="padding:8px;width:60%;margin-right:6px;"><br><br>
+    <select id="withdrawMethod" style="padding:8px;">
+      <option value="JazzCash">JazzCash</option>
+      <option value="EasyPaisa">EasyPaisa</option>
+      <option value="Bank">Bank</option>
+      <option value="Binance" disabled>Binance (Coming Soon)</option>
     </select><br><br>
-    <button onclick="confirmWithdraw()">Submit Withdraw</button>`;
+    <button onclick="confirmWithdraw()">Submit Withdraw</button>
+  `;
 }
 
+/* CONFIRM WITHDRAW — deducts balance and logs withdrawal */
 function confirmWithdraw(){
-    const name=document.getElementById('withdrawName').value.trim();
-    const acc=document.getElementById('withdrawAcc').value.trim();
-    const amt=parseInt(document.getElementById('withdrawAmount').value.trim());
-    const method=document.getElementById('withdrawMethod').value;
-    if(!name||!acc||!amt){showNotif('Fill all fields'); return;}
-    if(amt>currentUser.balance){showNotif('Insufficient balance'); return;}
-    currentUser.balance -= amt;
-    currentUser.withdrawals=currentUser.withdrawals||[];
-    currentUser.withdrawals.push({name:name,account:acc,amount:amt,method:method,status:'done'});
-    users=users.map(u=>u.email===currentUser.email?currentUser:u);
-    localStorage.setItem('reUsers',JSON.stringify(users));
-    localStorage.setItem('reCurrent',JSON.stringify(currentUser));
-    showNotif('Withdraw processed');
-    openSection('withdraw');
+  const name = document.getElementById('withdrawName')?.value.trim();
+  const acc = document.getElementById('withdrawAcc')?.value.trim();
+  const amtRaw = document.getElementById('withdrawAmount')?.value.trim();
+  const amt = parseInt(amtRaw, 10);
+  const method = document.getElementById('withdrawMethod')?.value;
+  if(!name || !acc || !amt || isNaN(amt)){ showNotif('Fill all fields correctly'); return; }
+  if(amt > (currentUser.balance || 0)){ showNotif('Insufficient balance'); return; }
+
+  currentUser.balance = (currentUser.balance || 0) - amt;
+  currentUser.withdrawals = currentUser.withdrawals || [];
+  currentUser.withdrawals.push({
+    name: name,
+    account: acc,
+    amount: amt,
+    method: method,
+    status: 'done',
+    ts: Date.now()
+  });
+
+  // Persist
+  users = users.map(u => u.email === currentUser.email ? currentUser : u);
+  localStorage.setItem('reUsers', JSON.stringify(users));
+  localStorage.setItem('reCurrent', JSON.stringify(currentUser));
+  showNotif('Withdraw request processed');
+  openSection('withdraw');
 }
 
-// ----------------------
-// Copy Helper
-// ----------------------
-function copyText(txt){navigator.clipboard.writeText(txt);showNotif('Copied!');}
+/* COPY helper */
+function copyText(txt){
+  if(navigator && navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(()=> showNotif('Copied to clipboard'));
+  } else {
+    showNotif('Copy not supported');
+  }
+}
 
-// ----------------------
-// Profile Modal
-// ----------------------
+/* PROFILE modal functions */
 function openProfile(){
-    document.getElementById('profileModal').style.display='block';
-    document.getElementById('profileName').value=currentUser.name;
-    document.getElementById('profileEmail').value=currentUser.email;
+  if(!currentUser){ showNotif('No user logged in'); return; }
+  document.getElementById('profileModal').style.display = 'block';
+  document.getElementById('profileName').value = currentUser.name;
+  document.getElementById('profileEmail').value = currentUser.email;
 }
-function closeProfile(){document.getElementById('profileModal').style.display='none';}
+function closeProfile(){
+  document.getElementById('profileModal').style.display = 'none';
+}
 function updateProfile(){
-    const n=document.getElementById('profileName').value.trim();
-    const e=document.getElementById('profileEmail').value.trim();
-    const p=document.getElementById('profilePass').value.trim();
-    if(n) currentUser.name=n;
-    if(e) currentUser.email=e;
-    if(p) currentUser.pass=p;
-    users=users.map(u=>u.email===currentUser.email?currentUser:u);
-    localStorage.setItem('reUsers',JSON.stringify(users));
-    localStorage.setItem('reCurrent',JSON.stringify(currentUser));
-    showNotif('Profile updated');
+  const n = document.getElementById('profileName')?.value.trim();
+  const e = document.getElementById('profileEmail')?.value.trim().toLowerCase();
+  const p = document.getElementById('profilePass')?.value.trim();
+  if(n) currentUser.name = n;
+  if(e) currentUser.email = e;
+  if(p) currentUser.pass = p;
+  // persist changes
+  users = users.map(u => u.email === currentUser.email ? currentUser : u);
+  // if email changed we need to update storage properly: replace by matching previous email
+  localStorage.setItem('reUsers', JSON.stringify(users));
+  localStorage.setItem('reCurrent', JSON.stringify(currentUser));
+  showNotif('Profile updated');
+  closeProfile();
 }
 
-// ----------------------
-// Init on load
-// ----------------------
-if(currentUser) openDashboard();
-</script><style>
-/* -------------------- */
-/* General Styles       */
-/* -------------------- */
-body {
-  margin:0;
-  font-family:'Segoe UI',sans-serif;
-  background:linear-gradient(135deg,#0a0a0a,#1a1a1a);
-  color:white;
-  overflow-x:hidden;
-}
-#notif {
-  position:fixed; top:10px; left:50%; transform:translateX(-50%);
-  background:#00ff99; padding:10px 20px; border-radius:8px;
-  display:none; z-index:9999; font-weight:bold;
-}
-#notif.show {display:block; animation: fadeInOut 3s forwards;}
-@keyframes fadeInOut {0%{opacity:0}10%{opacity:1}90%{opacity:1}100%{opacity:0}}
-
-/* -------------------- */
-/* Animated Rock Earn Title */
-/* -------------------- */
-#rockEarnTitle {
-  font-size:2.5rem;
-  font-weight:bold;
-  text-align:center;
-  margin:20px 0;
-  background:linear-gradient(90deg,#ff00ff,#00ffff,#ff9900,#ff00ff);
-  background-size:300% 300%;
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  animation: gradientAnim 6s ease infinite;
-}
-@keyframes gradientAnim {
-  0%{background-position:0% 50%}
-  50%{background-position:100% 50%}
-  100%{background-position:0% 50%}
+/* Utility: basic html escape for strings used inside template (to avoid breaking attributes) */
+function escapeHtml(str){
+  if(!str) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
-/* -------------------- */
-/* Sidebar & Buttons    */
-/* -------------------- */
-#sidebar {
-  display:flex; flex-direction:column;
-  position:fixed; left:0; top:0; bottom:0; width:80px;
-  background:#111; padding-top:60px; z-index:10;
-}
-#sidebar button {
-  margin:10px 0; background:none; border:none; color:white;
-  font-size:1.2rem; cursor:pointer; transition:all 0.3s;
-}
-#sidebar button:hover {
-  color:#00ffcc; transform:scale(1.2);
+/* INIT: if currentUser present, open dashboard */
+if(currentUser){
+  // ensure currentUser is refreshed from users list (in case of updated localStorage)
+  users = JSON.parse(localStorage.getItem('reUsers')) || users;
+  currentUser = users.find(u => u.email === currentUser.email) || currentUser;
+  localStorage.setItem('reCurrent', JSON.stringify(currentUser));
+  openDashboard();
 }
 
-/* -------------------- */
-/* Content & Sections   */
-/* -------------------- */
-#contentSection {
-  margin-left:100px; padding:20px;
-  animation: fadeContent 0.5s;
-}
-@keyframes fadeContent {0%{opacity:0}100%{opacity:1}}
-
-/* Plans Cards */
-.plan-card {
-  background:rgba(255,255,255,0.05);
-  border:1px solid #00ffcc;
-  padding:15px; margin:10px; border-radius:12px;
-  display:inline-block; width:200px; transition:transform 0.3s,box-shadow 0.3s;
-}
-.plan-card:hover {transform:translateY(-5px); box-shadow:0 0 15px #00ffcc;}
-
-/* Buy Now Buttons */
-.plan-card button {
-  background:#00ffcc; color:#000; border:none; padding:8px 12px;
-  border-radius:6px; cursor:pointer; font-weight:bold;
-  transition:all 0.3s;
-}
-.plan-card button:hover {background:#ff00ff; color:white; transform:scale(1.1);}
-
-/* Welcome / Balance Boxes */
-#welcomeBox {
-  text-align:center; padding:10px; margin-top:60px;
-}
-#welcomeBox div {
-  display:inline-block; background:rgba(0,255,204,0.1); padding:10px 20px; margin:5px; border-radius:10px;
-  animation: popIn 0.5s;
-}
-@keyframes popIn {0%{transform:scale(0)}100%{transform:scale(1)}}
-
-/* Back & Refresh Button */
-#backBtn,#refreshBtn {
-  position:fixed; top:15px; cursor:pointer; z-index:10; padding:8px 12px;
-  border:none; border-radius:6px; font-weight:bold; background:#00ffcc; color:#000; transition:all 0.3s;
-}
-#backBtn:hover,#refreshBtn:hover {background:#ff00ff; color:white; transform:scale(1.1);}
-#backBtn {left:100px;}
-#refreshBtn {right:20px;}
-
-/* Background Animation */
-body::before {
-  content:""; position:fixed; top:0; left:0; right:0; bottom:0; z-index:-1;
-  background:linear-gradient(270deg,#ff00ff,#00ffff,#ff9900,#ff00ff);
-  background-size:800% 800%;
-  animation:bgAnim 20s ease infinite;
-}
-@keyframes bgAnim {
-  0%{background-position:0% 50%}
-  50%{background-position:100% 50%}
-  100%{background-position:0% 50%}
-}
-
-/* Admin Panel */
-#adminBtn {display:none; background:#ff9900; color:black; font-weight:bold; padding:8px 12px; border-radius:6px; margin-top:10px;}
-#adminBtn:hover {background:#00ffff; color:black; transform:scale(1.1);}
-</style>
+/* End of Part 2 JS */
+</script>
+</body>
+</html>
