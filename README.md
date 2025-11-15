@@ -75,30 +75,58 @@ function showNotif(msg){document.getElementById('notif').innerText=msg;setTimeou
 function signupUser(){
   const n=document.getElementById('authName').value.trim();
   const e=document.getElementById('authEmail').value.trim().toLowerCase();
-  const p=document.getElementById('authPass').value;
+  const p=document.getElementById('authPass').value.trim();
+
   if(!n||!e||!p){showNotif('Fill all fields');return;}
+
+  users = JSON.parse(localStorage.getItem('reUsers')) || [];
+
+  if(users.find(u=>u.email===e)){showNotif('Email already exists');return;}
+
+  let newUser={name:n,email:e,pass:p,role:'user',plans:[],deposits:[],withdrawals:[],balance:0,profit:0};
+
+  users.push(newUser);
+  localStorage.setItem('reUsers',JSON.stringify(users));
+
+  currentUser=newUser;
+  localStorage.setItem('reCurrent',JSON.stringify(currentUser));
+
+  showDashboard();
+  showNotif('Account created successfully');('Fill all fields');return;}
   if(users.find(u=>u.email===e)){showNotif('Email exists');return;}
   let u={name:n,email:e,pass:p,role:e==='admin@rockearn.com'?'admin':'user',plans:[],deposits:[],withdrawals:[],balance:0,profit:0};
   users.push(u);localStorage.setItem('reUsers',JSON.stringify(users));
-  currentUser=u;localStorage.setItem('reCurrent',JSON.stringify(currentUser));
+  currentUser=u;
+  localStorage.setItem('reCurrent',JSON.stringify(currentUser));
+  document.getElementById('authBox').style.display='none';
+  document.getElementById('sidebar').style.display='block';
   openDashboard();showNotif('Account created & logged in');
 }
 
 function loginUser(){
   const e=document.getElementById('authEmail').value.trim().toLowerCase();
-  const p=document.getElementById('authPass').value;
+  const p=document.getElementById('authPass').value.trim();
+
+  users = JSON.parse(localStorage.getItem('reUsers')) || [];
   const u=users.find(x=>x.email===e && x.pass===p);
-  if(!u){showNotif('Invalid credentials');return;}
-  currentUser=u;localStorage.setItem('reCurrent',JSON.stringify(currentUser));
+
+  if(!u){showNotif('Invalid email or password');return;}
+
+  currentUser=u;
+  localStorage.setItem('reCurrent',JSON.stringify(currentUser));
+
+  showDashboard();
+  showNotif('Welcome '+u.name);('Invalid credentials');return;}
+  currentUser=u;
+  localStorage.setItem('reCurrent',JSON.stringify(currentUser));
+  document.getElementById('authBox').style.display='none';
+  document.getElementById('sidebar').style.display='block';
   openDashboard();showNotif('Welcome '+currentUser.name.split(' ')[0]);
 }
 
 function logoutUser(){currentUser=null;localStorage.removeItem('reCurrent');location.reload();}
 
-function openDashboard(){
-  document.getElementById('authBox').style.display='none';
-  document.getElementById('sidebar').style.display='block';
-  document.getElementById('contentSection').innerHTML = `<h2 style='text-shadow:0 0 8px #fff;'>🎉 Welcome, <b>${currentUser.name}</b> 🎉</h2>`;
+function openDashboard(){showDashboard();}</b> 🎉</h2>`;
   if(currentUser.role==='admin'){
     document.getElementById('adminBtn').style.display='inline-block';
   }
@@ -226,6 +254,15 @@ function approveWithdraw(email,index){
   localStorage.setItem('reUsers',JSON.stringify(users));
   showNotif('Withdrawal Approved');
   openSection('admin');
+}
+
+function showDashboard(){
+  document.getElementById('authBox').style.display='none';
+  document.getElementById('sidebar').style.display='block';
+  if(currentUser.role==='admin'){
+    document.getElementById('adminBtn').style.display='inline-block';
+  }
+  document.getElementById('contentSection').innerHTML='<h3>Welcome '+currentUser.name+'</h3>';
 }
 
 </script></body>
