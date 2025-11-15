@@ -3,341 +3,76 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rock Earn — Premium Dashboard</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+<title>Rock Earn Premium Dashboard</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 <style>
-/* ----------------- General Styles ----------------- */
-body {
-    margin:0;
-    font-family:'Segoe UI',sans-serif;
-    background:#081423;
-    color:#fff;
-    overflow-x:hidden;
-}
-
-/* Background Animation */
-body::before {
-    content:"";
-    position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    background: linear-gradient(270deg, #00f7ef, #ff4766, #00f7ef);
-    background-size: 600% 600%;
-    animation: gradientBG 15s ease infinite;
-    z-index:-1;
-}
-@keyframes gradientBG{
-    0%{background-position:0% 50%;}
-    50%{background-position:100% 50%;}
-    100%{background-position:0% 50%;}
-}
-
-/* Buttons */
-button {
-    cursor:pointer;
-    padding:8px 12px;
-    border:none;
-    border-radius:8px;
-    background:linear-gradient(90deg,#00f7ef,#ff4766);
-    color:#001;
-    font-weight:700;
-    transition:.3s;
-}
-button:hover {
-    transform:translateY(-3px);
-    box-shadow:0 10px 20px rgba(255,71,102,0.3);
-}
-
-/* Notification */
-#notif {
-    position:fixed;
-    top:20px;
-    right:-400px;
-    background:#00f7ef;
-    color:#001;
-    padding:12px 20px;
-    border-radius:12px;
-    font-weight:700;
-    transition: right .45s;
-    z-index:60;
-}
-#notif.show { right:20px; }
-
-/* Auth Box */
-#authBox {
-    position:fixed;
-    left:50%;
-    top:150px;
-    transform:translateX(-50%);
-    width:320px;
-    background:rgba(0,0,0,0.7);
-    padding:20px;
-    border-radius:14px;
-    text-align:center;
-}
-#authBox input {
-    width:100%;
-    margin-bottom:10px;
-    padding:10px;
-    border-radius:10px;
-    border:none;
-    background:#0f1320;
-    color:#dff7fb;
-}
-#authBox h3{
-    margin-bottom:15px;
-    font-size:20px;
-    background: linear-gradient(90deg,#00f7ef,#ff4766);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-/* Rock Earn Animation */
-#rockEarnName{
-    font-size:28px;
-    font-weight:900;
-    text-align:center;
-    margin-bottom:10px;
-    background: linear-gradient(90deg,#ff4766,#00f7ef,#ff4766);
-    background-size: 200% 200%;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: rockEarnAnim 4s ease infinite alternate;
-}
-@keyframes rockEarnAnim{
-    0%{background-position:0% 50%;}
-    100%{background-position:100% 50%;}
-}
-
-/* Sidebar */
-#sidebar {
-    position:fixed;
-    left:0;
-    top:0;
-    bottom:0;
-    width:80px;
-    background:rgba(10,10,12,0.9);
-    display:none;
-    flex-direction:column;
-    align-items:center;
-    padding:20px 0;
-    gap:14px;
-    z-index:50;
-}
-.icon-btn {
-    width:64px;
-    height:64px;
-    border-radius:14px;
-    background:linear-gradient(180deg,#0b0b10,#0f1220);
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    color:#bcdbe3;
-    font-size:14px;
-    transition:.2s;
-}
-.icon-btn:hover {
-    transform:translateY(-6px);
-    box-shadow:0 12px 30px rgba(0,247,239,0.2);
-}
-#sidebar i { font-size:20px; }
-
-/* Content Section */
-#contentSection {
-    position:fixed;
-    left:100px;
-    top:120px;
-    right:20px;
-    bottom:20px;
-    background:rgba(0,0,0,0.5);
-    border-radius:14px;
-    padding:20px;
-    overflow:auto;
-    display:none;
-}
-
-/* Back Button */
-#backBtn {
-    position:absolute;
-    left:12px;
-    top:12px;
-    background:#ff4766;
-    color:white;
-    padding:8px 10px;
-    border-radius:8px;
-    cursor:pointer;
-    display:none;
-}
-
-/* Refresh Button */
-#refreshBtn{
-    position:absolute;
-    top:12px;
-    right:20px;
-    background:#00f7ef;
-    color:#001;
-    padding:8px 10px;
-    border-radius:8px;
-    cursor:pointer;
-    display:none;
-}
-
-/* Logout Button */
-#logoutBtn {
-    position:fixed;
-    bottom:20px;
-    left:50%;
-    transform:translateX(-50%);
-    background:#ff4766;
-    color:white;
-    padding:10px 14px;
-    border-radius:10px;
-    display:none;
-    cursor:pointer;
-}
-
-/* Welcome Box */
-#welcomeBox {
-    position:fixed;
-    left:100px;
-    top:20px;
-    right:20px;
-    padding:18px;
-    border-radius:14px;
-    background:rgba(255,255,255,0.02);
-    backdrop-filter:blur(8px);
-    box-shadow:0 4px 30px rgba(0,0,0,0.5);
-    display:none;
-}
-.stats {
-    display:flex;
-    gap:18px;
-    margin-top:12px;
-}
-.stat-card {
-    background:rgba(0,247,239,0.03);
-    padding:12px 16px;
-    border-radius:10px;
-    min-width:120px;
-}
-.stat-label { font-size:11px; color:#00f7ef; margin:0 0 6px; }
-.stat-value { font-size:16px; font-weight:700; margin:0; }
-
-/* Plans */
-.plan-card {
-    border:1px solid rgba(0,247,239,0.1);
-    border-radius:10px;
-    padding:12px;
-    margin-bottom:12px;
-    background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0));
-}
-.muted { color:#9fcfda; font-size:13px; }
-
-/* Profile Modal */
-#profileModal{
-    position:fixed;
-    top:50%;
-    left:50%;
-    transform:translate(-50%,-50%);
-    background:rgba(0,0,0,0.9);
-    padding:20px;
-    border-radius:14px;
-    display:none;
-    z-index:70;
-}
-#profileModal input{
-    width:100%;
-    margin-bottom:10px;
-    padding:10px;
-    border-radius:10px;
-    border:none;
-    background:#0f1320;
-    color:#dff7fb;
-}
-#profileModal h3{
-    margin-bottom:12px;
-    text-align:center;
-    background: linear-gradient(90deg,#00f7ef,#ff4766);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-/* Animations */
-@keyframes fadeIn{
-    0%{opacity:0;}
-    100%{opacity:1;}
-}
+body{margin:0;font-family:'Segoe UI',sans-serif;color:white;background:#000;overflow-x:hidden;animation:bgAnim 20s linear infinite;}
+@keyframes bgAnim{0%{background:#000;}50%{background:#0ff;}100%{background:#000;}}
+#authBox{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;animation:fadeIn 1s;}
+#sidebar{display:none;flex-direction:column;width:220px;position:fixed;top:0;left:0;height:100%;background:rgba(0,0,0,0.9);padding:10px;z-index:999;}
+#sidebar button{margin:5px 0;padding:10px;background:rgba(0,255,255,0.05);border:none;color:#0ff;border-radius:8px;transition:0.3s;}
+#sidebar button:hover{background:rgba(0,255,255,0.2);transform:scale(1.05);}
+#welcomeBox{display:none;padding:20px;text-align:center;animation:fadeIn 1s;}
+#contentSection{display:none;padding:20px;margin-left:230px;}
+#backBtn,#refreshBtn{display:none;position:fixed;top:10px;padding:8px 15px;border:none;border-radius:8px;cursor:pointer;background:#0ff;color:black;z-index:1000;}
+#backBtn{left:10px;} #refreshBtn{right:10px;}
+#notif{position:fixed;top:20px;right:20px;background:#0ff;color:black;padding:10px 20px;border-radius:8px;opacity:0;transition:0.3s;z-index:1000;}
+#notif.show{opacity:1;}
+#profileModal{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,0.95);padding:20px;border-radius:12px;z-index:10000;}
+.plan-card,.admin-card{background:rgba(0,255,255,0.05);padding:10px;margin:10px 0;border-radius:10px;transition:0.3s;}
+.plan-card:hover,.admin-card:hover{background:rgba(0,255,255,0.15);transform:scale(1.03);}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+@keyframes textGlow{0%{text-shadow:0 0 5px #0ff;}100%{text-shadow:0 0 20px #0ff;}}
+#rockEarnName{animation:textGlow 2s infinite alternate;}
+input,select{margin:5px 0;padding:5px;border-radius:5px;border:none;color:black;}
+button{cursor:pointer;}
 </style>
 </head>
 <body>
 
-<!-- Notification -->
-<div id="notif"></div>
-
-<!-- Auth Box -->
 <div id="authBox">
-    <h3>Login / Sign Up</h3>
-    <input id="authName" placeholder="Full Name">
-    <input id="authEmail" placeholder="Email">
-    <input id="authPass" type="password" placeholder="Password">
-    <div style="display:flex; gap:8px; justify-content:center;">
-        <button onclick="signupUser()"><i class="fa fa-user-plus"></i> Sign Up</button>
-        <button onclick="loginUser()"><i class="fa fa-sign-in-alt"></i> Login</button>
-    </div>
-    <p class="muted" style="margin-top:10px;">Default admin: <strong>admin@rockearn.com</strong></p>
+    <h1 id="rockEarnName" style="font-size:3em;">Rock Earn</h1>
+    <input id="authName" placeholder="Full Name" />
+    <input id="authEmail" placeholder="Email" />
+    <input id="authPass" placeholder="Password" type="password"/>
+    <button onclick="signupUser()">Sign Up</button>
+    <button onclick="loginUser()">Login</button>
 </div>
 
-<!-- Rock Earn Animated Name -->
-<div id="rockEarnName">ROCK EARN</div>
-
-<!-- Sidebar -->
 <div id="sidebar">
-    <div class="icon-btn" onclick="openSection('plans')"><i class="fa fa-gem"></i><br>Plans</div>
-    <div class="icon-btn" onclick="openSection('deposit')"><i class="fa fa-money-bill"></i><br>Deposit</div>
-    <div class="icon-btn" onclick="openSection('withdraw')"><i class="fa fa-hand-holding-dollar"></i><br>Withdraw</div>
-    <div class="icon-btn" onclick="openSection('profit')"><i class="fa fa-coins"></i><br>Profit</div>
-    <div class="icon-btn" onclick="openSection('history')"><i class="fa fa-clock"></i><br>History</div>
-    <div class="icon-btn" onclick="openSection('admin')" id="adminBtn" style="display:none"><i class="fa fa-cog"></i><br>Admin</div>
+    <button onclick="openSection('plans')"><i class="fa-solid fa-list"></i> Plans</button>
+    <button onclick="openSection('deposit')"><i class="fa-solid fa-wallet"></i> Deposit</button>
+    <button onclick="openSection('withdraw')"><i class="fa-solid fa-arrow-up-right-from-square"></i> Withdraw</button>
+    <button onclick="openSection('profit')"><i class="fa-solid fa-coins"></i> Profit</button>
+    <button onclick="openSection('history')"><i class="fa-solid fa-clock-rotate-left"></i> History</button>
+    <button onclick="openProfile()"><i class="fa-solid fa-user"></i> Profile</button>
+    <button id="adminBtn" style="display:none;" onclick="openSection('admin')"><i class="fa-solid fa-shield"></i> Admin</button>
 </div>
 
-<!-- Welcome Box -->
 <div id="welcomeBox">
-    <h2 id="userNameTxt"></h2>
-    <div class="stats">
-        <div class="stat-card"><div class="stat-label">Balance</div><div class="stat-value" id="balValue">0 PKR</div></div>
-        <div class="stat-card"><div class="stat-label">Total Profit</div><div class="stat-value" id="profValue">0 PKR</div></div>
-    </div>
+    <h2 id="userNameTxt" style="animation:textGlow 2s infinite alternate;">Welcome</h2>
+    <p>Balance: <span id="balValue">0 PKR</span> | Profit: <span id="profValue">0 PKR</span></p>
 </div>
 
-<!-- Content Section -->
-<div id="contentSection">
-    <button id="backBtn" onclick="closeSection()">← Back</button>
-    <button id="refreshBtn" onclick="refreshDashboard()">⟳ Refresh</button>
-    <div id="sectionContent"></div>
-</div>
+<button id="backBtn" onclick="closeSection()">Back</button>
+<button id="refreshBtn" onclick="refreshDashboard()">Refresh</button>
+<div id="notif"></div>
+<div id="contentSection"><div id="sectionContent"></div></div>
 
-<!-- Logout Button -->
-<button id="logoutBtn" onclick="logoutUser()">Logout</button>
-
-<!-- Profile Modal -->
 <div id="profileModal">
     <h3>Edit Profile</h3>
-    <input id="profileName" placeholder="Full Name">
-    <input id="profileEmail" placeholder="Email">
-    <input id="profilePass" type="password" placeholder="Password (Leave blank if no change)">
-    <button onclick="updateProfile()">Update Profile</button>
+    <input id="profileName" placeholder="Name" />
+    <input id="profileEmail" placeholder="Email" />
+    <input id="profilePass" placeholder="Password" type="password"/>
+    <button onclick="updateProfile()">Save</button>
     <button onclick="closeProfile()">Close</button>
-</div><script>
-// ----------------------
-// Users & Storage
-// ----------------------
+</div>
+
+<script>
+// ---------------- Users & Storage ----------------
 let users = JSON.parse(localStorage.getItem('reUsers')) || [];
 let currentUser = JSON.parse(localStorage.getItem('reCurrent')) || null;
-
-// Default admin
 if(!users.find(u=>u.email==='admin@rockearn.com')){
     users.push({name:'Administrator',email:'admin@rockearn.com',pass:'admin123',role:'admin',plans:[],deposits:[],withdrawals:[],balance:0,profit:0});
     localStorage.setItem('reUsers',JSON.stringify(users));
@@ -345,36 +80,17 @@ if(!users.find(u=>u.email==='admin@rockearn.com')){
 
 // Plans
 const plans = [
-{name:'Basic',amount:200,daily:30,days:20},
-{name:'Starter',amount:500,daily:75,days:20},
-{name:'Pro',amount:1000,daily:180,days:20},
-{name:'Advanced',amount:1500,daily:250,days:25},
-{name:'Silver',amount:2000,daily:350,days:30},
-{name:'Gold',amount:3000,daily:550,days:30},
-{name:'Platinum',amount:5000,daily:950,days:40},
-{name:'Diamond',amount:7000,daily:1350,days:50},
-{name:'VIP',amount:10000,daily:2000,days:60},
-{name:'Elite',amount:12000,daily:2400,days:60},
-{name:'Master',amount:15000,daily:3000,days:70},
-{name:'Ultimate',amount:18000,daily:3500,days:75},
-{name:'Legend',amount:20000,daily:4000,days:80},
-{name:'Supreme',amount:25000,daily:5000,days:90},
-{name:'Titan',amount:30000,daily:6000,days:100}
+{name:'Basic',amount:200,daily:30,days:20},{name:'Starter',amount:500,daily:75,days:20},{name:'Pro',amount:1000,daily:180,days:20},
+{name:'Advanced',amount:1500,daily:250,days:25},{name:'Silver',amount:2000,daily:350,days:30},{name:'Gold',amount:3000,daily:550,days:30},
+{name:'Platinum',amount:5000,daily:950,days:40},{name:'Diamond',amount:7000,daily:1350,days:50},{name:'VIP',amount:10000,daily:2000,days:60},
+{name:'Elite',amount:12000,daily:2400,days:60},{name:'Master',amount:15000,daily:3000,days:70},{name:'Ultimate',amount:18000,daily:3500,days:75},
+{name:'Legend',amount:20000,daily:4000,days:80},{name:'Supreme',amount:25000,daily:5000,days:90},{name:'Titan',amount:30000,daily:6000,days:100}
 ];
 
-// ----------------------
-// Notifications
-// ----------------------
-function showNotif(msg){ 
-    const el=document.getElementById('notif'); 
-    el.innerText=msg; 
-    el.classList.add('show'); 
-    setTimeout(()=>el.classList.remove('show'),3000); 
-}
+// ---------------- Notifications ----------------
+function showNotif(msg){ const el=document.getElementById('notif'); el.innerText=msg; el.classList.add('show'); setTimeout(()=>el.classList.remove('show'),3000); }
 
-// ----------------------
-// Auth Functions
-// ----------------------
+// ---------------- Auth ----------------
 function signupUser(){
     const n=document.getElementById('authName').value.trim();
     const e=document.getElementById('authEmail').value.trim().toLowerCase();
@@ -396,74 +112,41 @@ function loginUser(){
     openDashboard(); showNotif('Welcome '+currentUser.name.split(' ')[0]);
 }
 
-function logoutUser(){
-    currentUser=null; localStorage.removeItem('reCurrent'); location.reload();
-}
+function logoutUser(){currentUser=null; localStorage.removeItem('reCurrent'); location.reload();}
 
-// ----------------------
-// Dashboard & Sections
-// ----------------------
+// ---------------- Dashboard ----------------
 function openDashboard(){
     document.getElementById('authBox').style.display='none';
     document.getElementById('sidebar').style.display='flex';
     document.getElementById('welcomeBox').style.display='block';
     document.getElementById('refreshBtn').style.display='inline-block';
-    document.getElementById('logoutBtn').style.display='inline-block';
     document.getElementById('userNameTxt').innerText=currentUser.name.split(' ')[0];
     document.getElementById('balValue').innerText=(currentUser.balance||0)+' PKR';
     document.getElementById('profValue').innerText=(currentUser.profit||0)+' PKR';
     if(currentUser.role==='admin'){document.getElementById('adminBtn').style.display='block';}
-    document.getElementById('backBtn').style.display='none';
     document.getElementById('contentSection').style.display='block';
 }
+function refreshDashboard(){if(currentUser){currentUser=users.find(u=>u.email===currentUser.email); localStorage.setItem('reCurrent',JSON.stringify(currentUser)); document.getElementById('balValue').innerText=(currentUser.balance||0)+' PKR'; document.getElementById('profValue').innerText=(currentUser.profit||0)+' PKR'; showNotif('Dashboard refreshed'); closeSection();}}
 
-function refreshDashboard(){
-    if(currentUser){
-        currentUser=users.find(u=>u.email===currentUser.email);
-        localStorage.setItem('reCurrent',JSON.stringify(currentUser));
-        document.getElementById('balValue').innerText=(currentUser.balance||0)+' PKR';
-        document.getElementById('profValue').innerText=(currentUser.profit||0)+' PKR';
-        showNotif('Dashboard refreshed');
-        closeSection();
-    }
-}
-
+// ---------------- Sections, Deposit & Withdraw ----------------
 function openSection(type){
     const content=document.getElementById('sectionContent');
     document.getElementById('backBtn').style.display='inline-block';
     content.innerHTML='';
-
     if(type==='plans'){
         plans.forEach((p,idx)=>{
             content.innerHTML+=`<div class='plan-card'><b>${p.name}</b><br>Amount: ${p.amount} PKR<br>Daily: ${p.daily} PKR<br>Days: ${p.days}<br><button onclick="openDeposit(${p.amount},'${p.name}',${p.daily},${p.days},${idx})">Buy Now</button></div>`;
         });
-    } else if(type==='deposit'){
-        content.innerHTML='<h3>Deposit Section</h3>';
-    } else if(type==='withdraw'){
-        openWithdraw();
-    } else if(type==='profit'){
-        content.innerHTML=`<h3>Total Profit: ${currentUser.profit} PKR</h3>`;
-    } else if(type==='history'){
-        let html='<h3>History</h3>';
-        (currentUser.deposits||[]).forEach(d=>{html+=`<p>Deposit: ${d.plan} - ${d.amount} PKR</p>`;});
-        (currentUser.withdrawals||[]).forEach(w=>{html+=`<p>Withdraw: ${w.amount} PKR - ${w.method}</p>`;});
-        content.innerHTML=html;
-    } else if(type==='admin' && currentUser.role==='admin'){
-        let html='<h3>Admin — User Activity</h3>';
-        users.forEach(u=>{
-            html+=`<div>${u.name} (${u.email}) — Balance: ${u.balance} PKR — Profit: ${u.profit} PKR</div>`;
-        });
-        content.innerHTML=html;
-    } else {content.innerHTML='<h3>Coming Soon</h3>';}
+    } else if(type==='deposit'){content.innerHTML='<h3>Deposit Section</h3>';}
+    else if(type==='withdraw'){openWithdraw();}
+    else if(type==='profit'){content.innerHTML=`<h3>Total Profit: ${currentUser.profit} PKR</h3>`;}
+    else if(type==='history'){let html='<h3>History</h3>'; (currentUser.deposits||[]).forEach(d=>{html+=`<p>Deposit: ${d.plan} - ${d.amount} PKR</p>`;}); (currentUser.withdrawals||[]).forEach(w=>{html+=`<p>Withdraw: ${w.amount} PKR - ${w.method}</p>`;}); content.innerHTML=html;}
+    else if(type==='admin' && currentUser.role==='admin'){let html='<h3>Admin — User Activity</h3>'; users.forEach(u=>{html+=`<div class="admin-card">${u.name} (${u.email}) — Balance: ${u.balance} PKR — Profit: ${u.profit} PKR</div>`;}); content.innerHTML=html;}
+    else {content.innerHTML='<h3>Coming Soon</h3>';}
 }
+function closeSection(){document.getElementById('contentSection').style.display='block'; document.getElementById('backBtn').style.display='none';}
 
-function closeSection(){
-    document.getElementById('backBtn').style.display='none';
-}
-
-// ----------------------
-// Deposit / Buy Plan
-// ----------------------
+// Deposit / Buy
 function openDeposit(amount=0,name='',daily=0,days=0,planIndex=0){
     const content=document.getElementById('sectionContent');
     document.getElementById('contentSection').style.display='block';
@@ -487,7 +170,7 @@ function confirmDeposit(amount,name,daily,days,planIndex){
     const deposit={plan:name,amount:amount,daily:daily,days:days,txn:txn,proof:proof.name,status:'approved',ts:Date.now()};
     currentUser.deposits=currentUser.deposits||[]; currentUser.deposits.push(deposit);
     currentUser.balance += amount;
-    currentUser.profit += daily; // first day profit auto
+    currentUser.profit += daily; 
     users=users.map(u=>u.email===currentUser.email?currentUser:u);
     localStorage.setItem('reUsers',JSON.stringify(users));
     localStorage.setItem('reCurrent',JSON.stringify(currentUser));
@@ -495,9 +178,7 @@ function confirmDeposit(amount,name,daily,days,planIndex){
     openSection('plans');
 }
 
-// ----------------------
 // Withdraw
-// ----------------------
 function openWithdraw(){
     const content=document.getElementById('sectionContent');
     content.innerHTML=`<h3>Withdraw</h3>
@@ -530,14 +211,10 @@ function confirmWithdraw(){
     openSection('withdraw');
 }
 
-// ----------------------
-// Copy Helper
-// ----------------------
+// Copy
 function copyText(txt){navigator.clipboard.writeText(txt);showNotif('Copied!');}
 
-// ----------------------
-// Profile Modal
-// ----------------------
+// Profile
 function openProfile(){
     document.getElementById('profileModal').style.display='block';
     document.getElementById('profileName').value=currentUser.name;
@@ -557,9 +234,7 @@ function updateProfile(){
     showNotif('Profile updated');
 }
 
-// ----------------------
-// Init on load
-// ----------------------
+// Init
 if(currentUser) openDashboard();
 </script>
 </body>
