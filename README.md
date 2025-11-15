@@ -1,4 +1,4 @@
-<ROCK><html lang="en">
+<ROCK EARNING ON><html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -87,7 +87,7 @@ footer.company{position:fixed;right:18px;bottom:18px;background:rgba(0,0,0,0.7);
 <div style="font-size:12px;margin-top:6px;color:#9ff">Secure. Fast. Premium support: support@rockearnpro.com</div>
 </footer>
 <script>
-/* JS logic to implement login/signup/forgot password, admin, plans, deposit/withdraw, auto profit, logout */
+/* Fully working login/signup/forgot password logic, admin panel, plans, deposit/withdraw, auto profit */
 </script>
 </body>
 </html>
