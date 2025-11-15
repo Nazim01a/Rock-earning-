@@ -9,10 +9,14 @@
 <style>
 body{margin:0;font-family:'Segoe UI',sans-serif;background:#0e0e15;color:white;overflow-x:hidden;}
 canvas#bgCanvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;}
+
+/* Sidebar */
 .sidebar{position:fixed;top:0;left:0;width:160px;height:100vh;background:rgba(20,20,20,0.95);display:flex;flex-direction:column;align-items:center;padding-top:20px;gap:15px;z-index:10;display:none;}
 .icon-btn{display:flex;flex-direction:column;align-items:center;padding:12px;border-radius:15px;cursor:pointer;transition:0.3s;background:#111;color:#ccc;box-shadow:0 0 5px #000;}
 .icon-btn:hover{transform:scale(1.1);box-shadow:0 0 15px #0ff,0 0 25px #0ff;}
 .icon-name{margin-top:6px;font-size:12px;color:#ccc;text-shadow:0 0 3px #000;}
+
+/* Welcome Box */
 #welcomeBox{position:fixed;top:20px;left:180px;right:20px;padding:25px;border-radius:20px;background:rgba(0,0,0,0.8);backdrop-filter:blur(12px);text-align:center;display:none;animation:fadeIn 1.5s;}
 #welcomeBox h2{color:white;font-size:26px;font-weight:800;animation:glowText 2.5s infinite alternate;}
 .stats{display:flex;justify-content:center;gap:30px;margin-top:15px;flex-wrap:wrap;}
@@ -20,6 +24,8 @@ canvas#bgCanvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;}
 .stat-label{font-size:12px;color:#0ff;letter-spacing:1px;margin-bottom:5px;}
 .stat-value{font-size:18px;font-weight:700;color:white;}
 .refresh-btn{margin-top:10px;}
+
+/* Content Section */
 #contentSection{position:fixed;top:160px;left:180px;right:20px;bottom:20px;background:rgba(0,0,0,0.85);backdrop-filter:blur(15px);border-radius:20px;padding:20px;overflow-y:auto;display:none;z-index:999;}
 #backBtn{position:absolute;top:10px;left:20px;background:#ff0044;padding:8px 12px;border:none;border-radius:10px;font-weight:700;cursor:pointer;transition:0.3s;}
 #backBtn:hover{transform:scale(1.05);background:#ff3366;}
@@ -33,12 +39,14 @@ input:focus, select:focus{outline:none;box-shadow:0 0 12px #0ff;}
 .btn:hover{transform:scale(1.08);box-shadow:0 0 20px #0ff,0 0 40px #0ff;}
 .logout-btn{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#ff0044;color:white;padding:12px 18px;border-radius:12px;font-weight:700;cursor:pointer;box-shadow:0 0 10px #ff3366;transition:0.3s;display:none;}
 .logout-btn:hover{transform:scale(1.05);box-shadow:0 0 20px #ff3366,0 0 30px #ff6688;}
+
+/* Animations */
 @keyframes glowText{0%{text-shadow:0 0 5px #000,0 0 10px #0ff;}50%{text-shadow:0 0 12px #000,0 0 25px #0ff;}100%{text-shadow:0 0 5px #000,0 0 10px #0ff;}}
 @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
 @media (max-width: 1024px){
-#welcomeBox{left:20px;right:20px;}
-#contentSection{top:220px;left:20px;right:20px;bottom:20px;}
-.sidebar{width:100%;height:auto;flex-direction:row;justify-content:space-around;padding:10px;display:flex;position:relative;}
+    #welcomeBox{left:20px;right:20px;}
+    #contentSection{top:220px;left:20px;right:20px;bottom:20px;}
+    .sidebar{width:100%;height:auto;flex-direction:row;justify-content:space-around;padding:10px;display:flex;position:relative;}
 }
 </style>
 </head>
@@ -46,6 +54,7 @@ input:focus, select:focus{outline:none;box-shadow:0 0 12px #0ff;}
 <canvas id="bgCanvas"></canvas>
 <div id="notif"></div>
 
+<!-- Sidebar -->
 <div class="sidebar" id="sidebar">
 <div style="font-size:28px;margin-bottom:10px;">🚀</div>
 <div class="icon-btn" onclick="openSection('plans')"><i class="fa fa-gem"></i><span class="icon-name">Plans</span></div>
@@ -58,6 +67,7 @@ input:focus, select:focus{outline:none;box-shadow:0 0 12px #0ff;}
 <div class="icon-btn" onclick="openSection('share')"><i class="fa fa-share"></i><span class="icon-name">Share</span></div>
 </div>
 
+<!-- Welcome Box -->
 <div id="welcomeBox">
 <h2>🎉 Welcome to <span style="color:white;font-weight:900;">Rock Earn</span> Premium 💎</h2>
 <div class="stats">
@@ -67,11 +77,13 @@ input:focus, select:focus{outline:none;box-shadow:0 0 12px #0ff;}
 </div>
 </div>
 
+<!-- Content Section -->
 <div id="contentSection">
 <button id="backBtn" onclick="closeSection()">← Back</button>
 <div id="sectionContent"></div>
 </div>
 
+<!-- Auth Box -->
 <div id="authBox" class="card" style="margin-left:180px;margin-top:20px;width:320px;">
 <h2 class="text-2xl font-bold mb-4 text-center">Login / Sign Up</h2>
 <input id="authName" placeholder="Full Name" />
@@ -96,28 +108,21 @@ function showNotif(msg){const n=document.getElementById('notif');n.innerText=msg
 // Auth
 let users=JSON.parse(localStorage.getItem('reUsers'))||[];
 let currentUser=JSON.parse(localStorage.getItem('reCurrent'))||null;
-window.addEventListener('load',()=>{if(currentUser){openDashboard();}});
+window.addEventListener('load',()=>{if(currentUser){openDashboard();} else {document.getElementById('authBox').style.display='block';}});
 
 function validateEmail(e){return/^\S+@\S+\.\S+$/.test(e);}
 function signupUser(){let n=document.getElementById('authName').value.trim();let e=document.getElementById('authEmail').value.trim();let p=document.getElementById('authPass').value.trim();if(!n||!e||!p)return showNotif('Fill all fields');if(!validateEmail(e))return showNotif('Invalid email');if(users.find(u=>u.email===e))return showNotif('Email already registered');let u={name:n,email:e,pass:p,plans:[],balance:0,profit:0};users.push(u);localStorage.setItem('reUsers',JSON.stringify(users));currentUser=u;localStorage.setItem('reCurrent',JSON.stringify(u));openDashboard();}
 function loginUser(){let e=document.getElementById('authEmail').value.trim();let p=document.getElementById('authPass').value.trim();let u=users.find(x=>x.email===e&&x.pass===p);if(!u)return showNotif('Invalid credentials');currentUser=u;localStorage.setItem('reCurrent',JSON.stringify(u));openDashboard();}
 function logoutUser(){currentUser=null;localStorage.removeItem('reCurrent');location.reload();}
-function openDashboard(){document.getElementById('authBox').style.display='none';document.getElementById('sidebar').style.display='flex';document.getElementById('welcomeBox').style.display='block';document.getElementById('logoutBtn').style.display='block';document.getElementById('balValue').innerText=currentUser.balance+' PKR';document.getElementById('profValue').innerText=currentUser.profit+' PKR';}
+function openDashboard(){document.getElementById('authBox').style.display='none';document.getElementById('sidebar').style.display='flex';document.getElementById('welcomeBox').style.display='block';document.getElementById('logoutBtn').style.display='block';document.getElementById('balValue').innerText=currentUser.balance+' PKR';document.getElementById('profValue').innerText=currentUser.profit+' PKR';showNotif(`Welcome ${currentUser.name}!`);}
 
 // Balance refresh
 function refreshBalance(){document.getElementById('balValue').innerText=currentUser.balance+' PKR';document.getElementById('profValue').innerText=currentUser.profit+' PKR';showNotif('Balance refreshed!');}
 
 // Plans
-let plans=[
-{name:'Basic',amount:200,daily:30,days:1},{name:'Starter',amount:500,daily:75,days:1},{name:'Pro',amount:1000,daily:180,days:1},
-{name:'Advanced',amount:1500,daily:250,days:2},{name:'Silver',amount:2000,daily:350,days:3},{name:'Gold',amount:3000,daily:550,days:3},
-{name:'Platinum',amount:5000,daily:950,days:4},{name:'Diamond',amount:7000,daily:1350,days:5},{name:'Elite X',amount:10000,daily:2200,days:5,coming:true},
-{name:'Mega Booster',amount:15000,daily:3500,days:6,coming:true},{name:'Ultra Pro',amount:20000,daily:4800,days:6,coming:true},
-{name:'Crypto Miner',amount:30000,daily:6500,days:7,coming:true},{name:'Titanium Plan',amount:40000,daily:8500,days:7,coming:true},
-{name:'Ultimate',amount:50000,daily:12000,days:8,coming:true},{name:'Infinity',amount:100000,daily:25000,days:10,coming:true}
-];
+let plans=[{name:'Basic',amount:200,daily:30,days:1},{name:'Starter',amount:500,daily:75,days:1},{name:'Pro',amount:1000,daily:180,days:1},{name:'Advanced',amount:1500,daily:250,days:2},{name:'Silver',amount:2000,daily:350,days:3},{name:'Gold',amount:3000,daily:550,days:3},{name:'Platinum',amount:5000,daily:950,days:4},{name:'Diamond',amount:7000,daily:1350,days:5},{name:'Elite X',amount:10000,daily:2200,days:5,coming:true},{name:'Mega Booster',amount:15000,daily:3500,days:6,coming:true},{name:'Ultra Pro',amount:20000,daily:4800,days:6,coming:true},{name:'Crypto Miner',amount:30000,daily:6500,days:7,coming:true},{name:'Titanium Plan',amount:40000,daily:8500,days:7,coming:true},{name:'Ultimate',amount:50000,daily:12000,days:8,coming:true},{name:'Infinity',amount:100000,daily:25000,days:10,coming:true}];
 
-// Open section
+// Sections
 function openSection(type){
 const sec=document.getElementById('contentSection');
 const content=document.getElementById('sectionContent');
@@ -147,10 +152,6 @@ function confirmDeposit(amount,name,daily,days){let file=document.getElementById
 
 // Copy referral
 function copyText(txt){navigator.clipboard.writeText(txt);showNotif('Copied!');}
-
-// Auto daily profit
-setInterval(()=>{if(currentUser){let now=Date.now();currentUser.plans.forEach(p=>{let elapsed=Math.floor((now-p.ts)/(1000*60*60*24));if(elapsed>=1 && !p.profitAdded){currentUser.balance+=p.daily;currentUser.profit+=p.daily;p.profitAdded=true;localStorage.setItem('reCurrent',JSON.stringify(currentUser));refreshBalance();}})},10000);
 </script>
 </body>
 </html>
-``
