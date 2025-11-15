@@ -1,294 +1,422 @@
-<!DOCTYPE html>
+<ROCK>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Rock Earn Premium Dashboard</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Rock Earn — Full Final</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
 <style>
-body{margin:0;font-family:'Segoe UI',sans-serif;background:#0e0e15;color:white;overflow-x:hidden;}
-canvas#bgCanvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;}
-
-.sidebar{position:fixed;top:0;left:0;width:80px;height:100vh;background:rgba(20,20,20,0.95);
-display:flex;flex-direction:column;align-items:center;padding-top:20px;gap:15px;z-index:10;display:none;}
-
-.icon-btn{display:flex;flex-direction:column;align-items:center;padding:12px;border-radius:15px;cursor:pointer;
-transition:0.3s;background:#111;color:#ccc;box-shadow:0 0 5px #000;}
-.icon-btn:hover{transform:scale(1.1);box-shadow:0 0 15px #0ff,0 0 25px #0ff;}
-.icon-name{margin-top:6px;font-size:12px;color:#ccc;text-shadow:0 0 3px #000;text-align:center;}
-
-#welcomeBox{position:fixed;top:20px;left:100px;right:20px;padding:25px;border-radius:20px;background:rgba(0,0,0,0.8);
-backdrop-filter:blur(12px);text-align:center;display:none;animation:fadeIn 1.5s;}
-#welcomeBox h2{color:white;font-size:26px;font-weight:800;animation:glowText 2.5s infinite alternate;}
-
-.stats{display:flex;justify-content:center;gap:30px;margin-top:15px;flex-wrap:wrap;}
-.stat-card{background: rgba(0,255,255,0.05); padding: 18px 25px; border-radius: 15px; box-shadow: 0 0 5px #0ff,0 0 10px #0ff; transition: 0.4s;}
-.stat-label{font-size:12px;color:#0ff;letter-spacing:1px;margin-bottom:5px;}
-.stat-value{font-size:18px;font-weight:700;color:white;}
-
-#contentSection{position:fixed;top:160px;left:100px;right:20px;bottom:20px;background:rgba(0,0,0,0.85);
-backdrop-filter:blur(15px);border-radius:20px;padding:20px;overflow-y:auto;display:none;z-index:999;}
-#backBtn{position:absolute;top:10px;left:20px;background:#ff0044;padding:8px 12px;border:none;border-radius:10px;font-weight:700;
-cursor:pointer;transition:0.3s;}
-#backBtn:hover{transform:scale(1.05);background:#ff3366;}
-
-#notif{position:fixed;top:20px;right:-400px;background:linear-gradient(45deg,#0ff,#0ffcc0);padding:15px 25px;border-radius:12px;
-box-shadow:0 0 20px #0ff;color:white;font-weight:600;transition:0.5s;z-index:9999;}
-#notif.show{right:20px;}
-
-input,select{padding:10px;border-radius:12px;width:100%;margin-bottom:10px;background:#1b1e2f;color:white;border:none;transition:0.3s;}
-input:focus, select:focus{outline:none;box-shadow:0 0 12px #0ff;}
-
-.btn{background:#111;color:#0ff;padding:12px 18px;border-radius:12px;font-weight:700;cursor:pointer;
-box-shadow:0 0 5px #0ff,0 0 10px #0ff;transition:0.3s;}
-.btn:hover{transform:scale(1.08);box-shadow:0 0 20px #0ff,0 0 40px #0ff;}
-
-.logout-btn{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#ff0044;color:white;
-padding:12px 18px;border-radius:12px;font-weight:700;cursor:pointer;box-shadow:0 0 10px #ff3366;transition:0.3s;display:none;}
-
-.admin-btn{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#00ff66;color:#000;
-padding:12px 18px;border-radius:12px;font-weight:700;cursor:pointer;box-shadow:0 0 10px #00ff66;display:none;}
-
-@keyframes glowText{0%{text-shadow:0 0 5px #000,0 0 10px #0ff;}50%{text-shadow:0 0 12px #000,0 0 25px #0ff;}100%{text-shadow:0 0 5px #000,0 0 10px #0ff;}}
-@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
-
-@media(max-width:1024px){
-#welcomeBox{left:20px;right:20px;}
-#contentSection{top:220px;left:20px;right:20px;bottom:20px;}
-.sidebar{width:100%;height:auto;flex-direction:row;justify-content:space-around;padding:10px;display:flex;position:relative;}
-}
+  :root{--cy:#00f7ff;--bg1:#0f1123;--bg2:#13142b;}
+  body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;background:linear-gradient(120deg,var(--bg1),var(--bg2));color:#e6f7ff;margin:0;min-height:100vh;}
+  .glass{background:rgba(0,0,0,0.45);backdrop-filter:blur(8px);border-radius:14px;border:1px solid rgba(0,255,255,0.06);box-shadow:0 8px 30px rgba(0,0,0,0.6);}
+  .btn{background:#07121a;color:var(--cy);padding:.6rem 1.1rem;border-radius:10px;font-weight:700;box-shadow:0 6px 18px rgba(0,255,255,0.04);cursor:pointer;border:1px solid rgba(0,255,255,0.07);}
+  .btn:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(0,255,255,0.07);}
+  #notif{position:fixed;right:18px;top:18px;background:linear-gradient(90deg,var(--cy),#66f0ff);color:#012; padding:10px 14px;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,0.6);transform:translateX(350px);transition:0.45s;z-index:9999;font-weight:700;}
+  #notif.show{transform:translateX(0);}
+  /* layout */
+  #mainWrapper{display:flex;gap:20px;padding:18px;}
+  #leftSidebar{width:84px;display:flex;flex-direction:column;align-items:center;padding-top:18px;gap:12px;height:calc(100vh - 36px);position:fixed;left:18px;top:18px;background:rgba(0,0,0,0.45);border-radius:12px;box-shadow:0 6px 20px rgba(0,0,0,0.6);}
+  .icon-btn{width:60px;height:60px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-direction:column;color:#bfeff6;background:#07121a;border:1px solid rgba(0,255,255,0.04);cursor:pointer;transition:0.25s;}
+  .icon-btn:hover{transform:translateY(-6px);box-shadow:0 6px 28px rgba(0,255,255,0.06);}
+  .icon-label{font-size:11px;color:#bfeff6;margin-top:6px;text-align:center;}
+  #centerArea{margin-left:130px;margin-right:18px;flex:1;padding-top:18px;}
+  #topBar{display:flex;justify-content:space-between;align-items:center;gap:14px;}
+  #welcomeCard{padding:18px 20px;border-radius:14px;display:flex;justify-content:space-between;align-items:center;gap:20px;}
+  .stat{background:linear-gradient(180deg,rgba(0,255,255,0.03), rgba(0,255,255,0.01));padding:12px;border-radius:10px;min-width:120px;text-align:center;}
+  #contentCard{margin-top:18px;padding:18px;border-radius:14px;min-height:60vh;overflow:auto;}
+  /* plans */
+  .plan-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;}
+  .plan{padding:12px;border-radius:12px;border:1px solid rgba(0,255,255,0.06);transition:0.35s;cursor:pointer;}
+  .plan:hover{transform:translateY(-6px);box-shadow:0 16px 60px rgba(0,255,255,0.04);}
+  .plan h3{font-weight:800;font-size:18px}
+  .plan .price{font-weight:900;font-size:20px;color:var(--cy)}
+  /* forms */
+  input,select,textarea{background:rgba(0,0,0,0.35);border-radius:10px;padding:10px;border:1px solid rgba(255,255,255,0.04);color:#e6f7ff;width:100%;box-sizing:border-box;}
+  label{font-size:13px;color:#bfeff6;font-weight:700;margin-bottom:6px;display:block;}
+  .small{font-size:12px;color:#9fdfe6}
+  .rightTiny{font-size:12px;color:#9fdfe6;text-align:right}
+  /* admin list */
+  .req-card{display:flex;gap:12px;align-items:flex-start;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.04);background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent)}
+  .img-preview{width:120px;height:80px;border-radius:8px;object-fit:cover;border:1px solid rgba(255,255,255,0.04);}
+  /* responsive */
+  @media (max-width:900px){
+    #leftSidebar{position:static;width:100%;height:auto;display:flex;flex-direction:row;justify-content:space-around;padding:8px;border-radius:10px;margin-bottom:12px;}
+    #centerArea{margin-left:18px;margin-right:18px;}
+  }
 </style>
 </head>
 <body>
 
-<canvas id="bgCanvas"></canvas>
 <div id="notif"></div>
 
-<div class="sidebar" id="sidebar">
-<div style="font-size:28px;margin-bottom:10px;">🚀</div>
-
-<div class="icon-btn" onclick="openSection('plans')"><i class="fa fa-gem"></i><span class="icon-name">Plans</span></div>
-<div class="icon-btn" onclick="openSection('deposit')"><i class="fa fa-money-bill"></i><span class="icon-name">Deposit</span></div>
-<div class="icon-btn" onclick="openSection('withdraw')"><i class="fa fa-hand-holding-dollar"></i><span class="icon-name">Withdraw</span></div>
-<div class="icon-btn" onclick="openSection('profit')"><i class="fa fa-coins"></i><span class="icon-name">Profit</span></div>
-<div class="icon-btn" onclick="openSection('history')"><i class="fa fa-clock"></i><span class="icon-name">History</span></div>
-<div class="icon-btn" onclick="openSection('support')"><i class="fa fa-headset"></i><span class="icon-name">Support</span></div>
-<div class="icon-btn" onclick="openSection('referral')"><i class="fa fa-share-alt"></i><span class="icon-name">Referral</span></div>
-<div class="icon-btn" onclick="openSection('share')"><i class="fa fa-share"></i><span class="icon-name">Share</span></div>
-
-</div><!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Rock Earn – Final Premium</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-
-<style>
-body{
-    font-family:'Segoe UI',sans-serif;
-    background:linear-gradient(120deg,#0f1123,#1c1f3b);
-    color:white;
-}
-
-/* Smooth Animations */
-.fadeIn{
-    animation:fadeIn .6s ease;
-}
-@keyframes fadeIn{
-    from{opacity:0;transform:translateY(10px);}
-    to{opacity:1;transform:translateY(0);}
-}
-
-/* Side Panel */
-#sidebar{
-    transition:0.4s;
-    transform:translateX(-100%);
-}
-#sidebar.show{
-    transform:translateX(0);
-}
-</style>
-</head>
-
-<body class="overflow-x-hidden">
-
-<!-- LOGIN PAGE -->
-<div id="loginPage" class="min-h-screen flex flex-col justify-center items-center p-4 fadeIn">
-    <h1 class="text-3xl font-bold mb-4">Rock Earn Login</h1>
-
-    <input id="loginEmail" type="text" placeholder="Email" class="w-72 p-2 mb-3 rounded bg-white/20">
-    <input id="loginPass" type="password" placeholder="Password" class="w-72 p-2 mb-3 rounded bg-white/20">
-
-    <button onclick="login()" class="w-72 p-2 bg-blue-600 rounded mt-2">Login</button>
-
-    <p class="mt-3">Create new account? 
-        <span onclick="showSignup()" class="text-blue-300 underline cursor-pointer">Sign Up</span>
-    </p>
+<!-- SIDEBAR (icons hidden until login) -->
+<div id="leftSidebar" style="display:none">
+  <div style="font-size:22px">🚀</div>
+  <div class="icon-btn" id="btnPlans" title="Plans"><i class="fa fa-gem fa-lg"></i><div class="icon-label">Plans</div></div>
+  <div class="icon-btn" id="btnDeposit" title="Deposit"><i class="fa fa-money-bill-wave fa-lg"></i><div class="icon-label">Deposit</div></div>
+  <div class="icon-btn" id="btnWithdraw" title="Withdraw"><i class="fa fa-hand-holding-dollar fa-lg"></i><div class="icon-label">Withdraw</div></div>
+  <div class="icon-btn" id="btnProfit" title="Profit"><i class="fa fa-coins fa-lg"></i><div class="icon-label">Profit</div></div>
+  <div class="icon-btn" id="btnHistory" title="History"><i class="fa fa-clock fa-lg"></i><div class="icon-label">History</div></div>
+  <div class="icon-btn" id="btnReferral" title="Referral"><i class="fa fa-share-alt fa-lg"></i><div class="icon-label">Referral</div></div>
+  <div class="icon-btn" id="btnAdmin" title="Admin" style="display:none"><i class="fa fa-user-shield fa-lg"></i><div class="icon-label">Admin</div></div>
+  <div style="flex:1"></div>
+  <div class="icon-btn" id="btnLogout" title="Logout"><i class="fa fa-right-from-bracket fa-lg"></i><div class="icon-label">Logout</div></div>
 </div>
 
-<!-- SIGNUP PAGE -->
-<div id="signupPage" class="hidden min-h-screen flex flex-col justify-center items-center p-4 fadeIn">
-    <h1 class="text-3xl font-bold mb-4">Create Account</h1>
+<!-- CENTER -->
+<div id="centerArea">
 
-    <input id="signupName" type="text" placeholder="Full Name" class="w-72 p-2 mb-3 rounded bg-white/20">
-    <input id="signupEmail" type="text" placeholder="Email" class="w-72 p-2 mb-3 rounded bg-white/20">
-    <input id="signupPass" type="password" placeholder="Password" class="w-72 p-2 mb-3 rounded bg-white/20">
+  <!-- topbar / auth -->
+  <div id="topBar">
+    <div id="authArea" class="glass p-4" style="display:flex;gap:12px;align-items:center;">
+      <!-- If not logged in, show signup/login -->
+      <div id="authForms">
+        <div id="authBox" style="max-width:420px;">
+          <div style="display:flex;gap:8px;align-items:center;justify-content:space-between;">
+            <h2 style="font-weight:900">Rock Earn</h2>
+            <small class="small">Client Demo</small>
+          </div>
+          <div style="margin-top:10px;display:flex;gap:8px;">
+            <input id="authName" placeholder="Full name" style="flex:1" />
+            <input id="authEmail" placeholder="Email" style="flex:1" />
+            <input id="authPass" type="password" placeholder="Password" style="flex:1" />
+          </div>
+          <div style="margin-top:10px;display:flex;gap:8px;">
+            <button class="btn" id="signupBtn"><i class="fa fa-user-plus mr-2"></i>Sign Up</button>
+            <button class="btn" id="loginBtn" style="background:#052b2a;color:#c9fff9"><i class="fa fa-sign-in-alt mr-2"></i>Login</button>
+          </div>
+          <p class="small" style="margin-top:8px">Use <b>admin@rockearn.com</b> / <i>admin123</i> for admin.</p>
+        </div>
+      </div>
 
-    <button onclick="signup()" class="w-72 p-2 bg-green-600 rounded mt-2">Sign Up</button>
-
-    <p class="mt-3">Already have account?
-        <span onclick="showLogin()" class="text-blue-300 underline cursor-pointer">Login</span>
-    </p>
-</div>
-
-<!-- DASHBOARD -->
-<div id="dashboard" class="hidden fadeIn">
-
-    <!-- TOP BAR -->
-    <div class="p-4 flex justify-between items-center bg-white/10 backdrop-blur">
-        <i class="fas fa-bars text-2xl cursor-pointer" onclick="toggleSidebar()"></i>
-        <h2 class="text-xl font-bold">Rock Earn Dashboard</h2>
-        <span></span>
+      <div id="userBox" style="display:none;align-items:center;gap:12px;">
+        <div>
+          <div id="welcomeTxt" style="font-weight:800"></div>
+          <div class="small">Balance: <span id="balValue">0</span> PKR · Profit: <span id="profValue">0</span> PKR</div>
+        </div>
+      </div>
     </div>
 
-    <!-- WELCOME -->
-    <div class="p-4">
-        <h1 class="text-2xl font-bold" id="welcomeUser"></h1>
-        <p class="opacity-70">Premium Animated Dashboard</p>
+    <div style="display:flex;gap:10px;align-items:center">
+      <button class="btn" id="openShare">Share</button>
+      <button class="btn" id="openSupport">Support</button>
+    </div>
+  </div>
+
+  <!-- welcome / stats -->
+  <div id="welcomeCard" class="glass mt-4 p-4">
+    <div>
+      <h2 style="font-size:20px">🎉 Welcome to <span style="color:white;font-weight:900">Rock Earn</span> Premium</h2>
+      <p class="small">Stylish dashboard — demo client-only app.</p>
+    </div>
+    <div style="display:flex;gap:12px;">
+      <div class="stat"><div class="small">Balance</div><div id="balBig" style="font-weight:900;font-size:18px">0 PKR</div></div>
+      <div class="stat"><div class="small">Total Profit</div><div id="profBig" style="font-weight:900;font-size:18px">0 PKR</div></div>
+    </div>
+  </div>
+
+  <!-- content area -->
+  <div id="contentCard" class="glass mt-4 p-4">
+    <!-- default home -->
+    <div id="homeView">
+      <h3 style="font-weight:900;margin-bottom:8px">Featured Plans</h3>
+      <div class="plan-grid" id="planGrid"></div>
     </div>
 
-    <!-- ICON GRID -->
-    <div class="grid grid-cols-3 gap-4 p-4 text-center text-sm">
-
-        <div onclick="openPlans()" class="p-4 bg-white/10 rounded-xl cursor-pointer">
-            <i class="fa-solid fa-rocket text-3xl mb-2"></i>
-            Plans
+    <!-- dynamic sections -->
+    <div id="depositView" style="display:none">
+      <h3 style="font-weight:900">Deposit — JazzCash / EasyPaisa</h3>
+      <div style="display:grid;grid-template-columns:1fr 320px;gap:12px;margin-top:10px">
+        <div>
+          <label>Amount (PKR)</label>
+          <input id="depAmount" type="number" placeholder="e.g. 2000" />
+          <label>Payment Method</label>
+          <select id="depMethod">
+            <option>JazzCash</option>
+            <option>EasyPaisa</option>
+          </select>
+          <label>Transaction ID / Reference</label>
+          <input id="depTx" placeholder="Txn ID / Reference" />
+          <label>Upload Payment Proof (image)</label>
+          <input id="depProof" type="file" accept="image/*" />
+          <div class="rightTiny" style="margin-top:8px">Admin will approve deposit to add balance</div>
+          <div style="margin-top:12px;display:flex;gap:8px">
+            <button class="btn" id="sendDeposit">Send Deposit</button>
+            <button class="btn" id="cancelDeposit">Cancel</button>
+          </div>
         </div>
-
-        <div onclick="openDeposit()" class="p-4 bg-white/10 rounded-xl cursor-pointer">
-            <i class="fa-solid fa-wallet text-3xl mb-2"></i>
-            Deposit
+        <div>
+          <div class="small" style="color:#9fdfe6">Example JazzCash Number</div>
+          <div class="glass p-3 mt-2" style="border-radius:10px">
+            <div style="font-weight:800">0333-1234567</div>
+            <div class="small">Rock Earn (Demo)</div>
+            <div class="small" style="margin-top:8px">Send amount and upload screenshot/tx id above.</div>
+          </div>
         </div>
-
-        <div onclick="openWithdraw()" class="p-4 bg-white/10 rounded-xl cursor-pointer">
-            <i class="fas fa-money-check text-3xl mb-2"></i>
-            Withdraw
-        </div>
-
-        <div onclick="openProfit()" class="p-4 bg-white/10 rounded-xl cursor-pointer">
-            <i class="fa-solid fa-chart-line text-3xl mb-2"></i>
-            Daily Profit
-        </div>
-
-        <div onclick="openHistory()" class="p-4 bg-white/10 rounded-xl cursor-pointer">
-            <i class="fa-solid fa-clock-rotate-left text-3xl mb-2"></i>
-            History
-        </div>
-
-        <div onclick="openSettings()" class="p-4 bg-white/10 rounded-xl cursor-pointer">
-            <i class="fa-solid fa-gear text-3xl mb-2"></i>
-            Settings
-        </div>
+      </div>
     </div>
 
-</div>
-
-<!-- SIDEBAR -->
-<div id="sidebar" class="fixed left-0 top-0 w-64 h-full bg-black/80 p-6">
-    <div class="flex justify-between mb-6">
-        <h2 class="text-xl font-bold">Menu</h2>
-        <i class="fa-solid fa-x text-xl cursor-pointer" onclick="toggleSidebar()"></i>
+    <div id="withdrawView" style="display:none">
+      <h3 style="font-weight:900">Withdraw</h3>
+      <div style="max-width:520px;margin-top:10px">
+        <label>Full Name</label><input id="wName" placeholder="Full name" />
+        <label>Account Number / Mobile</label><input id="wAcc" placeholder="JazzCash / EasyPaisa number or bank ac" />
+        <label>Amount (PKR)</label><input id="wAmt" type="number" />
+        <label>Optional proof screenshot (for manual processing)</label><input id="wProof" type="file" accept="image/*" />
+        <div style="display:flex;gap:8px;margin-top:10px">
+          <button class="btn" id="sendWithdraw">Request Withdraw</button>
+          <button class="btn" id="cancelWithdraw">Cancel</button>
+        </div>
+        <div class="small" style="margin-top:8px;color:#9fdfe6">Withdraw requests are processed by admin demo only.</div>
+      </div>
     </div>
 
-    <p onclick="openPlans()" class="mb-4 cursor-pointer">🔥 Plans</p>
-    <p onclick="openDeposit()" class="mb-4 cursor-pointer">💰 Deposit</p>
-    <p onclick="openWithdraw()" class="mb-4 cursor-pointer">🏧 Withdraw</p>
-    <p onclick="openHistory()" class="mb-4 cursor-pointer">📜 History</p>
-    <p onclick="logout()" class="mt-10 text-red-400 cursor-pointer">Logout</p>
+    <div id="historyView" style="display:none">
+      <h3 style="font-weight:900">History</h3>
+      <div id="historyList" style="margin-top:12px;display:flex;flex-direction:column;gap:8px"></div>
+    </div>
+
+    <div id="profitView" style="display:none">
+      <h3 style="font-weight:900">Daily Profit</h3>
+      <div style="margin-top:8px">
+        <div class="small">Total accumulated profit:</div>
+        <div style="font-weight:900;font-size:18px" id="profitTotal">0 PKR</div>
+      </div>
+    </div>
+
+    <div id="referralView" style="display:none">
+      <h3 style="font-weight:900">Referral</h3>
+      <div style="margin-top:8px">
+        <div class="small">Your invite code (use email):</div>
+        <div class="glass p-3 mt-2" id="inviteBox" style="display:inline-block"></div>
+      </div>
+    </div>
+
+    <div id="adminView" style="display:none">
+      <h3 style="font-weight:900">Admin Panel</h3>
+      <div style="margin-top:8px" id="adminRequests"></div>
+    </div>
+
+    <div id="supportView" style="display:none">
+      <h3 style="font-weight:900">Support</h3>
+      <div class="small" style="margin-top:8px">Contact demo support: support@rockearn.com</div>
+    </div>
+  </div>
 </div>
 
 <script>
-// Show signup
-function showSignup(){
-    loginPage.classList.add("hidden");
-    signupPage.classList.remove("hidden");
+/* --------------------------
+   Utility & Notification
+   -------------------------- */
+function notify(msg){
+  const n = document.getElementById('notif');
+  n.innerText = msg;
+  n.classList.add('show');
+  setTimeout(()=> n.classList.remove('show'), 3000);
 }
 
-// Show login
-function showLogin(){
-    signupPage.classList.add("hidden");
-    loginPage.classList.remove("hidden");
+/* --------------------------
+   LocalStorage keys & defaults
+   -------------------------- */
+let USERS_KEY = 'reUsers_demo';
+let CURRENT_KEY = 'reCurrent_demo';
+let REQ_KEY = 'reRequests_demo';
+
+// init users array and admin
+let users = JSON.parse(localStorage.getItem(USERS_KEY)) || [];
+if(!users.find(u=>u.email==='admin@rockearn.com')){
+  users.push({name:'Admin', email:'admin@rockearn.com', pass:'admin123', balance:0, profit:0, plans:[], history:[]});
+  localStorage.setItem(USERS_KEY, JSON.stringify(users));
+}
+let currentUser = JSON.parse(localStorage.getItem(CURRENT_KEY)) || null;
+let requests = JSON.parse(localStorage.getItem(REQ_KEY)) || [];
+
+/* --------------------------
+   Elements
+   -------------------------- */
+const leftSidebar = document.getElementById('leftSidebar');
+const authBox = document.getElementById('authBox');
+const userBox = document.getElementById('userBox');
+const welcomeTxt = document.getElementById('welcomeTxt');
+const balValue = document.getElementById('balValue');
+const profValue = document.getElementById('profValue');
+const balBig = document.getElementById('balBig');
+const profBig = document.getElementById('profBig');
+const inviteBox = document.getElementById('inviteBox');
+
+/* --------------------------
+   Plans data
+   -------------------------- */
+let plans = [
+  {name:'Basic', amount:200, daily:30, days:1, badge:'Starter'},
+  {name:'Starter', amount:500, daily:75, days:1, badge:'Hot'},
+  {name:'Pro', amount:1000, daily:180, days:1, badge:'Best'},
+  {name:'Advanced', amount:1500, daily:250, days:2, badge:'Pro'},
+  {name:'Silver', amount:2000, daily:350, days:3, badge:'Stable'},
+  {name:'Gold', amount:3000, daily:550, days:3, badge:'Value'},
+  {name:'Platinum', amount:5000, daily:950, days:4, badge:'Premium'},
+  {name:'Diamond', amount:7000, daily:1350, days:5, badge:'VIP'}
+];
+
+/* --------------------------
+   Render featured plans
+   -------------------------- */
+function renderPlans(){
+  const grid = document.getElementById('planGrid');
+  grid.innerHTML = '';
+  plans.forEach(p=>{
+    const div = document.createElement('div');
+    div.className = 'plan glass';
+    div.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <h3>${p.name}</h3>
+          <div class="small">${p.badge}</div>
+        </div>
+        <div class="price">${p.amount} PKR</div>
+      </div>
+      <div style="margin-top:8px">
+        <div class="small">Daily: <b>${p.daily} PKR</b> · Days: <b>${p.days}</b></div>
+      </div>
+      <div style="margin-top:12px;display:flex;gap:8px">
+        <button class="btn" onclick="buyPlan('${p.name}')">Buy</button>
+        <button class="btn" onclick="viewPlan('${p.name}')">Details</button>
+      </div>
+    `;
+    grid.appendChild(div);
+  });
 }
 
-// SIGNUP SYSTEM
-function signup(){
-    let user = {
-        name: signupName.value,
-        email: signupEmail.value,
-        pass: signupPass.value
-    };
-    localStorage.setItem("rockUser", JSON.stringify(user));
-    alert("Account Created!");
-    showLogin();
-}
-
-// LOGIN SYSTEM (FIXED)
-function login(){
-    let user = JSON.parse(localStorage.getItem("rockUser"));
-    if(!user){
-        alert("Account not found!");
-        return;
-    }
-
-    if(loginEmail.value === user.email && loginPass.value === user.pass){
-        localStorage.setItem("loggedIn", "yes");
-        loadDashboard();
-    } else {
-        alert("Wrong Email or Password");
-    }
-}
-
-// KEEP LOGGED IN AFTER REFRESH
-window.onload = function(){
-    if(localStorage.getItem("loggedIn") === "yes"){
-        loadDashboard();
-    }
+/* --------------------------
+   Auth: signup / login / logout
+   -------------------------- */
+document.getElementById('signupBtn').onclick = () => {
+  let n = document.getElementById('authName').value.trim();
+  let e = document.getElementById('authEmail').value.trim().toLowerCase();
+  let p = document.getElementById('authPass').value.trim();
+  if(!n || !e || !p) return notify('Fill all fields');
+  if(!/^\S+@\S+\.\S+$/.test(e)) return notify('Invalid email');
+  users = JSON.parse(localStorage.getItem(USERS_KEY)) || users;
+  if(users.find(u=>u.email===e)) return notify('Email already registered');
+  let u = {name:n, email:e, pass:p, balance:0, profit:0, plans:[], history:[]};
+  users.push(u);
+  localStorage.setItem(USERS_KEY, JSON.stringify(users));
+  currentUser = u;
+  localStorage.setItem(CURRENT_KEY, JSON.stringify(currentUser));
+  afterLogin();
+  notify('Signup successful');
 };
 
-// LOAD DASHBOARD
-function loadDashboard(){
-    loginPage.classList.add("hidden");
-    signupPage.classList.add("hidden");
-    dashboard.classList.remove("hidden");
+document.getElementById('loginBtn').onclick = () => {
+  let e = document.getElementById('authEmail').value.trim().toLowerCase();
+  let p = document.getElementById('authPass').value.trim();
+  users = JSON.parse(localStorage.getItem(USERS_KEY)) || users;
+  let u = users.find(x=>x.email===e && x.pass===p);
+  if(!u) return notify('Invalid credentials');
+  currentUser = u;
+  localStorage.setItem(CURRENT_KEY, JSON.stringify(currentUser));
+  afterLogin();
+  notify('Welcome ' + currentUser.name.split(' ')[0]);
+};
 
-    let user = JSON.parse(localStorage.getItem("rockUser"));
-    welcomeUser.innerHTML = "Welcome, " + user.name;
+document.getElementById('btnLogout').onclick = () => {
+  currentUser = null;
+  localStorage.removeItem(CURRENT_KEY);
+  leftSidebar.style.display = 'none';
+  authBox.style.display = 'block';
+  userBox.style.display = 'none';
+  document.getElementById('homeView').style.display = 'block';
+  hideAllViews();
+  renderPlans();
+  notify('Logged out');
+};
+
+/* Keep in sync across tabs */
+window.addEventListener('storage', (e)=>{
+  if(e.key === USERS_KEY) users = JSON.parse(localStorage.getItem(USERS_KEY)) || users;
+  if(e.key === CURRENT_KEY){
+    currentUser = JSON.parse(localStorage.getItem(CURRENT_KEY));
+    if(currentUser) afterLogin();
+    else { leftSidebar.style.display='none'; authBox.style.display='block'; userBox.style.display='none'; }
+  }
+  if(e.key === REQ_KEY) requests = JSON.parse(localStorage.getItem(REQ_KEY)) || [];
+});
+
+/* After successful login */
+function afterLogin(){
+  // hide auth / show user
+  authBox.style.display = 'none';
+  userBox.style.display = 'flex';
+  leftSidebar.style.display = 'flex';
+  document.getElementById('homeView').style.display = 'block';
+  hideAllViews();
+  // update UI values
+  updateUserUI();
+  // show admin button if admin
+  if(currentUser.email === 'admin@rockearn.com'){
+    document.getElementById('btnAdmin').style.display = 'block';
+  } else {
+    document.getElementById('btnAdmin').style.display = 'none';
+  }
+  renderPlans();
+  renderHistory();
+  inviteBox.innerText = currentUser.email;
 }
 
-// LOGOUT
-function logout(){
-    localStorage.setItem("loggedIn","no");
-    dashboard.classList.add("hidden");
-    loginPage.classList.remove("hidden");
+/* update user balances in UI (reads currentUser from memory or localStorage) */
+function updateUserUI(){
+  currentUser = JSON.parse(localStorage.getItem(CURRENT_KEY)) || currentUser;
+  if(!currentUser) return;
+  welcomeTxt.innerText = currentUser.name;
+  balValue.innerText = (currentUser.balance || 0);
+  profValue.innerText = (currentUser.profit || 0);
+  balBig.innerText = (currentUser.balance || 0) + ' PKR';
+  profBig.innerText = (currentUser.profit || 0) + ' PKR';
 }
 
-// SIDEBAR
-function toggleSidebar(){
-    document.getElementById("sidebar").classList.toggle("show");
+/* on load if already logged in */
+if(currentUser){
+  afterLogin();
+} else {
+  // show auth area
+  authBox.style.display = 'block';
+  leftSidebar.style.display = 'none';
 }
 
-// ICON ACTIONS
-function openPlans(){ alert("Plans page will open."); }
-function openDeposit(){ alert("Deposit section."); }
-function openWithdraw(){ alert("Withdraw section."); }
-function openProfit(){ alert("Daily profit section."); }
-function openHistory(){ alert("History."); }
-function openSettings(){ alert("Settings."); }
+/* --------------------------
+   Navigation buttons
+   -------------------------- */
+document.getElementById('btnPlans').onclick = ()=>{ showView('homeView'); renderPlans(); };
+document.getElementById('btnDeposit').onclick = ()=>{ showView('depositView'); };
+document.getElementById('btnWithdraw').onclick = ()=>{ showView('withdrawView'); };
+document.getElementById('btnProfit').onclick = ()=>{ showView('profitView'); updateProfitView(); };
+document.getElementById('btnHistory').onclick = ()=>{ showView('historyView'); renderHistory(); };
+document.getElementById('btnReferral').onclick = ()=>{ showView('referralView'); };
+document.getElementById('btnAdmin').onclick = ()=>{ showView('adminView'); renderAdmin(); };
+document.getElementById('openSupport').onclick = ()=>{ showView('supportView'); };
+document.getElementById('openShare').onclick = ()=>{ shareNow(); };
 
-</script>
+/* show/hide helpers */
+function hideAllViews(){
+  const ids = ['homeView','depositView','withdrawView','historyView','profitView','referralView','adminView','supportView'];
+  ids.forEach(id => document.getElementById(id).style.display = 'none');
+}
+function showView(id){
+  hideAllViews();
+  document.getElementById(id).style.display = 'block';
+}
 
-</body>
-</html>
+/* --------------------------
+   Buy Plan
+   -------------------------- */
+function buyPlan(name){
+  if(!currentUser) return notify('Login first');
+  const p = plans.find(x=>x.name===name);
+  if(!p) return;
+  if(currentUser.balance < p.amount) return notify('Insufficient balance');
+  // deduct, add profit, add plan & history
+  currentUser.balance = Number(currentUser.balance) - Number(p.amount);
+  currentUser.profit = Number(currentUser.profit) + Number(p.daily);
+  currentUser.plans = currentUser.plans || [];
+  let expiry = new Date(); expiry.setDate(expiry.g
