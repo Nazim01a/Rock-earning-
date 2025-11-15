@@ -192,14 +192,21 @@ function openSection(type){
         (currentUser.withdrawals||[]).forEach(w=>{html+=`<p>Withdraw: ${w.amount} PKR - ${w.status}</p>`});
         content.innerHTML=html;
     } else if(type==='admin' && currentUser.role==='admin'){
-        let html='<h3>Admin Panel — Approve / Reject Deposits</h3>';
+        let html='<h3>Admin Panel — Approve / Reject Deposits & Withdrawals</h3>';
         users.forEach(u=>{
-            html+=`<div style="margin-bottom:10px;"><b>${u.name} (${u.email})</b><br>Balance: ${u.balance} PKR<br>`;
+            html+=`<div style="margin-bottom:12px;"><b>${u.name} (${u.email})</b><br>Balance: ${u.balance} PKR<br>`;
             (u.deposits||[]).forEach((d,idx)=>{
                 if(d.status==='pending'){
                     html+=`Deposit ${d.plan} ${d.amount} PKR - <button onclick="adminApprove('${u.email}',${idx})">Approve</button> <button onclick="adminReject('${u.email}',${idx})">Reject</button><br>`;
                 } else {
                     html+=`Deposit ${d.plan} ${d.amount} PKR - ${d.status}<br>`;
+                }
+            });
+            (u.withdrawals||[]).forEach((w,idx)=>{
+                if(w.status==='pending'){
+                    html+=`Withdraw ${w.amount} PKR (${w.method}) - <button onclick="adminApproveWithdraw('${u.email}',${idx})">Approve</button> <button onclick="adminRejectWithdraw('${u.email}',${idx})">Reject</button><br>`;
+                } else {
+                    html+=`Withdraw ${w.amount} PKR (${w.method}) - ${w.status}<br>`;
                 }
             });
             html+='</div>';
@@ -214,8 +221,7 @@ function closeSection(){
 }
 
 // ----------------------
-// Deposit / Buy Plan
-// ----------------------
+// Deposit
 function openDeposit(amount=0,name='',daily=0,days=0,planIndex=0){
     const content=document.getElementById('sectionContent');
     content.innerHTML=`<h3>Deposit — ${name}</h3>
@@ -233,7 +239,7 @@ function confirmDeposit(amount,name,daily,days,planIndex){
     const txn=document.getElementById('depositTxn').value.trim();
     const proof=document.getElementById('depositProof').files[0];
     if(!txn || !proof){showNotif('Upload proof & enter txn'); return;}
-    const deposit={plan:name,amount:amount,daily:daily,days:days,txn:txn.name,status:'pending',ts:Date.now()};
+    const deposit={plan:name,amount:amount,daily:daily,days:days,txn:txn,name:currentUser.name,status:'pending',ts:Date.now()};
     currentUser.deposits=currentUser.deposits||[]; currentUser.deposits.push(deposit);
     users=users.map(u=>u.email===currentUser.email?currentUser:u);
     localStorage.setItem('reUsers',JSON.stringify(users));
@@ -242,8 +248,8 @@ function confirmDeposit(amount,name,daily,days,planIndex){
     openSection('plans');
 }
 
-// Copy text helper
-function copyText(txt){navigator.clipboard.writeText(txt);showNotif('Copied: '+txt);}// ----------------- Withdraw
+// ----------------------
+// Withdraw
 function openWithdraw(){
     const content=document.getElementById('sectionContent');
     document.getElementById('contentSection').style.display='block';
@@ -273,67 +279,114 @@ function confirmWithdraw(){
     const w={amount:amt,method:method,name:name,acc:acc,status:'pending',ts:Date.now()};
     currentUser.withdrawals=currentUser.withdrawals||[]; currentUser.withdrawals.push(w);
     users=users.map(u=>u.email===currentUser.email?currentUser:u);
-    localStorage.setItem('reUsers',JSON.stringify(users));
     currentUser.balance-=amt;
+    localStorage.setItem('reUsers',JSON.stringify(users));
     localStorage.setItem('reCurrent',JSON.stringify(currentUser));
     showNotif('Withdrawal request submitted & balance updated');
     openDashboard();
 }
 
-// ----------------- Admin Approve / Reject
-function adminApprove(email,idx){
-    let user=users.find(u=>u.email===email);
-    if(user && user.deposits[idx]){
-        user.deposits[idx].status='approved';
-        user.plans.push({...user.deposits[idx],ts:Date.now(),lastTs:Date.now()});
-        user.balance+=user.deposits[idx].amount;
-        users=users.map(u=>u.email===user.email?user:u);
-        localStorage.setItem('reUsers',JSON.stringify(users));
-        showNotif('Deposit approved & balance updated');
-        openSection('admin');
-    }
+// ----------------------
+// Copy Text
+function copyText(txt){navigator.clipboard.writeText(txt);showNotif('Copied: '+txt);}
+</script><script>
+// ----------------------
+// Admin Approve / Reject Deposit
+// ----------------------
+function adminApprove(userEmail,depositIndex){
+    let u = users.find(x=>x.email===userEmail);
+    if(!u) return;
+    let d = u.deposits[depositIndex];
+    if(d.status!=='pending') return;
+    d.status='approved';
+    u.balance += d.amount; // Deposit approved, balance updated
+    users=users.map(x=>x.email===u.email?u:x);
+    localStorage.setItem('reUsers',JSON.stringify(users));
+    if(currentUser && currentUser.email===userEmail){localStorage.setItem('reCurrent',JSON.stringify(u));}
+    showNotif(`Deposit of ${d.amount} PKR approved`);
+    openSection('admin');
 }
 
-function adminReject(email,idx){
-    let user=users.find(u=>u.email===email);
-    if(user && user.deposits[idx]){
-        user.deposits[idx].status='rejected';
-        users=users.map(u=>u.email===user.email?user:u);
-        localStorage.setItem('reUsers',JSON.stringify(users));
-        showNotif('Deposit rejected');
-        openSection('admin');
-    }
+function adminReject(userEmail,depositIndex){
+    let u = users.find(x=>x.email===userEmail);
+    if(!u) return;
+    let d = u.deposits[depositIndex];
+    if(d.status!=='pending') return;
+    d.status='rejected';
+    users=users.map(x=>x.email===u.email?u:x);
+    localStorage.setItem('reUsers',JSON.stringify(users));
+    showNotif(`Deposit of ${d.amount} PKR rejected`);
+    openSection('admin');
 }
 
-// ----------------- Daily Profit Scheduler
-setInterval(()=>{
+// ----------------------
+// Admin Approve / Reject Withdraw
+// ----------------------
+function adminApproveWithdraw(userEmail,withdrawIndex){
+    let u = users.find(x=>x.email===userEmail);
+    if(!u) return;
+    let w = u.withdrawals[withdrawIndex];
+    if(w.status!=='pending') return;
+    w.status='approved';
+    users=users.map(x=>x.email===u.email?u:x);
+    localStorage.setItem('reUsers',JSON.stringify(users));
+    showNotif(`Withdrawal of ${w.amount} PKR approved`);
+    openSection('admin');
+}
+
+function adminRejectWithdraw(userEmail,withdrawIndex){
+    let u = users.find(x=>x.email===userEmail);
+    if(!u) return;
+    let w = u.withdrawals[withdrawIndex];
+    if(w.status!=='pending') return;
+    w.status='rejected';
+    u.balance += w.amount; // Refund balance
+    users=users.map(x=>x.email===u.email?u:x);
+    localStorage.setItem('reUsers',JSON.stringify(users));
+    showNotif(`Withdrawal of ${w.amount} PKR rejected`);
+    openSection('admin');
+}
+
+// ----------------------
+// Daily Profit Scheduler
+// ----------------------
+function addDailyProfit(){
+    let now = new Date().getTime();
     users.forEach(u=>{
-        if(u.plans){
-            u.plans.forEach((p)=>{
-                if(p.status==='approved'){
-                    let lastTs=p.lastTs||p.ts;
-                    if(Date.now()-lastTs>24*60*60*1000){
-                        p.lastTs=Date.now();
-                        u.balance+=p.daily;
-                        u.profit+=p.daily;
-                    }
+        (u.deposits||[]).forEach(d=>{
+            if(d.status==='approved' && !d.lastProfit){
+                d.lastProfit = now;
+                u.profit += d.daily;
+                u.balance += d.daily;
+            } else if(d.status==='approved'){
+                let daysPassed = Math.floor((now - d.lastProfit)/(1000*60*60*24));
+                if(daysPassed>0){
+                    let totalProfit = d.daily*daysPassed;
+                    u.profit += totalProfit;
+                    u.balance += totalProfit;
+                    d.lastProfit += daysPassed*24*60*60*1000;
                 }
-            });
-        }
+            }
+        });
     });
     localStorage.setItem('reUsers',JSON.stringify(users));
-    if(currentUser){
-        currentUser=users.find(u=>u.email===currentUser.email);
-        localStorage.setItem('reCurrent',JSON.stringify(currentUser));
-        openDashboard();
-    }
-},60*1000); // runs every minute for demo, real app: 24*60*60*1000
+    if(currentUser){currentUser=users.find(u=>u.email===currentUser.email); localStorage.setItem('reCurrent',JSON.stringify(currentUser));}
+}
 
-// ----------------- Back button auto hide on refresh
-window.onpopstate=function(){
-    document.getElementById('backBtn').style.display='none';
-    document.getElementById('contentSection').style.display='none';
+// Run daily profit scheduler every 1 min (for demo purpose)
+setInterval(addDailyProfit,60000);
+
+// ----------------------
+// Back button fix on refresh
+// ----------------------
+window.onload=function(){
+    if(currentUser){
+        openDashboard();
+    } else {
+        document.getElementById('authBox').style.display='block';
+        document.getElementById('sidebar').style.display='none';
+        document.getElementById('welcomeBox').style.display='none';
+        document.getElementById('logoutBtn').style.display='none';
+    }
 };
 </script>
-</body>
-</html>
