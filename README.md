@@ -6,7 +6,9 @@
 <title>Rock Earn — Premium Dashboard</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
 <style>
-body{margin:0;font-family:'Segoe UI',sans-serif;overflow-x:hidden;color:#fff;background:#081423;background:linear-gradient(-45deg,#081423,#0a1b2b,#081423,#0a1b2b);background-size:400% 400%;animation:gradientBG 20s ease infinite;}
+body{margin:0;font-family:'Segoe UI',sans-serif;overflow-x:hidden;color:#fff;
+background:linear-gradient(-45deg,#081423,#0a1b2b,#081423,#0a1b2b);
+background-size:400% 400%;animation:gradientBG 20s ease infinite;}
 @keyframes gradientBG{0%{background-position:0 50%}50%{background-position:100% 50%}100%{background-position:0 50%}}
 button{cursor:pointer;padding:10px 14px;border:none;border-radius:12px;font-weight:600;transition:.3s;}
 button:hover{transform:translateY(-3px) scale(1.05);box-shadow:0 8px 20px rgba(0,247,239,0.3);}
@@ -130,7 +132,39 @@ function openDashboard(){document.getElementById('authBox').style.display='none'
 // ----------------------
 // Sections & Back Button
 // ----------------------
-function openSection(type){const content=document.getElementById('sectionContent');document.getElementById('contentSection').style.display='block';document.getElementById('backBtn').style.display='inline-block';content.innerHTML=''; /* Add section rendering logic here */ }
+function openSection(type){
+const content=document.getElementById('sectionContent');
+document.getElementById('contentSection').style.display='block';
+document.getElementById('backBtn').style.display='inline-block';
+content.innerHTML='';
+
+if(type==='plans'){
+plans.forEach((p,idx)=>{
+content.innerHTML+=`<div class='plan-card'><b>${p.name}</b><br>Amount: ${p.amount} PKR<br>Daily: ${p.daily} PKR<br>Days: ${p.days}<br><button onclick="alert('Deposit via Deposit section')">Buy Now</button></div>`;
+} );
+} else if(type==='deposit'){
+content.innerHTML=`<h3>Deposit</h3>
+<p>JazzCash: 03705519562 <button onclick="copyText('03705519562')">Copy</button></p>
+<p>EasyPaisa: 03379827882 <button onclick="copyText('03379827882')">Copy</button></p>
+<p>Bank: 1234567890 <button onclick="copyText('1234567890')">Copy</button></p>`;
+} else if(type==='withdraw'){
+content.innerHTML=`<h3>Withdraw</h3>
+<select id="withdrawMethod"><option>JazzCash</option><option>EasyPaisa</option><option>Bank</option></select>
+<input id="withdrawAmount" placeholder="Amount"><button onclick="alert('Withdrawal request sent')">Withdraw</button>`;
+} else if(type==='profit'){
+content.innerHTML=`<h3>Total Profit: ${currentUser.profit} PKR</h3>`;
+} else if(type==='history'){
+let html='<h3>History</h3>';
+(currentUser.deposits||[]).forEach(d=>{html+=`<p>Deposit: ${d.plan} - ${d.amount} PKR - ${d.status}</p>`});
+(currentUser.withdrawals||[]).forEach(w=>{html+=`<p>Withdraw: ${w.amount} PKR - ${w.status}</p>`});
+content.innerHTML=html;
+} else if(type==='admin' && currentUser.role==='admin'){
+let html='<h3>Admin Panel</h3>';
+users.forEach(u=>{html+=`<div>${u.name} (${u.email}) - Balance: ${u.balance} PKR <button onclick="alert('Approve/Reject not implemented')">Approve/Reject</button></div>`});
+content.innerHTML=html;
+} else {content.innerHTML='<h3>Coming Soon</h3>';}
+}
+
 function closeSection(){document.getElementById('contentSection').style.display='none';document.getElementById('backBtn').style.display='none';document.getElementById('sectionContent').innerHTML='';}
 
 // ----------------------
