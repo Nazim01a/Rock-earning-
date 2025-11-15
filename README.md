@@ -9,15 +9,16 @@
 <style>
 body{font-family:'Segoe UI',sans-serif;color:white;overflow-x:hidden;margin:0;height:100vh;background:#0a0f1f;position:relative;}
 canvas#bgCanvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;}
-.sidebar{position:fixed;top:0;left:0;width:80px;height:100vh;background:rgba(0,0,0,0.3);display:flex;flex-direction:column;align-items:center;padding-top:20px;gap:15px;z-index:10;}
+.sidebar{position:fixed;top:0;left:0;width:100px;height:100vh;background:rgba(0,0,0,0.3);display:flex;flex-direction:column;align-items:center;padding-top:20px;gap:15px;z-index:10;}
 .icon-btn{display:flex;align-items:center;justify-content:center;flex-direction:column;padding:12px;font-weight:700;border-radius:15px;cursor:pointer;transition:0.3s;background:linear-gradient(45deg,#4f46e5,#0ff);box-shadow:0 0 10px #0ff,0 0 20px #4f46e5;}
 .icon-btn:hover{transform:scale(1.1);box-shadow:0 0 20px #0ff,0 0 40px #4f46e5;}
+.icon-name{margin-top:6px;font-size:12px;color:#0ff;text-shadow:0 0 3px #0ff;}
 .card{background:rgba(255,255,255,0.05);border-radius:20px;padding:20px;backdrop-filter:blur(15px);box-shadow:0 0 30px #0ff6;transition:0.3s;}
 .btn{background:linear-gradient(45deg,#4f46e5,#0ff);padding:12px 18px;border-radius:12px;font-weight:700;transition:0.3s;box-shadow:0 0 10px #0ff,0 0 20px #4f46e5;cursor:pointer;}
 .btn:hover{transform:scale(1.08);box-shadow:0 0 20px #0ff,0 0 40px #4f46e5;}
 .plan-card{border:1px solid #0ff;padding:12px;margin-bottom:12px;border-radius:12px;transition:0.3s;}
 .plan-card:hover{box-shadow:0 0 25px #0ff,0 0 50px #4f46e5;transform:scale(1.04);}
-#contentSection{position:fixed;top:20px;left:100px;right:20px;bottom:20px;background:rgba(0,0,0,0.8);backdrop-filter:blur(15px);border-radius:20px;padding:20px;overflow-y:auto;display:none;z-index:999;}
+#contentSection{position:fixed;top:20px;left:120px;right:20px;bottom:20px;background:rgba(0,0,0,0.8);backdrop-filter:blur(15px);border-radius:20px;padding:20px;overflow-y:auto;display:none;z-index:999;}
 #backBtn{position:absolute;top:10px;left:20px;background:#ff0044;padding:8px 12px;border:none;border-radius:10px;font-weight:700;cursor:pointer;transition:0.3s;}
 #backBtn:hover{transform:scale(1.05);background:#ff3366;}
 #notif{position:fixed;top:20px;right:-400px;background:linear-gradient(45deg,#4f46e5,#0ff);padding:15px 25px;border-radius:12px;box-shadow:0 0 20px #0ff;color:white;font-weight:600;transition:0.5s;z-index:9999;}
@@ -31,22 +32,22 @@ canvas#bgCanvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;}
 
 <!-- Sidebar -->
 <div class="sidebar">
-<div style="font-size:28px;margin-bottom:20px;">🚀</div>
-<button class="icon-btn" onclick="openSection('home')"><i class="fa fa-home"></i></button>
-<button class="icon-btn" onclick="openSection('plans')"><i class="fa fa-gem"></i></button>
-<button class="icon-btn" onclick="openSection('wallet')"><i class="fa fa-wallet"></i></button>
-<button class="icon-btn" onclick="openSection('deposit')"><i class="fa fa-money-bill"></i></button>
-<button class="icon-btn" onclick="openSection('withdraw')"><i class="fa fa-hand-holding-dollar"></i></button>
-<button class="icon-btn" onclick="openSection('history')"><i class="fa fa-clock"></i></button>
-<button class="icon-btn" onclick="openSection('support')"><i class="fa fa-headset"></i></button>
-<button class="icon-btn" onclick="openSection('company')"><i class="fa fa-building"></i></button>
-<button class="icon-btn" onclick="openSection('invite')"><i class="fa fa-gift"></i></button>
-<button class="icon-btn" onclick="openSection('share')"><i class="fa fa-share-alt"></i></button>
-<button class="icon-btn" onclick="refreshBalance()"><i class="fa fa-sync"></i></button>
+<div style="font-size:28px;margin-bottom:10px;">🚀</div>
+<div class="icon-btn" onclick="openSection('home')"><i class="fa fa-home"></i><span class="icon-name">Dashboard</span></div>
+<div class="icon-btn" onclick="openSection('plans')"><i class="fa fa-gem"></i><span class="icon-name">Investment Plans</span></div>
+<div class="icon-btn" onclick="openSection('wallet')"><i class="fa fa-wallet"></i><span class="icon-name">My Wallet</span></div>
+<div class="icon-btn" onclick="openSection('deposit')"><i class="fa fa-money-bill"></i><span class="icon-name">Add Funds</span></div>
+<div class="icon-btn" onclick="openSection('withdraw')"><i class="fa fa-hand-holding-dollar"></i><span class="icon-name">Cash Out</span></div>
+<div class="icon-btn" onclick="openSection('history')"><i class="fa fa-clock"></i><span class="icon-name">Activity Log</span></div>
+<div class="icon-btn" onclick="openSection('support')"><i class="fa fa-headset"></i><span class="icon-name">Help Center</span></div>
+<div class="icon-btn" onclick="openSection('company')"><i class="fa fa-building"></i><span class="icon-name">About Us</span></div>
+<div class="icon-btn" onclick="openSection('invite')"><i class="fa fa-gift"></i><span class="icon-name">Referral Bonus</span></div>
+<div class="icon-btn" onclick="openSection('share')"><i class="fa fa-share-alt"></i><span class="icon-name">Share Link</span></div>
+<div class="icon-btn" onclick="refreshBalance()"><i class="fa fa-sync"></i><span class="icon-name">Refresh Balance</span></div>
 </div>
 
 <!-- Auth Box -->
-<div id="authBox" class="card" style="margin-left:100px;margin-top:20px;width:300px;">
+<div id="authBox" class="card" style="margin-left:120px;margin-top:20px;width:300px;">
 <h2 class="text-2xl font-bold mb-4 text-center">Login / Sign Up</h2>
 <input id="authName" placeholder="Full Name" />
 <input id="authEmail" placeholder="Email" />
@@ -55,7 +56,7 @@ canvas#bgCanvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;}
 <button onclick="loginUser()" class="btn w-full mb-2 bg-green-600 hover:bg-green-700"><i class="fa fa-sign-in-alt"></i> Login</button>
 </div>
 
-<div id="welcomeBox" style="display:none;margin-left:100px;" class="card mb-4 p-4 text-center"></div>
+<div id="welcomeBox" style="display:none;margin-left:120px;" class="card mb-4 p-4 text-center"></div>
 
 <!-- Content Section -->
 <div id="contentSection">
@@ -107,7 +108,12 @@ let plans=[
 {name:'Premium',amount:1000,daily:180,days:30},
 {name:'Gold',amount:2500,daily:450,days:28},
 {name:'Platinum',amount:5000,daily:950,days:32},
-{name:'Diamond',amount:7000,daily:1350,days:27}
+{name:'Diamond',amount:7000,daily:1350,days:27},
+{name:'Elite X',amount:10000,daily:2200,days:35,coming:true},
+{name:'Mega Booster',amount:15000,daily:3500,days:40,coming:true},
+{name:'Ultra Pro',amount:20000,daily:4800,days:45,coming:true},
+{name:'Crypto Miner',amount:30000,daily:6500,days:50,coming:true},
+{name:'Titanium Plan',amount:40000,daily:8500,days:55,coming:true}
 ];
 
 // Open Section
@@ -115,7 +121,11 @@ function openSection(type){
   const sec=document.getElementById('contentSection');const content=document.getElementById('sectionContent');sec.style.display='block';content.innerHTML='';
   switch(type){
     case 'home':content.innerHTML='<h2>Dashboard Home</h2><p>Quick overview of your balance, plans, and profits.</p>';break;
-    case 'plans':content.innerHTML='<h2>Plans</h2>'+plans.map(p=>`<div class="plan-card"><b>${p.name}</b> - ${p.amount} PKR - Daily Profit: ${p.daily} PKR - <span class="countdown">${p.days} Days</span><br><button class="btn mt-2" onclick="buyPlan(${p.amount},'${p.name}',${p.daily},${p.days})">Buy Now</button></div>`).join('');break;
+    case 'plans':
+      content.innerHTML='<h2>Plans</h2>'+plans.map(p=>{
+        if(p.coming){return `<div class="plan-card"><b>${p.name}</b> - ${p.amount} PKR - Daily: ${p.daily} PKR - <span class="countdown">${p.days} Days</span><br><button class="btn mt-2" disabled>Coming Soon</button></div>`;}
+        return `<div class="plan-card"><b>${p.name}</b> - ${p.amount} PKR - Daily: ${p.daily} PKR - <span class="countdown">${p.days} Days</span><br><button class="btn mt-2" onclick="buyPlan(${p.amount},'${p.name}',${p.daily},${p.days})">Buy Now</button></div>`;
+      }).join('');break;
     case 'wallet':content.innerHTML=`<h2>Wallet</h2><p>Balance: ${currentUser.balance} PKR</p><p>Total Profit: ${currentUser.profit} PKR</p>`;break;
     case 'deposit':content.innerHTML=`<h2>Deposit</h2><p>JazzCash: 03705519562 <button class='btn' onclick='copyText("03705519562")'>Copy</button></p><p>EasyPaisa: 03379827882 <button class='btn' onclick='copyText("03379827882")'>Copy</button></p><input type='file'><input type='text' placeholder='Transaction ID'><button class='btn mt-2'>Submit</button>`;break;
     case 'withdraw':content.innerHTML=`<h2>Withdraw</h2><input type='number' placeholder='Amount'><select><option>JazzCash</option><option>EasyPaisa</option><option>Bank</option></select><input type='text' placeholder='Account Number'><button class='btn mt-2'>Withdraw</button>`;break;
