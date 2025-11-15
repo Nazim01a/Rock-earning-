@@ -9,22 +9,21 @@
 <style>
 body{font-family:'Segoe UI',sans-serif;color:white;margin:0;overflow-x:hidden;height:100vh;background:#0f0f20;}
 canvas#bgCanvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;}
-
-/* Sidebar */
 .sidebar{position:fixed;top:0;left:0;width:120px;height:100vh;background:rgba(0,0,0,0.3);display:flex;flex-direction:column;align-items:center;padding-top:20px;gap:15px;z-index:10;opacity:0;transition:1s;}
 .sidebar.active{opacity:1;}
 .icon-btn{display:flex;flex-direction:column;align-items:center;padding:12px;border-radius:15px;cursor:pointer;transition:0.3s;background:linear-gradient(45deg,#00f,#0ff);box-shadow:0 0 10px #0ff,0 0 20px #00f;}
 .icon-btn:hover{transform:scale(1.1);box-shadow:0 0 20px #0ff,0 0 40px #00f;}
 .icon-name{margin-top:6px;font-size:12px;color:#0ff;text-shadow:0 0 5px #0ff;}
-
-/* Cards / Buttons */
 .card{background:rgba(255,255,255,0.05);border-radius:20px;padding:20px;backdrop-filter:blur(15px);box-shadow:0 0 30px #0ff6;transition:0.3s;}
 .btn{background:linear-gradient(45deg,#00f,#0ff);padding:12px 18px;border-radius:12px;font-weight:700;transition:0.3s;box-shadow:0 0 10px #0ff,0 0 20px #00f;cursor:pointer;}
 .btn:hover{transform:scale(1.08);box-shadow:0 0 20px #0ff,0 0 40px #0ff;}
 .plan-card{border:1px solid #0ff;padding:12px;margin-bottom:12px;border-radius:12px;transition:0.3s;}
 .plan-card:hover{box-shadow:0 0 25px #0ff,0 0 50px #0ff;transform:scale(1.04);}
-
-/* Content Section */
+@keyframes neonGlow {from { text-shadow:0 0 5px #0ff,0 0 10px #0ff,0 0 20px #0ff,0 0 30px #00f,0 0 40px #0ff; } to { text-shadow:0 0 10px #0ff,0 0 20px #0ff,0 0 30px #0ff,0 0 40px #00f,0 0 50px #0ff; }}
+.stat-card {background: rgba(0,255,255,0.1); padding: 18px 25px; border-radius: 15px; box-shadow: 0 0 10px #0ff, 0 0 20px #0ff; transition: 0.4s; min-width:140px; cursor:default;}
+.stat-card:hover {transform: scale(1.05); box-shadow: 0 0 25px #0ff, 0 0 50px #00f;}
+.stat-label {font-size:12px;color:#0ff;letter-spacing:1px;margin-bottom:5px;}
+.stat-value {font-size:18px;font-weight:700;color:white;}
 #contentSection{position:fixed;top:20px;left:140px;right:20px;bottom:20px;background:rgba(0,0,0,0.8);backdrop-filter:blur(15px);border-radius:20px;padding:20px;overflow-y:auto;display:none;z-index:999;}
 #backBtn{position:absolute;top:10px;left:20px;background:#ff0044;padding:8px 12px;border:none;border-radius:10px;font-weight:700;cursor:pointer;transition:0.3s;}
 #backBtn:hover{transform:scale(1.05);background:#ff3366;}
@@ -75,7 +74,7 @@ input:focus, select:focus{outline:none;box-shadow:0 0 12px #0ff;}
 <button onclick="logoutUser()" class="btn bg-red-600" style="position:fixed;bottom:20px;left:50%;transform:translateX(-50%);width:200px;">Logout</button>
 
 <script>
-// BG Animation White-Blue
+// BG Animation Particles
 const canvas=document.getElementById('bgCanvas');
 const ctx=canvas.getContext('2d');
 canvas.width=window.innerWidth;canvas.height=window.innerHeight;
@@ -90,95 +89,54 @@ function showNotif(msg){const n=document.getElementById('notif');n.innerText=msg
 // Users + Auth
 let users=JSON.parse(localStorage.getItem('reUsers'))||[];
 let currentUser=JSON.parse(localStorage.getItem('reCurrent'))||null;
-
-// ✅ Fix: page load par check karo agar currentUser exist karta hai to dashboard open karo
-window.addEventListener('load', () => {
-  if (currentUser) {
-    openDashboard();
-    document.getElementById('sidebar').classList.add('active');
-  }
-});
-
+window.addEventListener('load', () => { if (currentUser) { openDashboard(); document.getElementById('sidebar').classList.add('active'); } });
 function validateEmail(e){return/^\S+@\S+\.\S+$/.test(e);}
 function signupUser(){let n=document.getElementById('authName').value.trim();let e=document.getElementById('authEmail').value.trim();let p=document.getElementById('authPass').value.trim();if(!n||!e||!p)return showNotif('Fill all fields');if(!validateEmail(e))return showNotif('Invalid email');if(users.find(u=>u.email===e))return showNotif('Email already registered');let u={name:n,email:e,pass:p,plans:[],referrals:[],balance:0,profit:0};users.push(u);localStorage.setItem('reUsers',JSON.stringify(users));currentUser=u;localStorage.setItem('reCurrent',JSON.stringify(u));openDashboard();}
 function loginUser(){let e=document.getElementById('authEmail').value.trim();let p=document.getElementById('authPass').value.trim();let u=users.find(x=>x.email===e&&x.pass===p);if(!u)return showNotif('Invalid credentials');currentUser=u;localStorage.setItem('reCurrent',JSON.stringify(u));openDashboard();}
-function openDashboard(){document.getElementById('authBox').style.display='none';document.getElementById('sidebar').classList.add('active');document.getElementById('welcomeBox').style.display='block';document.getElementById('welcomeBox').innerHTML=`<h2>Welcome, ${currentUser.name} 💎</h2><p>Balance: ${currentUser.balance} PKR</p><p>Total Profit: ${currentUser.profit} PKR</p>`;}
+function openDashboard(){document.getElementById('authBox').style.display='none';document.getElementById('sidebar').classList.add('active');document.getElementById('welcomeBox').style.display='block';document.getElementById('welcomeBox').innerHTML=`<div style="text-align:center;"><h2 style="font-size:28px;font-weight:800;color:#0ff;text-shadow:0 0 5px #0ff,0 0 10px #0ff,0 0 20px #0ff,0 0 30px #00f,0 0 40px #0ff; animation: neonGlow 1.5s ease-in-out infinite alternate;">Welcome, <span style="color:#fff;text-shadow:0 0 5px #fff;">${currentUser.name}</span> 💎</h2><div style="display:flex;justify-content:center;gap:20px;margin-top:20px;flex-wrap:wrap;"><div class="stat-card"><p class="stat-label">Balance</p><p class="stat-value">${currentUser.balance} PKR</p></div><div class="stat-card"><p class="stat-label">Total Profit</p><p class="stat-value">${currentUser.profit} PKR</p></div></div></div>`;}
 function logoutUser(){currentUser=null;localStorage.removeItem('reCurrent');location.reload();}
 function refreshBalance(){openDashboard();showNotif('Balance refreshed!');}
 
+// Copy Text
+function copyText(txt){navigator.clipboard.writeText(txt);showNotif('Copied!');}
+
 // Plans
-let plans=[
-{name:'Basic',amount:200,daily:30,days:22},
-{name:'Pro',amount:500,daily:80,days:25},
-{name:'Premium',amount:1000,daily:180,days:30},
-{name:'Gold',amount:2500,daily:450,days:28},
-{name:'Platinum',amount:5000,daily:950,days:32},
-{name:'Diamond',amount:7000,daily:1350,days:27},
-{name:'Elite X',amount:10000,daily:2200,days:35,coming:true},
-{name:'Mega Booster',amount:15000,daily:3500,days:40,coming:true},
-{name:'Ultra Pro',amount:20000,daily:4800,days:45,coming:true},
-{name:'Crypto Miner',amount:30000,daily:6500,days:50,coming:true},
-{name:'Titanium Plan',amount:40000,daily:8500,days:55,coming:true}
-];
+let plans=[{name:'Basic',amount:200,daily:30,days:22},{name:'Pro',amount:500,daily:80,days:25},{name:'Premium',amount:1000,daily:180,days:30},{name:'Gold',amount:2500,daily:450,days:28},{name:'Platinum',amount:5000,daily:950,days:32},{name:'Diamond',amount:7000,daily:1350,days:27},{name:'Elite X',amount:10000,daily:2200,days:35,coming:true}];
 
 // Sections
 function openSection(type){
-  const sec=document.getElementById('contentSection');const content=document.getElementById('sectionContent');sec.style.display='block';content.innerHTML='';
-  switch(type){
-    case 'home':content.innerHTML='<h2>Dashboard Home</h2><p>Quick overview of your balance, plans, and profits.</p>';break;
-    case 'plans':
-      content.innerHTML='<h2>Plans</h2>'+plans.map(p=>{
-        if(p.coming){return `<div class="plan-card"><b>${p.name}</b> - ${p.amount} PKR - Daily: ${p.daily} PKR - <span class="countdown">${p.days} Days</span><br><button class="btn mt-2" disabled>Coming Soon</button></div>`;}
-        return `<div class="plan-card"><b>${p.name}</b> - ${p.amount} PKR - Daily: ${p.daily} PKR - <span class="countdown">${p.days} Days</span><br><button class="btn mt-2" onclick="openDeposit(${p.amount},'${p.name}',${p.daily},${p.days})">Buy Now</button></div>`;
-      }).join('');break;
-    case 'wallet':content.innerHTML=`<h2>Wallet</h2><p>Balance: ${currentUser.balance} PKR</p><p>Total Profit: ${currentUser.profit} PKR</p>`;break;
-    case 'deposit':openDeposit();break;
-    case 'withdraw':content.innerHTML=`<h2>Withdraw</h2><input type='number' placeholder='Amount'><select><option>JazzCash</option><option>EasyPaisa</option><option>Bank</option></select><input type='text' placeholder='Account Number'><button class='btn mt-2'>Withdraw</button>`;break;
-    case 'history':content.innerHTML=`<h2>Activity History</h2><p>• Deposit: 500 PKR</p><p>• Withdraw: 300 PKR</p><p>• Plan Bought: Basic Plan</p>`;break;
-    case 'support':content.innerHTML=`<h2>Support</h2><p>Contact us at support@rockearnpro.com</p>`;break;
-    case 'company':content.innerHTML=`<h2>Company</h2><p>Since: 2018</p><p>Industry: Crypto & FinTech</p><p>Partner: Binance</p><p>Address: 1234 Crypto Avenue, SF, USA</p>`;break;
-    case 'invite':content.innerHTML=`<h2>Invite Bonus</h2><p>Share your referral link and earn bonuses!</p>`;break;
-    case 'share':content.innerHTML=`<h2>Share Link</h2><input type='text' value='https://rockearnpro.com?ref=${currentUser.email}' readonly><button class='btn mt-2' onclick='copyText("https://rockearnpro.com?ref=${currentUser.email}")'>Copy Link</button>`;break;
-    default:content.innerHTML=`<h2>${type}</h2><p>Coming Soon...</p>`;
-  }
+const sec=document.getElementById('contentSection');const content=document.getElementById('sectionContent');sec.style.display='block';content.innerHTML='';
+switch(type){
+case 'home':content.innerHTML='<h2>Dashboard Home</h2><p>Quick overview of your balance, plans, and profits.</p>';break;
+case 'plans':content.innerHTML='<h2>Plans</h2>'+plans.map(p=>{if(p.coming){return `<div class="plan-card"><b>${p.name}</b> - ${p.amount} PKR - Daily: ${p.daily} PKR - <span class="countdown">${p.days} Days</span><br><button class="btn mt-2" disabled>Coming Soon</button></div>`;}return `<div class="plan-card"><b>${p.name}</b> - ${p.amount} PKR - Daily: ${p.daily} PKR - <span class="countdown">${p.days} Days</span><br><button class="btn mt-2" onclick="openDeposit(${p.amount},'${p.name}',${p.daily},${p.days})">Buy Now</button></div>`;}).join('');break;
+case 'wallet':content.innerHTML=`<h2>Wallet</h2><p>Balance: ${currentUser.balance} PKR</p><p>Total Profit: ${currentUser.profit} PKR</p>`;break;
+case 'deposit':openDeposit();break;
+case 'withdraw':content.innerHTML=`<h2>Withdraw</h2><input type='number' placeholder='Amount'><select><option>JazzCash</option><option>EasyPaisa</option><option>Bank</option></select><input type='text' placeholder='Account Number'><button class='btn mt-2'>Withdraw</button>`;break;
+case 'history':content.innerHTML=`<h2>Activity History</h2><p>• Deposit: 500 PKR</p><p>• Withdraw: 300 PKR</p><p>• Plan Bought: Basic Plan</p>`;break;
+case 'support':content.innerHTML=`<h2>Support</h2><p>Contact us at support@rockearnpro.com</p>`;break;
+case 'company':content.innerHTML=`<h2>Company</h2><p>Since: 2018</p><p>Industry: Crypto & FinTech</p>`;break;
+case 'invite':content.innerHTML=`<h2>Invite Bonus</h2><p>Share your referral link and earn bonuses!</p>`;break;
+case 'share':content.innerHTML=`<h2>Share Link</h2><input type='text' value='https://rockearnpro.com?ref=${currentUser.email}' readonly><button class='btn mt-2' onclick='copyText("https://rockearnpro.com?ref=${currentUser.email}")'>Copy Link</button>`;break;
+default:content.innerHTML=`<h2>${type}</h2><p>Coming Soon...</p>`;}
 }
 function closeSection(){document.getElementById('contentSection').style.display='none';}
 
-// Deposit Auto-fill
+// Deposit
 function openDeposit(amount=0,name='',daily=0,days=0){
-  const sec=document.getElementById('contentSection');const content=document.getElementById('sectionContent');sec.style.display='block';
-  content.innerHTML=`<h2>Deposit for ${name}</h2>
-  <p>Amount: <b>${amount} PKR</b></p>
-  <p>JazzCash: 03705519562 <button class='btn' onclick='copyText("03705519562")'>Copy</button></p>
-  <p>EasyPaisa: 03379827882 <button class='btn' onclick='copyText("03379827882")'>Copy</button></p>
-  <input type='file' id='proofFile'><input type='text' id='txnId' placeholder='Transaction ID'>
-  <button class='btn mt-2' onclick='confirmDeposit(${amount},"${name}",${daily},${days})'>Submit Deposit</button>`;
-}
+const sec=document.getElementById('contentSection');const content=document.getElementById('sectionContent');sec.style.display='block';
+content.innerHTML=`<h2>Deposit for ${name}</h2>
+<p>Amount: <b>${amount} PKR</b></p>
+<p>JazzCash: 03705519562 <button class='btn' onclick='copyText("03705519562")'>Copy</button></p>
+<p>EasyPaisa: 03379827882 <button class='btn' onclick='copyText("03379827882")'>Copy</button></p>
+<input type='file' id='proofFile'><input type='text' id='txnId' placeholder='Transaction ID'>
+<button class='btn mt-2' onclick='confirmDeposit(${amount},"${name}",${daily},${days})'>Submit Deposit</button>`;}
 
-// Confirm Deposit → Plan activate
 function confirmDeposit(amount,name,daily,days){
-  let file=document.getElementById('proofFile').files[0];let txn=document.getElementById('txnId').value.trim();
-  if(!file || !txn){showNotif('Please upload proof & enter transaction ID'); return;}
-  currentUser.plans.push({name:name,amount:amount,daily:daily,days:days,ts:Date.now(),profitAdded:false});
-  currentUser.balance+=amount;localStorage.setItem('reCurrent',JSON.stringify(currentUser));
-  showNotif(`${name} plan activated! Profit will add every 24h`);
-  openSection('wallet');
-}
-
-// Daily Profit Auto Add
-setInterval(()=>{
-  if(currentUser){
-    let now=Date.now();
-    currentUser.plans.forEach(p=>{
-      if(!p.profitAdded && now-p.ts>=24*60*60*1000){currentUser.balance+=p.daily;currentUser.profit+=p.daily;p.profitAdded=true;showNotif(`Daily profit added for ${p.name} plan: ${p.daily} PKR`);}
-      p.days--; if(p.days<0)p.days=0;
-    });
-    localStorage.setItem('reCurrent',JSON.stringify(currentUser));
-    openDashboard();
-  }
-},10000);
-
-function copyText(val){navigator.clipboard.writeText(val);showNotif('Copied: '+val);}
+let file=document.getElementById('proofFile').files[0];let txn=document.getElementById('txnId').value.trim();
+if(!file||!txn){showNotif('Please upload proof & enter transaction ID');return;}
+currentUser.balance+=amount;currentUser.profit+=daily*days;localStorage.setItem('reCurrent',JSON.stringify(currentUser));
+users=users.map(u=>u.email===currentUser.email?currentUser:u);localStorage.setItem('reUsers',JSON.stringify(users));
+showNotif(`Deposit successful! ${amount} PKR added.`);openDashboard();closeSection();}
 </script>
 </body>
 </html>
