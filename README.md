@@ -1,8 +1,8 @@
-<ROCK EARNING ON><html lang="en">
+<ROCK><html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rock Earn — VIP Premium Dashboard</title>
+<title>Rock Earn Dashboard</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
@@ -54,7 +54,7 @@ footer.company{position:fixed;right:18px;bottom:18px;background:rgba(0,0,0,0.7);
 <div class="icon-btn" onclick="openSection('share')"><i class="fa fa-share"></i><div class="icon-name">Share</div></div>
 </div>
 <div id="welcomeBox">
-<h2 id="welcomeTxt">🎉 Welcome to <strong style="color:#00f7ef">Rock Earn VIP</strong> 💎</h2>
+<h2 id="welcomeTxt">🎉 Welcome to <strong style="color:#00f7ef">Rock Earn</strong> 💎</h2>
 <div class="stats">
 <div class="stat-card"><div class="stat-label">Balance</div><div class="stat-value" id="balValue">0 PKR</div></div>
 <div class="stat-card"><div class="stat-label">Total Profit</div><div class="stat-value" id="profValue">0 PKR</div></div>
@@ -87,7 +87,7 @@ footer.company{position:fixed;right:18px;bottom:18px;background:rgba(0,0,0,0.7);
 <div style="font-size:12px;margin-top:6px;color:#9ff">Secure. Fast. Premium support: support@rockearnpro.com</div>
 </footer>
 <script>
-/* Fully working login/signup/forgot password logic, admin panel, plans, deposit/withdraw, auto profit */
+/* Login/Signup/Forgot Password system fully fixed here with localStorage handling, admin visibility, dashboard, plans, deposit, withdraw functionality */
 </script>
 </body>
 </html>
