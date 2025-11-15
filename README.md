@@ -16,22 +16,16 @@ canvas#bgCanvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;}
 .icon-btn:hover{transform:scale(1.1);box-shadow:0 0 15px #0ff,0 0 25px #0ff;}
 .icon-name{margin-top:6px;font-size:12px;color:#ccc;text-shadow:0 0 3px #000;}
 
-/* Right Panel */
-.right-panel{position:fixed;top:20px;right:20px;display:flex;flex-direction:column;gap:12px;z-index:10;display:none;}
-.stat-card{background: rgba(0,255,255,0.05); padding: 18px 25px; border-radius: 15px; box-shadow: 0 0 5px #0ff,0 0 10px #0ff; transition: 0.4s; cursor:default;}
-.stat-card:hover{transform: scale(1.05); box-shadow:0 0 15px #0ff,0 0 30px #00f;}
+/* Welcome Box + Stats */
+#welcomeBox{position:fixed;top:20px;left:180px;right:20px;padding:25px;border-radius:20px;background:rgba(0,0,0,0.8);backdrop-filter:blur(12px);text-align:center;animation:fadeIn 2s;display:none;}
+#welcomeBox h2{color:white;font-size:28px;font-weight:800;animation:glowText 2.5s infinite alternate;}
+#welcomeBox .stats{display:flex;justify-content:center;gap:40px;margin-top:15px;}
+.stat-card{background: rgba(0,255,255,0.05); padding: 18px 25px; border-radius: 15px; box-shadow: 0 0 5px #0ff,0 0 10px #0ff; transition: 0.4s;}
 .stat-label{font-size:12px;color:#0ff;letter-spacing:1px;margin-bottom:5px;}
 .stat-value{font-size:18px;font-weight:700;color:white;}
-.refresh-btn{background:#111;color:#0ff;padding:10px 16px;border-radius:12px;font-weight:700;cursor:pointer;box-shadow:0 0 5px #0ff,0 0 10px #0ff;transition:0.3s;}
-.refresh-btn:hover{transform:scale(1.05);box-shadow:0 0 20px #0ff,0 0 35px #0ff;}
-
-/* Welcome Box */
-#welcomeBox{margin-left:160px;margin-top:20px;padding:25px;border-radius:20px;background:rgba(0,0,0,0.8);backdrop-filter:blur(12px);text-align:center;animation:fadeIn 2s;}
-@keyframes glowText{0%{text-shadow:0 0 5px #000,0 0 10px #0ff;}50%{text-shadow:0 0 12px #000,0 0 25px #0ff;}100%{text-shadow:0 0 5px #000,0 0 10px #0ff;}}
-#welcomeBox h2{color:white;font-size:28px;font-weight:800;animation:glowText 2.5s infinite alternate;}
 
 /* Content Section */
-#contentSection{position:fixed;top:20px;left:180px;right:180px;bottom:20px;background:rgba(0,0,0,0.85);backdrop-filter:blur(15px);border-radius:20px;padding:20px;overflow-y:auto;display:none;z-index:999;}
+#contentSection{position:fixed;top:160px;left:180px;right:20px;bottom:20px;background:rgba(0,0,0,0.85);backdrop-filter:blur(15px);border-radius:20px;padding:20px;overflow-y:auto;display:none;z-index:999;}
 #backBtn{position:absolute;top:10px;left:20px;background:#ff0044;padding:8px 12px;border:none;border-radius:10px;font-weight:700;cursor:pointer;transition:0.3s;}
 #backBtn:hover{transform:scale(1.05);background:#ff3366;}
 #notif{position:fixed;top:20px;right:-400px;background:linear-gradient(45deg,#0ff,#0ffcc0);padding:15px 25px;border-radius:12px;box-shadow:0 0 20px #0ff;color:white;font-weight:600;transition:0.5s;z-index:9999;}
@@ -44,6 +38,9 @@ input:focus, select:focus{outline:none;box-shadow:0 0 12px #0ff;}
 .btn:hover{transform:scale(1.08);box-shadow:0 0 20px #0ff,0 0 40px #0ff;}
 .logout-btn{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#ff0044;color:white;padding:12px 18px;border-radius:12px;font-weight:700;cursor:pointer;box-shadow:0 0 10px #ff3366;transition:0.3s;display:none;}
 .logout-btn:hover{transform:scale(1.05);box-shadow:0 0 20px #ff3366,0 0 30px #ff6688;}
+
+/* Animations */
+@keyframes glowText{0%{text-shadow:0 0 5px #000,0 0 10px #0ff;}50%{text-shadow:0 0 12px #000,0 0 25px #0ff;}100%{text-shadow:0 0 5px #000,0 0 10px #0ff;}}
 </style>
 </head>
 <body>
@@ -53,9 +50,7 @@ input:focus, select:focus{outline:none;box-shadow:0 0 12px #0ff;}
 <!-- Sidebar -->
 <div class="sidebar" id="sidebar">
 <div style="font-size:28px;margin-bottom:10px;">🚀</div>
-<div class="icon-btn" onclick="openSection('home')"><i class="fa fa-home"></i><span class="icon-name">Dashboard</span></div>
 <div class="icon-btn" onclick="openSection('plans')"><i class="fa fa-gem"></i><span class="icon-name">Plans</span></div>
-<div class="icon-btn" onclick="openSection('wallet')"><i class="fa fa-wallet"></i><span class="icon-name">Wallet</span></div>
 <div class="icon-btn" onclick="openSection('deposit')"><i class="fa fa-money-bill"></i><span class="icon-name">Deposit</span></div>
 <div class="icon-btn" onclick="openSection('withdraw')"><i class="fa fa-hand-holding-dollar"></i><span class="icon-name">Withdraw</span></div>
 <div class="icon-btn" onclick="openSection('profit')"><i class="fa fa-coins"></i><span class="icon-name">Profit</span></div>
@@ -65,8 +60,10 @@ input:focus, select:focus{outline:none;box-shadow:0 0 12px #0ff;}
 <div class="icon-btn" onclick="openSection('share')"><i class="fa fa-share"></i><span class="icon-name">Share</span></div>
 </div>
 
-<!-- Right Panel -->
-<div class="right-panel" id="rightPanel">
+<!-- Welcome Box -->
+<div id="welcomeBox">
+<h2>🎉 Welcome to <span style="color:white;font-weight:900;">Rock Earn</span> Premium 💎</h2>
+<div class="stats">
 <div class="stat-card">
 <p class="stat-label">Balance</p>
 <p class="stat-value" id="balValue">0 PKR</p>
@@ -77,24 +74,22 @@ input:focus, select:focus{outline:none;box-shadow:0 0 12px #0ff;}
 </div>
 <button class="refresh-btn" onclick="refreshBalance()">Refresh</button>
 </div>
+</div>
+
+<!-- Content Section -->
+<div id="contentSection">
+<button id="backBtn" onclick="closeSection()">← Back</button>
+<div id="sectionContent"></div>
+</div>
 
 <!-- Auth Box -->
-<div id="authBox" class="card" style="margin-left:160px;margin-top:20px;width:320px;">
+<div id="authBox" class="card" style="margin-left:180px;margin-top:20px;width:320px;">
 <h2 class="text-2xl font-bold mb-4 text-center">Login / Sign Up</h2>
 <input id="authName" placeholder="Full Name" />
 <input id="authEmail" placeholder="Email" />
 <input id="authPass" type="password" placeholder="Password" />
 <button onclick="signupUser()" class="btn w-full mb-2"><i class="fa fa-user-plus"></i> Sign Up</button>
 <button onclick="loginUser()" class="btn w-full mb-2 bg-green-600 hover:bg-green-700"><i class="fa fa-sign-in-alt"></i> Login</button>
-</div>
-
-<!-- Welcome Box -->
-<div id="welcomeBox" style="display:none;"></div>
-
-<!-- Content Section -->
-<div id="contentSection">
-<button id="backBtn" onclick="closeSection()">← Back</button>
-<div id="sectionContent"></div>
 </div>
 
 <button class="logout-btn" id="logoutBtn" onclick="logoutUser()">Logout</button>
@@ -118,22 +113,23 @@ function validateEmail(e){return/^\S+@\S+\.\S+$/.test(e);}
 function signupUser(){let n=document.getElementById('authName').value.trim();let e=document.getElementById('authEmail').value.trim();let p=document.getElementById('authPass').value.trim();if(!n||!e||!p)return showNotif('Fill all fields');if(!validateEmail(e))return showNotif('Invalid email');if(users.find(u=>u.email===e))return showNotif('Email already registered');let u={name:n,email:e,pass:p,plans:[],balance:0,profit:0};users.push(u);localStorage.setItem('reUsers',JSON.stringify(users));currentUser=u;localStorage.setItem('reCurrent',JSON.stringify(u));openDashboard();}
 function loginUser(){let e=document.getElementById('authEmail').value.trim();let p=document.getElementById('authPass').value.trim();let u=users.find(x=>x.email===e&&x.pass===p);if(!u)return showNotif('Invalid credentials');currentUser=u;localStorage.setItem('reCurrent',JSON.stringify(u));openDashboard();}
 function logoutUser(){currentUser=null;localStorage.removeItem('reCurrent');location.reload();}
-
 function openDashboard(){
-  document.getElementById('authBox').style.display='none';
-  document.getElementById('sidebar').style.display='flex';
-  document.getElementById('rightPanel').style.display='flex';
-  document.getElementById('logoutBtn').style.display='block';
-  document.getElementById('balValue').innerText=currentUser.balance+' PKR';
-  document.getElementById('profValue').innerText=currentUser.profit+' PKR';
-  document.getElementById('welcomeBox').style.display='block';
-  document.getElementById('welcomeBox').innerHTML=`<h2>🎉 Welcome to <span style="color:white;font-weight:900;">Rock Earn</span> Premium 💎</h2>`;
+document.getElementById('authBox').style.display='none';
+document.getElementById('sidebar').style.display='flex';
+document.getElementById('welcomeBox').style.display='block';
+document.getElementById('logoutBtn').style.display='block';
+document.getElementById('balValue').innerText=currentUser.balance+' PKR';
+document.getElementById('profValue').innerText=currentUser.profit+' PKR';
 }
-
 function refreshBalance(){document.getElementById('balValue').innerText=currentUser.balance+' PKR';document.getElementById('profValue').innerText=currentUser.profit+' PKR';showNotif('Balance refreshed!');}
 
-// Functions to open sections, plans, deposit etc will go here as above, fully working
-
+function openSection(type){
+const sec=document.getElementById('contentSection');
+const content=document.getElementById('sectionContent');
+sec.style.display='block';
+content.innerHTML='<h2>Coming Soon...</h2><p>This section will be available soon.</p>';
+}
+function closeSection(){document.getElementById('contentSection').style.display='none';}
 </script>
 </body>
 </html>
