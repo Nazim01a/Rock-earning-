@@ -1,4 +1,4 @@
-<ROCK>
+<ROCKS>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -20,6 +20,34 @@ body{
     50%{background:linear-gradient(120deg,#111,#1b1b1b);}
     100%{background:linear-gradient(120deg,#1b1b1b,#111);}
 }
+/* Rock Earn flashing title */
+#rockEarnAnim{
+    font-weight:bold;
+    font-size:36px;
+    background: linear-gradient(90deg, #00bfff, #ff00ff, #00ff00);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: textAnim 3s ease infinite;
+}
+@keyframes textAnim{
+    0%{background-position:0% 50%;}
+    50%{background-position:100% 50%;}
+    100%{background-position:0% 50%;}
+}
+
+/* Sidebar hover animation */
+#sidebar button{
+    width:100%;
+    text-align:left;
+    transition: all 0.3s ease;
+}
+#sidebar button:hover{
+    transform: scale(1.05);
+    background: linear-gradient(90deg,#00bfff,#ff00ff);
+}
+
+/* Other styles */
 #authBox{display:flex;flex-direction:column;justify-content:center;align-items:center;height:100vh;animation:fadeIn 1s;}
 input,button{padding:10px;margin:5px;border-radius:8px;border:none;}
 button{background:#00bfff;color:white;cursor:pointer;transition:0.3s;}
@@ -27,7 +55,6 @@ button:hover{background:#009acd;}
 #notif{position:fixed;top:20px;right:20px;background:#00bfff;padding:10px 20px;border-radius:8px;opacity:0;transition:0.3s;}
 #notif.show{opacity:1;}
 #sidebar{display:none;position:fixed;left:0;top:0;width:250px;height:100vh;background:#111;flex-direction:column;padding:10px;gap:10px;animation:fadeInLeft 1s;}
-#sidebar button{width:100%;text-align:left;}
 #welcomeBox{display:none;position:fixed;top:10px;left:260px;animation:fadeInDown 1s;color:#00bfff;}
 #contentSection{margin-left:260px;margin-top:80px;padding:20px;animation:fadeInUp 1s;}
 #profileModal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);justify-content:center;align-items:center;animation:fadeIn 0.5s;}
