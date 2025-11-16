@@ -99,7 +99,7 @@ if(!users.find(u=>u.email==='admin@rockearn.com')){
 }
 if(currentUser){openDashboard();}
 
-// Plans
+// --- Plans ---
 const plans=[
 {name:'Basic',amount:200,daily:30,days:20},{name:'Starter',amount:500,daily:75,days:20},{name:'Pro',amount:1000,daily:180,days:20},{name:'Advanced',amount:1500,daily:250,days:25},{name:'Silver',amount:2000,daily:350,days:30},{name:'Gold',amount:3000,daily:550,days:30},{name:'Platinum',amount:5000,daily:950,days:40},{name:'Diamond',amount:7000,daily:1350,days:50},{name:'VIP',amount:10000,daily:2000,days:60},{name:'Elite',amount:12000,daily:2400,days:60},{name:'Master',amount:15000,daily:3000,days:70},{name:'Ultimate',amount:18000,daily:3500,days:75},{name:'Legend',amount:20000,daily:4000,days:80},{name:'Supreme',amount:25000,daily:5000,days:90},{name:'Titan',amount:30000,daily:6000,days:100},{name:'Diamond Plus',amount:35000,daily:7000,days:100,coming:true},{name:'Royal',amount:40000,daily:8000,days:120,coming:true},{name:'King',amount:50000,daily:10000,days:150,coming:true},{name:'Legendary',amount:75000,daily:15000,days:180,coming:true},{name:'Ultimate VIP',amount:100000,daily:20000,days:200,coming:true}
 ];
@@ -195,6 +195,7 @@ function openDeposit(amount=0,name='',daily=0,days=0,planIndex=0){
     <button onclick="confirmDeposit(${amount},'${name}',${daily},${days},${planIndex})">Submit Deposit</button>
   </div>`;
 }
+
 function confirmDeposit(amount,name,daily,days,planIndex){
   const txn=document.getElementById('depositTxn').value.trim();
   const proof=document.getElementById('depositProof').files[0];
@@ -217,6 +218,11 @@ function openWithdraw(){
   <select id="withdrawMethod">
     <option value="JazzCash">JazzCash</option>
     <option value="EasyPaisa">EasyPaisa</option>
+    <option value="Bank">Bank</option>
+  </<select id="withdrawMethod">
+    <option value="JazzCash">JazzCash</option>
+    <option value="EasyPaisa">EasyPaisa</option>
+    <option value="Bank">Bank</option>
   </select><br>
   <button onclick="confirmWithdraw()">Submit Withdraw</button>`;
 }
@@ -226,41 +232,39 @@ function confirmWithdraw(){
   const acc=document.getElementById('withdrawAcc').value.trim();
   const amt=parseFloat(document.getElementById('withdrawAmount').value);
   const method=document.getElementById('withdrawMethod').value;
-  if(!name||!acc||!amt||amt>currentUser.balance){showNotif('Fill all fields correctly'); return;}
+  if(!name || !acc || !amt || amt>currentUser.balance){showNotif('Invalid details / insufficient balance'); return;}
   const withdraw={name:name,account:acc,amount:amt,method:method,ts:Date.now()};
   currentUser.withdrawals=currentUser.withdrawals||[]; currentUser.withdrawals.push(withdraw);
   currentUser.balance-=amt;
   users=users.map(u=>u.email===currentUser.email?currentUser:u);
   localStorage.setItem('reUsers',JSON.stringify(users));
   localStorage.setItem('reCurrent',JSON.stringify(currentUser));
-  document.getElementById('balValue').innerText=currentUser.balance+' PKR';
-  showNotif('Withdraw request submitted');
-  openSection('withdraw');
+  showNotif('Withdraw request submitted'); openSection('plans');
 }
 
-// --- Profile Modal ---
+// --- Profile ---
 function openProfile(){
   document.getElementById('profileModal').style.display='flex';
   document.getElementById('profileName').value=currentUser.name;
   document.getElementById('profileEmail').value=currentUser.email;
 }
-
 function closeProfile(){document.getElementById('profileModal').style.display='none';}
-
 function updateProfile(){
   const n=document.getElementById('profileName').value.trim();
   const e=document.getElementById('profileEmail').value.trim().toLowerCase();
   const p=document.getElementById('profilePass').value;
-  if(!n||!e){showNotif('Name & Email required'); return;}
-  if(users.find(u=>u.email===e && u.email!==currentUser.email)){showNotif('Email exists'); return;}
-  currentUser.name=n; currentUser.email=e;
-  if(p) currentUser.pass=p;
+  if(!n || !e){showNotif('Name & Email required'); return;}
+  currentUser.name=n;
+  currentUser.email=e;
+  if(p){currentUser.pass=p;}
   users=users.map(u=>u.email===currentUser.email?currentUser:u);
   localStorage.setItem('reUsers',JSON.stringify(users));
   localStorage.setItem('reCurrent',JSON.stringify(currentUser));
-  showNotif('Profile updated');
-  closeProfile();
+  showNotif('Profile updated'); closeProfile();
 }
+
+// --- Optional: Admin actions can be expanded here for controlling users ---
+
 </script>
 </body>
 </html>
