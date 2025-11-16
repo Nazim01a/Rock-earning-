@@ -1,87 +1,88 @@
-<😆>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Rock Earn Premium Dashboard</title>
 <script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 <style>
-body{margin:0;font-family:'Segoe UI',sans-serif;overflow-x:hidden;color:white;
-background: linear-gradient(120deg,#1b1b1b,#2c2c2c);
-animation:bgAnim 15s ease-in-out infinite alternate;}
-@keyframes bgAnim{
-0%{background: linear-gradient(120deg,#1b1b1b,#2c2c2c);}
-50%{background: linear-gradient(120deg,#1b1b1b,#3c3c4c);}
-100%{background: linear-gradient(120deg,#1b1b1b,#2c2c2c);}
-}
-#appLogo{font-size:3rem;font-weight:bold;text-align:center;margin:20px 0;
-animation:logoAnim 2s infinite alternate;text-shadow:0 0 10px #0ff,0 0 20px #0aa;color:#0ff;}
-@keyframes logoAnim{0%{transform:scale(1);color:#0ff;}50%{transform:scale(1.1);color:#0fa;}100%{transform:scale(1);color:#0ff;}}
-#notif{position:fixed;top:20px;right:20px;background:#0aa;padding:10px 20px;border-radius:8px;display:none;font-weight:bold;z-index:1000;}
-#notif.show{display:block;animation:notifAnim 0.5s ease-in-out;}
-@keyframes notifAnim{0%{opacity:0;transform:translateX(50px);}100%{opacity:1;transform:translateX(0);}}
-#sidebar{display:none;flex-direction:column;background:#111;position:fixed;top:0;left:0;height:100vh;width:60px;align-items:center;padding:10px 0;gap:20px;transition:width 0.3s;}
-#sidebar button{background:none;border:none;color:white;font-size:1.5rem;cursor:pointer;}
-#contentSection{display:none;padding:20px;margin-left:70px;}
-#welcomeBox{display:none;text-align:center;margin-top:20px;}
-#refreshBtn{display:none;position:fixed;top:20px;left:70px;padding:8px 12px;background:#0aa;border:none;border-radius:6px;color:white;cursor:pointer;}
-#backBtn{display:none;position:fixed;top:20px;left:150px;padding:8px 12px;background:#0aa;border:none;border-radius:6px;color:white;cursor:pointer;}
-.plan-card{background:#222;padding:15px;margin:10px;border-radius:10px;box-shadow:0 0 10px #0aa;}
+body{margin:0;font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#1b1b1b,#2b1b17);color:white;overflow-x:hidden;}
+button{cursor:pointer;transition:0.3s;}button:hover{opacity:0.85;}
+.show{opacity:1!important;}
+@keyframes glow{0%{text-shadow:0 0 5px #0ff,0 0 10px #0ff;}50%{text-shadow:0 0 15px #0ff,0 0 25px #0ff;}100%{text-shadow:0 0 5px #0ff,0 0 10px #0ff;}}
+#logo{font-size:3rem;font-weight:bold;color:#0ff;text-align:center;animation:glow 2s infinite alternate;margin-top:20px;}
+#authBox{width:100%;height:100vh;display:flex;justify-content:center;align-items:center;background:linear-gradient(135deg,#0b0b0b,#1b1b1b);}
+.auth-inner{background:#222;padding:40px;border-radius:15px;box-shadow:0 0 20px rgba(0,255,255,0.2);width:320px;}
+.auth-inner input{width:100%;padding:10px;margin:10px 0;border:none;border-radius:8px;background:#333;color:white;}
+.auth-inner button{width:100%;padding:10px;background:#0ff;color:#000;border:none;border-radius:8px;font-weight:bold;margin-top:5px;}
+#notif{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#0ff;color:#000;padding:10px 20px;border-radius:10px;opacity:0;transition:0.5s;z-index:1000;}
+#sidebar{display:none;position:fixed;top:0;left:0;width:60px;height:100vh;background:#111;flex-direction:column;align-items:center;padding:10px;gap:20px;z-index:999;}
+#sidebar i{cursor:pointer;}
+#sidebar i:hover{color:#0ff;}
+#welcomeBox{display:none;position:fixed;top:20px;left:80px;background:#222;padding:20px;border-radius:10px;box-shadow:0 0 20px rgba(0,255,255,255,0.1);}
+#contentSection{margin-left:80px;margin-top:120px;display:none;position:relative;}
+#profileModal{display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.9);justify-content:center;align-items:center;}
+#profileModal div{background:#111;padding:30px;border-radius:15px;width:300px;}
+.plan-card{background:#222;margin:10px;padding:15px;border-radius:10px;box-shadow:0 0 10px rgba(0,255,255,0.2);}
 </style>
 </head>
 <body>
-<div id="appLogo">Rock Earn</div>
-
-<div id="authBox" style="text-align:center;">
-<h2>Login / Sign Up</h2>
-<input id="authName" placeholder="Name" style="display:block;margin:10px auto;padding:8px;border-radius:6px;border:none;width:200px;">
-<input id="authEmail" placeholder="Email" style="display:block;margin:10px auto;padding:8px;border-radius:6px;border:none;width:200px;">
-<input id="authPass" placeholder="Password" type="password" style="display:block;margin:10px auto;padding:8px;border-radius:6px;border:none;width:200px;">
-<button onclick="signupUser()" style="margin:10px;padding:8px 12px;border-radius:6px;background:#0aa;color:white;border:none;">Sign Up</button>
-<button onclick="loginUser()" style="margin:10px;padding:8px 12px;border-radius:6px;background:#0aa;color:white;border:none;">Login</button>
-</div>
 
 <div id="notif"></div>
 
+<div id="logo">Rock Earn</div>
+
+<div id="authBox">
+  <div class="auth-inner">
+    <h2 style="text-align:center;margin-bottom:20px;">Login / Signup</h2>
+    <input type="text" id="authName" placeholder="Full Name">
+    <input type="email" id="authEmail" placeholder="Email">
+    <input type="password" id="authPass" placeholder="Password">
+    <button onclick="signupUser()">Sign Up & Login</button>
+    <button onclick="loginUser()">Login</button>
+  </div>
+</div>
+
 <div id="sidebar">
-<button onclick="openSection('plans')" title="Plans">📈</button>
-<button onclick="openSection('deposit')" title="Deposit">💰</button>
-<button onclick="openSection('withdraw')" title="Withdraw">💸</button>
-<button onclick="openSection('profit')" title="Profit">💹</button>
-<button onclick="openSection('history')" title="History">📜</button>
-<button id="adminBtn" onclick="openSection('admin')" title="Admin" style="display:none;">🛠️</button>
-<button onclick="openProfile()" title="Profile">👤</button>
+  <i class="fa-solid fa-house fa-2xl text-cyan-400" onclick="openSection('home')"></i>
+  <i class="fa-solid fa-money-check-dollar fa-2xl text-cyan-400" onclick="openSection('plans')"></i>
+  <i class="fa-solid fa-circle-plus fa-2xl text-cyan-400" onclick="openSection('deposit')"></i>
+  <i class="fa-solid fa-hand-holding-dollar fa-2xl text-cyan-400" onclick="openSection('withdraw')"></i>
+  <i class="fa-solid fa-chart-line fa-2xl text-cyan-400" onclick="openSection('profit')"></i>
+  <i class="fa-solid fa-clock-rotate-left fa-2xl text-cyan-400" onclick="openSection('history')"></i>
+  <i class="fa-solid fa-user fa-2xl text-cyan-400" onclick="openProfile()"></i>
+  <i class="fa-solid fa-arrow-rotate-left fa-2xl text-cyan-400" id="refreshBtn" onclick="refreshDashboard()" style="display:none;"></i>
+  <i class="fa-solid fa-right-from-bracket fa-2xl text-red-500" onclick="logoutUser()"></i>
+  <i class="fa-solid fa-user-gear fa-2xl text-yellow-400" id="adminBtn" onclick="openSection('admin')" style="display:none;"></i>
+</div>
+
+<div id="welcomeBox">
+  Welcome <span id="userNameTxt"></span>
+  <br>Balance: <span id="balValue">0 PKR</span> | Profit: <span id="profValue">0 PKR</span>
 </div>
 
 <div id="contentSection"></div>
-<div id="welcomeBox">
-<h3>Welcome, <span id="userNameTxt"></span></h3>
-<p>Balance: <span id="balValue">0 PKR</span> | Profit: <span id="profValue">0 PKR</span></p>
-</div>
 
-<button id="refreshBtn" onclick="refreshDashboard()">🔄 Refresh</button>
-<button id="backBtn" onclick="closeSection()">⬅ Back</button>
-
-<div id="profileModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);justify-content:center;align-items:center;flex-direction:column;">
-<h2>Profile</h2>
-<input id="profileName" placeholder="Name" style="margin:5px;padding:8px;border-radius:6px;width:200px;">
-<input id="profileEmail" placeholder="Email" style="margin:5px;padding:8px;border-radius:6px;width:200px;">
-<input id="profilePass" placeholder="New Password" type="password" style="margin:5px;padding:8px;border-radius:6px;width:200px;">
-<button onclick="updateProfile()" style="margin:5px;padding:8px 12px;background:#0aa;color:white;border:none;border-radius:6px;">Update</button>
-<button onclick="closeProfile()" style="margin:5px;padding:8px 12px;background:#aaa;color:white;border:none;border-radius:6px;">Close</button>
+<div id="profileModal">
+  <div>
+    <h3 style="text-align:center;">Edit Profile</h3>
+    <input id="profileName" placeholder="Name"><br>
+    <input id="profileEmail" placeholder="Email"><br>
+    <input id="profilePass" placeholder="Password"><br>
+    <button onclick="updateProfile()">Update</button>
+    <button onclick="closeProfile()">Close</button>
+  </div>
 </div>
 
 <script>
-// ---------------------- Users & Storage ----------------------
+// ---------------------- Users ----------------------
 let users = JSON.parse(localStorage.getItem('reUsers')) || [];
 let currentUser = JSON.parse(localStorage.getItem('reCurrent')) || null;
-
-// Default admin
 if(!users.find(u=>u.email==='admin@rockearn.com')){
     users.push({name:'Administrator',email:'admin@rockearn.com',pass:'admin123',role:'admin',plans:[],deposits:[],withdrawals:[],balance:0,profit:0});
     localStorage.setItem('reUsers',JSON.stringify(users));
 }
-
 // Plans
 const plans = [
 {name:'Basic',amount:200,daily:30,days:20},
@@ -104,7 +105,7 @@ const plans = [
 // ---------------------- Notifications ----------------------
 function showNotif(msg){ const el=document.getElementById('notif'); el.innerText=msg; el.classList.add('show'); setTimeout(()=>el.classList.remove('show'),3000); }
 
-// ---------------------- Auth Functions ----------------------
+// ---------------------- Auth ----------------------
 function signupUser(){
     const n=document.getElementById('authName').value.trim();
     const e=document.getElementById('authEmail').value.trim().toLowerCase();
@@ -116,7 +117,6 @@ function signupUser(){
     currentUser=u; localStorage.setItem('reCurrent',JSON.stringify(currentUser));
     openDashboard(); showNotif('Account created & logged in');
 }
-
 function loginUser(){
     const e=document.getElementById('authEmail').value.trim().toLowerCase();
     const p=document.getElementById('authPass').value;
@@ -125,8 +125,9 @@ function loginUser(){
     currentUser=u; localStorage.setItem('reCurrent',JSON.stringify(currentUser));
     openDashboard(); showNotif('Welcome '+currentUser.name.split(' ')[0]);
 }
-
-function logoutUser(){ currentUser=null; localStorage.removeItem('reCurrent'); location.reload(); }
+function logoutUser(){
+    currentUser=null; localStorage.removeItem('reCurrent'); location.reload();
+}
 
 // ---------------------- Dashboard ----------------------
 function openDashboard(){
@@ -138,10 +139,8 @@ function openDashboard(){
     document.getElementById('balValue').innerText=(currentUser.balance||0)+' PKR';
     document.getElementById('profValue').innerText=(currentUser.profit||0)+' PKR';
     if(currentUser.role==='admin'){document.getElementById('adminBtn').style.display='block';}
-    document.getElementById('backBtn').style.display='none';
     document.getElementById('contentSection').style.display='block';
 }
-
 function refreshDashboard(){
     if(currentUser){
         currentUser=users.find(u=>u.email===currentUser.email);
@@ -152,19 +151,15 @@ function refreshDashboard(){
         closeSection();
     }
 }
-
-// ---------------------- Sections ----------------------
 function openSection(type){
     const content=document.getElementById('contentSection');
-    document.getElementById('backBtn').style.display='inline-block';
     content.innerHTML='';
-
     if(type==='plans'){
         plans.forEach((p,idx)=>{
             content.innerHTML+=`<div class='plan-card'><b>${p.name}</b><br>Amount: ${p.amount} PKR<br>Daily: ${p.daily} PKR<br>Days: ${p.days}<br><button onclick="openDeposit(${p.amount},'${p.name}',${p.daily},${p.days},${idx})">Buy Now</button></div>`;
         });
     } else if(type==='deposit'){
-        content.innerHTML='<h3>Deposit Section</h3>';
+        openDeposit();
     } else if(type==='withdraw'){
         openWithdraw();
     } else if(type==='profit'){
@@ -182,8 +177,7 @@ function openSection(type){
         content.innerHTML=html;
     } else {content.innerHTML='<h3>Coming Soon</h3>';}
 }
-
-function closeSection(){ document.getElementById('contentSection').style.display='block'; document.getElementById('backBtn').style.display='none'; }
+function closeSection(){document.getElementById('contentSection').style.display='block';}
 
 // ---------------------- Deposit ----------------------
 function openDeposit(amount=0,name='',daily=0,days=0,planIndex=0){
@@ -200,7 +194,6 @@ function openDeposit(amount=0,name='',daily=0,days=0,planIndex=0){
     <button onclick="confirmDeposit(${amount},'${name}',${daily},${days},${planIndex})">Submit Deposit</button>
     </div>`;
 }
-
 function confirmDeposit(amount,name,daily,days,planIndex){
     const txn=document.getElementById('depositTxn').value.trim();
     const proof=document.getElementById('depositProof').files[0];
@@ -231,7 +224,6 @@ function openWithdraw(){
     </select><br><br>
     <button onclick="confirmWithdraw()">Submit Withdraw</button>`;
 }
-
 function confirmWithdraw(){
     const name=document.getElementById('withdrawName').value.trim();
     const acc=document.getElementById('withdrawAcc').value.trim();
@@ -275,5 +267,6 @@ function updateProfile(){
 // ---------------------- Init ----------------------
 if(currentUser) openDashboard();
 </script>
+
 </body>
 </html>
