@@ -13,6 +13,8 @@ body{font-family:'Segoe UI',sans-serif;margin:0;padding:0;background:linear-grad
 @keyframes fadeInDown{from{opacity:0;transform:translateY(-50px);}to{opacity:1;transform:translateY(0);}}
 @keyframes fadeInUp{from{opacity:0;transform:translateY(50px);}to{opacity:1;transform:translateY(0);}}
 @keyframes glow{0%{text-shadow:0 0 5px #00bfff,0 0 10px #00bfff,0 0 20px #00bfff;}50%{text-shadow:0 0 10px #00ffff,0 0 20px #00ffff,0 0 30px #00ffff;}100%{text-shadow:0 0 5px #00bfff,0 0 10px #00bfff,0 0 20px #00bfff;}}
+@keyframes bannerAnim{0%{background:linear-gradient(90deg,#00bfff,#00ffff);}50%{background:linear-gradient(90deg,#00ffff,#00bfff);}100%{background:linear-gradient(90deg,#00bfff,#00ffff);}}
+#banner{position:fixed;top:0;left:0;width:100%;height:100px;background:linear-gradient(90deg,#00bfff,#00ffff);display:flex;align-items:center;justify-content:center;animation:bannerAnim 5s infinite alternate;z-index:999;font-size:32px;font-weight:bold;color:#fff;text-shadow:0 0 10px #00ffff;}
 #authBox{display:flex;flex-direction:column;justify-content:center;align-items:center;height:100vh;animation:fadeIn 1s;}
 input,button{padding:10px;margin:5px;border-radius:8px;border:none;}
 button{background:#00bfff;color:white;cursor:pointer;transition:0.3s;}
@@ -28,8 +30,6 @@ button:hover{background:#009acd;transform:scale(1.05);}
 .plan-card{background:#222;margin:10px;padding:15px;border-radius:10px;transition:0.3s;}
 .plan-card:hover{background:#333;transform:scale(1.05);box-shadow:0 0 20px #00bfff;}
 #profileModal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);justify-content:center;align-items:center;animation:fadeIn 0.5s;}
-#banner{position:fixed;top:0;left:0;width:100%;height:100px;background:linear-gradient(90deg,#00bfff,#00ffff);display:flex;align-items:center;justify-content:center;animation:bannerAnim 5s infinite alternate;z-index:999;font-size:32px;font-weight:bold;color:#fff;text-shadow:0 0 10px #00ffff;}
-@keyframes bannerAnim{0%{background:linear-gradient(90deg,#00bfff,#00ffff);}50%{background:linear-gradient(90deg,#00ffff,#00bfff);}100%{background:linear-gradient(90deg,#00bfff,#00ffff);}}
 </style>
 </head>
 <body>
@@ -85,7 +85,7 @@ button:hover{background:#009acd;transform:scale(1.05);}
 </div>
 
 <script>
-// -------------------- Users & Storage --------------------
+// Users & Storage
 let users=JSON.parse(localStorage.getItem('reUsers'))||[];
 let currentUser=JSON.parse(localStorage.getItem('reCurrent'))||null;
 if(!users.find(u=>u.email==='admin@rockearn.com')){
@@ -93,13 +93,13 @@ if(!users.find(u=>u.email==='admin@rockearn.com')){
     localStorage.setItem('reUsers',JSON.stringify(users));
 }
 
-// -------------------- Plans --------------------
+// Plans
 const plans=[{name:'Basic',amount:200,daily:30,days:20},{name:'Starter',amount:500,daily:75,days:20},{name:'Pro',amount:1000,daily:180,days:20},{name:'Advanced',amount:1500,daily:250,days:25},{name:'Silver',amount:2000,daily:350,days:30},{name:'Gold',amount:3000,daily:550,days:30},{name:'Platinum',amount:5000,daily:950,days:40},{name:'Diamond',amount:7000,daily:1350,days:50},{name:'VIP',amount:10000,daily:2000,days:60},{name:'Elite',amount:12000,daily:2400,days:60},{name:'Master',amount:15000,daily:3000,days:70},{name:'Ultimate',amount:18000,daily:3500,days:75},{name:'Legend',amount:20000,daily:4000,days:80},{name:'Supreme',amount:25000,daily:5000,days:90},{name:'Titan',amount:30000,daily:6000,days:100}];
 
-// -------------------- Notifications --------------------
+// Notifications
 function showNotif(msg){const el=document.getElementById('notif');el.innerText=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),3000);}
 
-// -------------------- Auth --------------------
+// Auth Functions
 function signupUser(){
     const n=document.getElementById('authName').value.trim();
     const e=document.getElementById('authEmail').value.trim().toLowerCase();
@@ -122,7 +122,7 @@ function loginUser(){
 function logoutUser(){currentUser=null;localStorage.removeItem('reCurrent');location.reload();}
 function refreshDashboard(){if(currentUser){currentUser=users.find(u=>u.email===currentUser.email);localStorage.setItem('reCurrent',JSON.stringify(currentUser));document.getElementById('balValue').innerText=(currentUser.balance||0)+' PKR';document.getElementById('profValue').innerText=(currentUser.profit||0)+' PKR';showNotif('Dashboard refreshed');}}
 
-// -------------------- Dashboard --------------------
+// Dashboard
 function openDashboard(){
     document.getElementById('authBox').style.display='none';
     document.getElementById('sidebar').style.display='flex';
@@ -135,9 +135,7 @@ function openDashboard(){
     document.getElementById('contentSection').style.display='block';
 }
 
-// -------------------- Sections / Deposit / Withdraw / Profile --------------------
-// (Full working functions from earlier copy, all included)
-
+// Init
 if(currentUser) openDashboard();
 </script>
 </body>
