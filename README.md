@@ -1,4 +1,4 @@
-<ROCK>
+<ROCKS>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -84,59 +84,155 @@ button:hover{background:#ff00ff;color:#fff;}
 </div>
 
 <script>
+// --- Data ---
 let users=JSON.parse(localStorage.getItem('reUsers'))||[];
 let currentUser=JSON.parse(localStorage.getItem('reCurrent'))||null;
 if(!users.find(u=>u.email==='admin@rockearn.com')){
   users.push({name:'John Wilson',email:'admin@rockearn.com',pass:'admin123',role:'admin',plans:[],deposits:[],withdrawals:[],balance:0,profit:0});
   localStorage.setItem('reUsers',JSON.stringify(users));
 }
-const plans=[{name:'Basic',amount:200,daily:30,days:20},{name:'Starter',amount:500,daily:75,days:20},{name:'Pro',amount:1000,daily:180,days:20},{name:'Advanced',amount:1500,daily:250,days:25},{name:'Silver',amount:2000,daily:350,days:30},{name:'Gold',amount:3000,daily:550,days:30},{name:'Platinum',amount:5000,daily:950,days:40},{name:'Diamond',amount:7000,daily:1350,days:50},{name:'VIP',amount:10000,daily:2000,days:60},{name:'Elite',amount:12000,daily:2400,days:60},{name:'Master',amount:15000,daily:3000,days:70},{name:'Ultimate',amount:18000,daily:3500,days:75},{name:'Legend',amount:20000,daily:4000,days:80},{name:'Supreme',amount:25000,daily:5000,days:90},{name:'Titan',amount:30000,daily:6000,days:100},{name:'Diamond Plus',amount:35000,daily:7000,days:100,coming:true},{name:'Royal',amount:40000,daily:8000,days:120,coming:true},{name:'King',amount:50000,daily:10000,days:150,coming:true},{name:'Legendary',amount:75000,daily:15000,days:180,coming:true},{name:'Ultimate VIP',amount:100000,daily:20000,days:200,coming:true}];
+const plans=[
+{name:'Basic',amount:200,daily:30,days:20},{name:'Starter',amount:500,daily:75,days:20},{name:'Pro',amount:1000,daily:180,days:20},{name:'Advanced',amount:1500,daily:250,days:25},{name:'Silver',amount:2000,daily:350,days:30},{name:'Gold',amount:3000,daily:550,days:30},{name:'Platinum',amount:5000,daily:950,days:40},{name:'Diamond',amount:7000,daily:1350,days:50},{name:'VIP',amount:10000,daily:2000,days:60},{name:'Elite',amount:12000,daily:2400,days:60},{name:'Master',amount:15000,daily:3000,days:70},{name:'Ultimate',amount:18000,daily:3500,days:75},{name:'Legend',amount:20000,daily:4000,days:80},{name:'Supreme',amount:25000,daily:5000,days:90},{name:'Titan',amount:30000,daily:6000,days:100},{name:'Diamond Plus',amount:35000,daily:7000,days:100,coming:true},{name:'Royal',amount:40000,daily:8000,days:120,coming:true},{name:'King',amount:50000,daily:10000,days:150,coming:true},{name:'Legendary',amount:75000,daily:15000,days:180,coming:true},{name:'Ultimate VIP',amount:100000,daily:20000,days:200,coming:true}
+];
+// --- Notifications ---
 function showNotif(msg){const el=document.getElementById('notif');el.innerText=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),3000);}
-function signupUser(){const n=document.getElementById('authName').value.trim();const e=document.getElementById('authEmail').value.trim().toLowerCase();const p=document.getElementById('authPass').value;if(!n||!e||!p){showNotif('Fill all fields');return;}if(users.find(u=>u.email===e)){showNotif('Email exists');return;}let u={name:n,email:e,pass:p,role:'user',plans:[],deposits:[],withdrawals:[],balance:0,profit:0};users.push(u);localStorage.setItem('reUsers',JSON.stringify(users));currentUser=u;localStorage.setItem('reCurrent',JSON.stringify(currentUser));openDashboard();showNotif('Account created & logged in');}
-function loginUser(){const e=document.getElementById('authEmail').value.trim().toLowerCase();const p=document.getElementById('authPass').value;const u=users.find(x=>x.email===e&&x.pass===p);if(!u){showNotif('Invalid credentials');return;}currentUser=u;localStorage.setItem('reCurrent',JSON.stringify(currentUser));openDashboard();showNotif('Welcome '+currentUser.name.split(' ')[0]);}
+
+// --- Auth ---
+function signupUser(){
+  const n=document.getElementById('authName').value.trim();
+  const e=document.getElementById('authEmail').value.trim().toLowerCase();
+  const p=document.getElementById('authPass').value;
+  if(!n||!e||!p){showNotif('Fill all fields');return;}
+  if(users.find(u=>u.email===e)){showNotif('Email exists');return;}
+  let u={name:n,email:e,pass:p,role:'user',plans:[],deposits:[],withdrawals:[],balance:0,profit:0};
+  users.push(u);
+  localStorage.setItem('reUsers',JSON.stringify(users));
+  currentUser=u;
+  localStorage.setItem('reCurrent',JSON.stringify(currentUser));
+  openDashboard();
+  showNotif('Account created & logged in');
+}
+function loginUser(){
+  const e=document.getElementById('authEmail').value.trim().toLowerCase();
+  const p=document.getElementById('authPass').value;
+  const u=users.find(x=>x.email===e&&x.pass===p);
+  if(!u){showNotif('Invalid credentials');return;}
+  currentUser=u;
+  localStorage.setItem('reCurrent',JSON.stringify(currentUser));
+  openDashboard();
+  showNotif('Welcome '+currentUser.name.split(' ')[0]);
+}
 function logoutUser(){currentUser=null;localStorage.removeItem('reCurrent');location.reload();}
-function openDashboard(){document.getElementById('authBox').style.display='none';document.getElementById('sidebar').style.display='flex';document.getElementById('welcomeBox').style.display='flex';document.getElementById('balValue').innerText=(currentUser.balance||0)+' PKR';document.getElementById('profValue').innerText=(currentUser.profit||0)+' PKR';if(currentUser.role==='admin'){document.getElementById('adminBtn').style.display='block';}document.getElementById('contentSection').style.display='block';openSection('plans');}
-function openSection(type){const content=document.getElementById('contentSection');content.innerHTML='';if(type==='plans'){plans.forEach((p,idx)=>{if(p.coming){content.innerHTML+=`<div class='plan-card'><b>${p.name}</b><br>Coming Soon</div>`;}else{content.innerHTML+=`<div class='plan-card'><b>${p.name}</b><br>Amount: ${p.amount} PKR<br>Daily: ${p.daily} PKR<br>Days: ${p.days}<br><button onclick="openDeposit(${p.amount},'${p.name}',${p.daily},${p.days},${idx})">Buy Now</button></div>`;}});}else if(type==='deposit'){openDeposit();}else if(type==='withdraw'){openWithdraw();}else if(type==='profit'){content.innerHTML=`<h3>Total Profit: ${currentUser.profit} PKR</h3>`;}else if(type==='history'){let html='<h3>History</h3>'; (currentUser.deposits||[]).forEach(d=>{html+=`<p>Deposit: ${d.plan} - ${d.amount} PKR - TXN: ${d.txn}</p>`;}); (currentUser.withdrawals||[]).forEach(w=>{html+=`<p>Withdraw: ${w.amount} PKR - ${w.method}</p>`;}); content.innerHTML=html;}else if(type==='admin' && currentUser.role==='admin'){let html='<h3>Admin — User Activity</h3>'; users.forEach(u=>{html+=`<div>${u.name} (${u.email}) — Balance: ${u.balance} PKR — Profit: ${u.profit} PKR</div>`;}); content.innerHTML=html;}else if(type==='about'){content.innerHTML=`<h2 class="neon-text">About Rock Earn</h2><p>Owner: John Wilson</p><p>Founded: 2025, California</p><p>Platform: Crypto & Binance Integration Coming Soon</p><p>All features are premium style, neon animated UI, fully functional.</p>`;}else{content.innerHTML='<h3>Coming Soon</h3>';}}
 
-// Deposit & Withdraw
-function copyText(t){navigator.clipboard.writeText(t);showNotif('Copied: '+t);}
-function openDeposit(amount=0,name='',daily=0,days=0,planIndex=0){const content=document.getElementById('contentSection');content.innerHTML=`<h3>Deposit — ${name}</h3><p>Amount: <strong>${amount} PKR</strong></p><p>JazzCash: <strong>03705519562</strong> <button onclick="copyText('03705519562')">Copy</button></p><p>EasyPaisa: <strong>03379827882</strong> <button onclick="copyText('03379827882')">Copy</button></p><div style="margin-top:10px"><input id="depositTxn" placeholder="Transaction ID"><input id="depositProof" type="file"><br><button onclick="confirmDeposit(${amount},'${name}',${daily},${days},${planIndex})">Submit Deposit</button></div>`;}
-function confirmDeposit(amount,name,daily,days,planIndex){const txn=document.getElementById('depositTxn').value.trim();const proof=document.getElementById('depositProof').files[0];if(!txn || !proof){showNotif('Upload proof & enter txn'); return;}const deposit={plan:name,amount:amount,daily:daily,days:days,txn:txn,proof:proof.name,status:'approved',ts:Date.now()};currentUser.deposits=currentUser.deposits||[];currentUser.deposits.push(deposit);currentUser.balance+=amount;currentUser.profit+=daily;users=users.map(u=>u.email===currentUser.email?currentUser:u);localStorage.setItem('reUsers',JSON.stringify(users));localStorage.setItem('reCurrent',JSON.stringify(currentUser));showNotif('Deposit confirmed — balance updated'); openSection('plans');}
-function openWithdraw(){const content=document.getElementById('contentSection');content.innerHTML=`<h3>Withdraw</h3><input id="withdrawName" placeholder="Your Name"><input id="withdrawAcc" placeholder="Account Number"><input id="withdrawAmount" placeholder="Amount"><select id="withdrawMethod"><option value="JazzCash">JazzCash</option><option value="EasyPaisa">EasyPaisa</option><option value="Bank">Bank</option></select><br><br><button onclick="confirmWithdraw()">Submit Withdraw</button>`;}
-function confirmWithdraw(){const name=document.getElementById('withdrawName').value.trim();const acc=document.getElementById('withdrawAcc').value.trim();const amt=parseFloat(document.getElementById('withdrawAmount').value);const method=document.getElementById('withdrawMethod').value;if(!name||!acc||!amt||amt>currentUser.balance){showNotif('Invalid withdraw');return;}const wd={name:name,acc:acc,amount:amt,method:method,ts:Date.now()};currentUser.withdrawals=currentUser.withdrawals||[];currentUser.withdrawals.push(wd);currentUser.balance-=amt;users=users.map(u=>u.email===currentUser.email?currentUser:u);localStorage.setItem('reUsers',JSON.stringify(users));localStorage.setItem('reCurrent',JSON.stringify(currentUser));showNotif('Withdraw requested');openSection('withdraw');}
-
-// Profile
-function openProfile(){document.getElementById('profileModal').style.display='flex';document.getElementById('profileName').value=currentUser.name;document.getElementById('profileEmail').value=currentUser.email;}
-function closeProfile(){document.getElementById('profileModal').style.display='none';}
-function updateProfile(){const n=document.getElementById('profileName').value.trim();const e=document.getElementById('profileEmail').value.trim().toLowerCase();const p=document.getElementById('profilePass').value;if(!n||!e){showNotif('Name & Email required');return;}currentUser.namefunction updateProfile(){
-  const n = document.getElementById('profileName').value.trim();
-  const e = document.getElementById('profileEmail').value.trim().toLowerCase();
-  const p = document.getElementById('profilePass').value;
-  if(!n || !e){ showNotif('Name & Email required'); return; }
-
-  // Check if email is used by another user
-  const emailUsed = users.find(u => u.email === e && u.email !== currentUser.email);
-  if(emailUsed){ showNotif('Email already in use'); return; }
-
-  currentUser.name = n;
-  currentUser.email = e;
-  if(p) currentUser.pass = p;
-
-  // Update in users array and localStorage
-  users = users.map(u => u.email === currentUser.email ? currentUser : u);
-  localStorage.setItem('reUsers', JSON.stringify(users));
-  localStorage.setItem('reCurrent', JSON.stringify(currentUser));
-
-  // Update dashboard display
-  document.getElementById('balValue').innerText = (currentUser.balance || 0) + ' PKR';
-  document.getElementById('profValue').innerText = (currentUser.profit || 0) + ' PKR';
-
-  showNotif('Profile updated');
-  closeProfile();
+// --- Dashboard ---
+function openDashboard(){
+  document.getElementById('authBox').style.display='none';
+  document.getElementById('sidebar').style.display='flex';
+  document.getElementById('welcomeBox').style.display='flex';
+  document.getElementById('balValue').innerText=(currentUser.balance||0)+' PKR';
+  document.getElementById('profValue').innerText=(currentUser.profit||0)+' PKR';
+  if(currentUser.role==='admin'){document.getElementById('adminBtn').style.display='block';}
+  document.getElementById('contentSection').style.display='block';
+  openSection('plans');
 }
 
-// On page load, if user is already logged in, open dashboard
-if(currentUser) openDashboard();
+// --- Sections ---
+function openSection(type){
+  const content=document.getElementById('contentSection');content.innerHTML='';
+  if(type==='plans'){plans.forEach((p,idx)=>{
+    if(p.coming){content.innerHTML+=`<div class='plan-card'><b>${p.name}</b><br>Coming Soon</div>`;}
+    else{content.innerHTML+=`<div class='plan-card'><b>${p.name}</b><br>Amount: ${p.amount} PKR<br>Daily: ${p.daily} PKR<br>Days: ${p.days}<br><button onclick="openDeposit(${p.amount},'${p.name}',${p.daily},${p.days},${idx})">Buy Now</button></div>`;}
+  });}
+  else if(type==='deposit'){openDeposit();}
+  else if(type==='withdraw'){openWithdraw();}
+  else if(type==='profit'){content.innerHTML=`<h3>Total Profit: ${currentUser.profit} PKR</h3>`;}
+  else if(type==='history'){let html='<h3>History</h3>'; (currentUser.deposits||[]).forEach(d=>{html+=`<p>Deposit: ${d.plan} - ${d.amount} PKR - TXN: ${d.txn}</p>`;}); (currentUser.withdrawals||[]).forEach(w=>{html+=`<p>Withdraw: ${w.amount} PKR - ${w.method}</p>`;}); content.innerHTML=html;}
+  else if(type==='admin' && currentUser.role==='admin'){let html='<h3>Admin — Users</h3>'; users.forEach(u=>{html+=`<div>${u.name} (${u.email}) — Balance: ${u.balance} PKR — Profit: ${u.profit} PKR</div>`;}); content.innerHTML=html;}
+  else if(type==='about'){content.innerHTML=`<h2 class="neon-text">About Rock Earn</h2><p>Owner: John Wilson</p><p>Founded: 2025, California</p><p>Platform: Crypto & Binance Integration Coming Soon</p>`;}
+  else{content.innerHTML='<h3>Coming Soon</h3>';}
+}
+
+// --- Deposit/Withdraw ---
+function copyText(t){navigator.clipboard.writeText(t);showNotif('Copied: '+t);}
+function openDeposit(amount=0,name='',daily=0,days=0,planIndex=0){
+  const content=document.getElementById('contentSection');
+  content.innerHTML=`<h3>Deposit — ${name}</h3>
+  <p>Amount: <strong>${amount} PKR</strong></p>
+  <p>JazzCash: <strong>03705519562</strong> <button onclick="copyText('03705519562')">Copy</button></p>
+  <p>EasyPaisa: <strong>03379827882</strong> <button onclick="copyText('03379827882')">Copy</button></p>
+  <div style="margin-top:10px">
+    <input id="depositTxn" placeholder="Transaction ID">
+    <input id="depositProof" type="file"><br>
+    <button onclick="confirmDeposit(${amount},'${name}',${daily},${days},${planIndex})">Submit Deposit</button>
+  </div>`;
+}
+function confirmDeposit(amount,name,daily,days,planIndex){
+  const txn=document.getElementById('depositTxn').value.trim();
+  const proof=document.getElementById('depositProof').files[0];
+  if(!txn || !proof){showNotif('Upload proof & enter txn'); return;}
+  const deposit={plan:name,amount:amount,daily:daily,days:days,txn:txn,proof:proof.name,status:'approved',ts:Date.now()};
+  currentUser.deposits=currentUser.deposits||[]; currentUser.deposits.push(deposit);
+  currentUser.balance+=amount; currentUser.profit+=daily;
+  users=users.map(u=>u.email===currentUser.email?currentUser:u);
+  localStorage.setItem('reUsers',JSON.stringify(users));
+  localStorage.setItem('reCurrent',JSON.stringify(currentUser));
+  showNotif('Deposit confirmed — balance updated'); openSection('plans');
+}
+function openWithdraw(){
+  const content=document.getElementById('contentSection');
+  content.innerHTML=`<h3>Withdraw</h3>
+  <input id="withdrawName" placeholder="Your Name">
+  <input id="withdrawAcc" placeholder="Account Number">
+  <input id="withdrawAmount" placeholder="Amount">
+  <select id="withdrawMethod">
+    <option value="JazzCash">JazzCash</option>
+    <option value="EasyPaisa">EasyPaisa</option>
+    <option value="Bank">Bank</option>
+  </select><br><br>
+  <button onclick="confirmWithdraw()">Submit Withdraw</button>`;
+}
+function confirmWithdraw(){
+  const name=document.getElementById('withdrawName').value.trim();
+  const acc=document.getElementById('withdrawAcc').value.trim();
+  const amt=parseFloat(document.getElementById('withdrawAmount').value);
+  const method=document.getElementById('withdrawMethod').value;
+  if(!name||!acc||!amt||amt>currentUser.balance){showNotif('Invalid withdraw');return;}
+  const wd={name:name,acc:acc,amount:amt,method:method,ts:Date.now()};
+  currentUser.withdrawals=currentUser.withdrawals||[]; currentUser.withdrawals.push(wd);
+  currentUser.balance-=amt;
+  users=users.map(u=>u.email===currentUser.email?currentUser:u);
+  localStorage.setItem('reUsers',JSON.stringify(users));
+  localStorage.setItem('reCurrent',JSON.stringify(currentUser));
+  showNotif('Withdraw requested');openSection('withdraw');
+}
+
+// --- Profile ---
+function openProfile(){document.getElementByElementById('profileModal').style.display='flex';
+document.getElementById('profileName').value=currentUser.name;
+document.getElementById('profileEmail').value=currentUser.email;
+document.getElementById('profilePass').value='';
+}
+function closeProfile(){document.getElementById('profileModal').style.display='none';}
+function updateProfile(){
+  const n=document.getElementById('profileName').value.trim();
+  const e=document.getElementById('profileEmail').value.trim().toLowerCase();
+  const p=document.getElementById('profilePass').value;
+  if(!n||!e){showNotif('Name & Email required');return;}
+  if(users.some(u=>u.email===e && u.email!==currentUser.email)){showNotif('Email already used');return;}
+  currentUser.name=n;
+  currentUser.email=e;
+  if(p) currentUser.pass=p;
+  users=users.map(u=>u.email===currentUser.email?currentUser:u);
+  localStorage.setItem('reUsers',JSON.stringify(users));
+  localStorage.setItem('reCurrent',JSON.stringify(currentUser));
+  showNotif('Profile updated');
+  closeProfile();
+  document.getElementById('balValue').innerText=currentUser.balance+' PKR';
+  document.getElementById('profValue').innerText=currentUser.profit+' PKR';
+}
+
+// --- Auto-login if session exists ---
+if(currentUser){openDashboard();}
 </script>
 
 </body>
