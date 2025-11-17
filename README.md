@@ -1,518 +1,320 @@
 <ROCK>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Rock Earn Premium</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap');
-
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Orbitron', sans-serif;
-      background: #111;
-      color: #fff;
-      overflow-x: hidden;
-      position: relative;
-    }
-    body::before {
-      content: '';
-      position: fixed; top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: linear-gradient(270deg, #111, #222, #000, #111, #222);
-      background-size: 1200% 1200%;
-      animation: bgAnim 30s ease infinite;
-      z-index: -1;
-    }
-    @keyframes bgAnim {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    #authBox {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      text-align: center;
-      animation: fadeIn 1s;
-      padding: 20px;
-    }
-    input, button {
-      padding: 10px;
-      margin: 5px;
-      border-radius: 8px;
-      border: none;
-      font-size: 16px;
-    }
-    input {
-      width: 220px;
-      max-width: 100%;
-      background: #222;
-      color: #fff;
-    }
-    input:focus {
-      outline: 2px solid #00ffff;
-    }
-    button {
-      background: #00ffff;
-      color: #000;
-      font-weight: bold;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-    button:hover {
-      background: #ff00ff;
-      color: #fff;
-    }
-
-    #notif {
-      position: fixed;
-      top: 20px; right: 20px;
-      background: #00ffff;
-      color: #000;
-      padding: 10px 20px;
-      border-radius: 8px;
-      opacity: 0;
-      transition: 0.3s;
-      font-weight: bold;
-      z-index: 1000;
-    }
-    #notif.show {
-      opacity: 1;
-    }
-
-    #sidebar {
-      display: none;
-      position: fixed;
-      left: 0; top: 0;
-      width: 250px; height: 100vh;
-      background: rgba(0,0,0,0.85);
-      flex-direction: column;
-      padding: 10px;
-      gap: 10px;
-      animation: fadeInLeft 1s;
-      overflow-y: auto;
-    }
-    #sidebar button {
-      width: 100%;
-      text-align: left;
-      background: transparent;
-      border: 1px solid #00ffff;
-      color: #00ffff;
-      font-size: 16px;
-    }
-    #sidebar button:hover {
-      background: #00ffff;
-      color: #000;
-    }
-
-    #welcomeBox {
-      display: none;
-      position: fixed;
-      top: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      flex-direction: row;
-      gap: 20px;
-      animation: fadeInDown 1s;
-      flex-wrap: wrap;
-      z-index: 10;
-    }
-    .neon-card {
-      background: rgba(0,255,255,0.1);
-      border: 2px solid #00ffff;
-      padding: 15px 25px;
-      border-radius: 15px;
-      text-align: center;
-      width: 150px;
-      animation: neonPulse 2s infinite alternate;
-      box-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 30px #ff00ff;
-    }
-    .neon-card h3 {
-      font-size: 16px;
-      color: #00ffff;
-      text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff, 0 0 20px #ff00ff;
-    }
-    .neon-card p {
-      font-size: 18px;
-      font-weight: bold;
-      color: #fff;
-      text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff, 0 0 20px #ff00ff;
-    }
-    @keyframes neonPulse {
-      0% { box-shadow:0 0 10px #00ffff,0 0 20px #00ffff,0 0 30px #ff00ff; }
-      50% { box-shadow:0 0 20px #00ffff,0 0 40px #00ffff,0 0 60px #ff00ff; }
-      100% { box-shadow:0 0 10px #00ffff,0 0 20px #00ffff,0 0 30px #ff00ff; }
-    }
-
-    #contentSection {
-      margin-left: 270px;
-      margin-top: 140px;
-      padding: 20px;
-      animation: fadeInUp 1s;
-      flex-wrap: wrap;
-    }
-
-    #profileModal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.95);
-      justify-content: center; align-items: center;
-      animation: fadeIn 0.5s;
-      z-index: 999;
-    }
-    #profileModal div {
-      background: #111;
-      padding: 20px;
-      border-radius: 15px;
-      text-align: center;
-      width: 90%;
-      max-width: 400px;
-    }
-
-    .plan-card {
-      background: #111;
-      margin: 10px;
-      padding: 15px;
-      border-radius: 12px;
-      border: 1px solid #00ffff;
-      transition: 0.3s;
-      text-align: center;
-    }
-    .plan-card:hover {
-      transform: scale(1.05);
-      background: #000;
-      border-color: #ff00ff;
-    }
-
-    .neon-text {
-      color: #00ffff;
-      text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 40px #ff00ff, 0 0 80px #ff00ff;
-    }
-
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-    @keyframes fadeInLeft { from { opacity: 0; transform: translateX(-50px); } to { opacity: 1; transform: translateX(0); } }
-    @keyframes fadeInDown { from { opacity: 0; transform: translateY(-50px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes fadeInUp { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
-
-    @media(max-width:768px) {
-      #contentSection { margin-left: 0; margin-top: 300px; }
-      #sidebar { width:100%; height:auto; position: relative; flex-direction: row; flex-wrap: wrap; }
-      #sidebar button { flex:1; margin:2px; font-size:14px; }
-      #welcomeBox { top: auto; bottom:20px; left:50%; transform: translateX(-50%); flex-wrap: wrap; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rock Earn — Full HD Premium</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&display=swap');
+:root{--neon1:#00ffff;--neon2:#ff00ff;}
+body{margin:0;font-family:'Orbitron',sans-serif;color:#fff;overflow-x:hidden;animation:neonBG 20s linear infinite;background:#07080b;}
+@keyframes neonBG{0%{background:#07080b}25%{background:#0b0a15}50%{background:#07080b}75%{background:#0a070f}100%{background:#07080b}}
+header{position:fixed;left:50%;transform:translateX(-50%);top:8px;font-size:22px;color:var(--neon1);text-shadow:0 0 8px var(--neon1);z-index:100}
+.container{max-width:1100px;margin:0 auto;padding:20px}
+#notif{position:fixed;right:20px;top:20px;background:var(--neon1);color:#000;padding:10px 14px;border-radius:8px;opacity:0;z-index:9999;transition:all .25s}
+#sidebar{position:fixed;left:10px;top:70px;width:62px;background:rgba(0,0,0,.6);border-radius:12px;padding:8px;display:flex;flex-direction:column;gap:8px;z-index:50;display:none;}
+#sidebar button{width:46px;height:46px;border-radius:10px;border:1px solid var(--neon1);background:transparent;color:var(--neon1);display:flex;align-items:center;justify-content:center;cursor:pointer;}
+#sidebar button:hover{background:var(--neon1);color:#000}
+#welcome{position:fixed;left:100px;top:18px;display:flex;gap:10px;z-index:40;display:none;}
+.card{background:rgba(0,255,255,0.03);border:1px solid rgba(0,255,255,0.07);padding:10px;border-radius:10px;min-width:130px;text-align:center}
+.container-main{margin-left:100px;padding-top:100px;padding-bottom:60px}
+.neon-btn{padding:8px 12px;border-radius:8px;border:none;background:linear-gradient(90deg,var(--neon1),var(--neon2));color:#000;font-weight:700;cursor:pointer;transition:0.3s}
+.neon-btn:hover{filter:brightness(1.2)}
+.neon-input{width:100%;padding:10px;margin:6px 0;border-radius:8px;border:2px solid var(--neon2);background:#111;color:#fff}
+.plan-grid{display:flex;flex-wrap:wrap;gap:12px}
+.plan-card{background:#0d0d10;padding:12px;border-radius:8px;border:1px solid rgba(0,255,255,0.06);width:220px;transition:0.3s;position:relative}
+.plan-card:hover{transform:scale(1.05);box-shadow:0 0 12px var(--neon1)}
+.buy-btn{padding:6px 10px;border-radius:6px;border:none;background:var(--neon1);color:#000;cursor:pointer;margin-top:6px}
+.offerTag{background:#ff6600;color:#fff;padding:4px 8px;border-radius:8px;font-weight:700;display:inline-block;margin-top:6px}
+.countdown{font-size:12px;color:#ff0;margin-top:4px}
+.small{font-size:13px;color:#bbb}
+.modal-back{position:fixed;inset:0;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:999;display:none}
+.modal{background:#0d0d10;padding:16px;border-radius:10px;width:92%;max-width:520px}
+.footer{position:fixed;bottom:0;left:0;right:0;background:#050506;padding:10px;text-align:center;border-top:1px solid rgba(0,255,255,0.03);font-size:13px}
+.about-content{line-height:1.5;font-size:14px;color:#0ff;margin-top:8px}
+.copy-btn{padding:4px 8px;background:var(--neon2);color:#000;border:none;border-radius:6px;cursor:pointer;margin-left:6px}
+@media(max-width:800px){.container-main{margin-left:80px}}
+</style>
 </head>
-
 <body>
-  <div id="notif"></div>
+<header>Rock Earn Premium</header>
+<div id="notif"></div>
 
-  <div id="authBox">
-    <h1 class="text-4xl font-bold mb-6 neon-text">Rock Earn</h1>
-    <input type="text" id="authName" placeholder="Your Name (Signup only)">
-    <input type="email" id="authEmail" placeholder="Email">
-    <input type="password" id="authPass" placeholder="Password">
-    <div>
-      <button onclick="signupUser()">Sign Up</button>
-      <button onclick="loginUser()">Login</button>
+<!-- Sidebar -->
+<div id="sidebar">
+  <button onclick="openSection('plans')" title="Plans"><i class="fas fa-list"></i></button>
+  <button onclick="openSection('deposit')" title="Deposit"><i class="fas fa-wallet"></i></button>
+  <button onclick="openSection('withdraw')" title="Withdraw"><i class="fas fa-money-bill-wave"></i></button>
+  <button onclick="openSection('profit')" title="Profit"><i class="fas fa-chart-line"></i></button>
+  <button onclick="openSection('history')" title="History"><i class="fas fa-history"></i></button>
+  <button onclick="openSection('settings')" title="Settings"><i class="fas fa-cogs"></i></button>
+  <button onclick="openSection('support')" title="Support"><i class="fas fa-headset"></i></button>
+  <button id="adminBtn" style="display:none" onclick="openAdmin()" title="Admin"><i class="fas fa-user-shield"></i></button>
+  <button onclick="openSection('about')" title="About"><i class="fas fa-info-circle"></i></button>
+  <button onclick="openProfile()" title="Profile"><i class="fas fa-user"></i></button>
+  <button onclick="logoutUser()" title="Logout"><i class="fas fa-sign-out-alt"></i></button>
+</div>
+
+<!-- Header Cards -->
+<div id="welcome">
+  <div class="card"><div class="small">Balance</div><div id="balValue">0 PKR</div></div>
+  <div class="card"><div class="small">Profit</div><div id="profValue">0 PKR</div></div>
+</div>
+
+<!-- Main -->
+<div class="container-main container" id="mainArea">
+  <div id="authBox" style="max-width:460px;margin:30px auto">
+    <div style="text-align:center;margin-bottom:8px" class="small">Welcome — Signup or Login</div>
+    <input id="authName" class="neon-input" placeholder="Your Name (Signup only)">
+    <input id="authEmail" class="neon-input" placeholder="Email">
+    <input id="authPass" class="neon-input" placeholder="Password" type="password">
+    <div style="display:flex;gap:8px;justify-content:center">
+      <button class="neon-btn" onclick="signupUser()">Sign Up</button>
+      <button class="neon-btn" onclick="loginUser()">Login</button>
     </div>
   </div>
+  <div id="mainContent"></div>
+</div>
 
-  <div id="sidebar">
-    <button onclick="openSection('plans')"><i class="fas fa-list"></i> Plans</button>
-    <button onclick="openSection('deposit')"><i class="fas fa-wallet"></i> Deposit</button>
-    <button onclick="openSection('withdraw')"><i class="fas fa-money-bill-wave"></i> Withdraw</button>
-    <button onclick="openSection('profit')"><i class="fas fa-chart-line"></i> Profit</button>
-    <button onclick="openSection('history')"><i class="fas fa-history"></i> History</button>
-    <button id="adminBtn" style="display:none;" onclick="openSection('admin')"><i class="fas fa-user-shield"></i> Admin</button>
-    <button onclick="openSection('about')"><i class="fas fa-info-circle"></i> About</button>
-    <button onclick="openProfile()"><i class="fas fa-user"></i> Profile</button>
-    <button onclick="logoutUser()"><i class="fas fa-sign-out-alt"></i> Logout</button>
-  </div>
+<!-- Plans container -->
+<div id="plansContainer" class="plan-grid" style="margin:20px;"></div>
 
-  <div id="welcomeBox">
-    <div class="neon-card"><h3>Balance</h3><p id="balValue">0 PKR</p></div>
-    <div class="neon-card"><h3>Profit</h3><p id="profValue">0 PKR</p></div>
-  </div>
-
-  <div id="contentSection"></div>
-
-  <div id="profileModal">
-    <div>
-      <h3 class="neon-text">Edit Profile</h3>
-      <input type="text" id="profileName" placeholder="Name"><br>
-      <input type="email" id="profileEmail" placeholder="Email"><br>
-      <input type="password" id="profilePass" placeholder="New Password"><br>
-      <button onclick="updateProfile()">Update</button>
-      <button onclick="closeProfile()">Close</button>
+<!-- Deposit Modal -->
+<div id="depositModal" class="modal-back">
+  <div class="modal">
+    <h3>Make Deposit</h3>
+    <input id="depositAmount" class="neon-input" type="number" placeholder="Amount (PKR)">
+    <select id="depositMethod" class="neon-input" onchange="updateDepositInfo()">
+      <option>JazzCash</option>
+      <option>EasyPaisa</option>
+      <option>Bank</option>
+      <option>Binance</option>
+    </select>
+    <div id="depositInfo" class="small about-content" style="margin:6px 0"></div>
+    <div id="copyDiv" style="display:flex;align-items:center;"></div>
+    <input id="transId" class="neon-input" placeholder="Transaction ID / Upload Proof">
+    <div style="display:flex;gap:8px;justify-content:center;margin-top:8px">
+      <button class="neon-btn" onclick="confirmDeposit()">Submit & Auto-Add</button>
+      <button class="neon-btn" onclick="closeDeposit()">Close</button>
     </div>
   </div>
+</div>
 
-  <script>
-    // --- Data ---
-    let users = JSON.parse(localStorage.getItem('reUsers')) || [];
-    let currentUser = JSON.parse(localStorage.getItem('reCurrent')) || null;
+<!-- Withdraw Modal -->
+<div id="withdrawModal" class="modal-back">
+  <div class="modal">
+    <h3>Request Withdrawal</h3>
+    <input id="withdrawAmount" class="neon-input" type="number" placeholder="Amount (PKR)">
+    <select id="withdrawMethod" class="neon-input" onchange="updateWithdrawInfo()">
+      <option>JazzCash</option>
+      <option>EasyPaisa</option>
+      <option>Bank</option>
+      <option>Binance</option>
+    </select>
+    <input id="withdrawUsername" class="neon-input" placeholder="Payee Username">
+    <input id="withdrawAcc" class="neon-input" placeholder="Account / Mobile Number">
+    <div id="withdrawInfo" class="small" style="margin:6px 0"></div>
+    <div style="display:flex;gap:8px;justify-content:center;margin-top:8px">
+      <button class="neon-btn" onclick="confirmWithdraw()">Request Withdraw</button>
+      <button class="neon-btn" onclick="closeWithdraw()">Close</button>
+    </div>
+  </div>
+</div>
 
-    // Create default admin if not exist
-    if (!users.find(u => u.email === 'admin@rockearn.com')) {
-      users.push({ name: 'John Wilson', email: 'admin@rockearn.com', pass: 'admin123', role: 'admin', deposits: [], withdrawals: [], balance: 0, profit: 0 });
-      localStorage.setItem('reUsers', JSON.stringify(users));
+<!-- About Modal -->
+<div id="aboutModal" class="modal-back">
+  <div class="modal">
+    <h3>About Rock Earn Premium</h3>
+    <div class="about-content">
+      Rock Earn Premium — <strong>Your Trusted Earning Platform</strong> 💎<br>
+      <strong>Official Email:</strong> rock.earn92@gmail.com ✉️<br>
+      <strong>Customer Support:</strong> 24/7 available<br>
+      <strong>Deposit Numbers:</strong><br>
+      &nbsp;&nbsp;- JazzCash: 03705591562 📲<br>
+      &nbsp;&nbsp;- EasyPaisa: 03379827882 📲<br>
+      <strong>Safe & Secure Platform</strong> 🔒<br>
+      <strong>Start Plans from:</strong> 200 PKR 💰<br>
+      <strong>Fully Premium Animated Dashboard</strong> ✨
+    </div>
+    <div style="display:flex;gap:8px;justify-content:center;margin-top:12px">
+      <button class="neon-btn" onclick="closeAbout()">Close</button>
+    </div>
+  </div>
+</div>
+
+<div class="footer">Rock Earn Premium © 2025</div>
+
+<script>
+// ======== Data ========
+let users = JSON.parse(localStorage.getItem('reUsers')) || [];
+let currentUserEmail = localStorage.getItem('reCurrentEmail') || null;
+let depositRequests = JSON.parse(localStorage.getItem('reDeposit')) || [];
+let withdrawRequests = JSON.parse(localStorage.getItem('reWithdraw')) || [];
+let selectedPlan = null;
+if(!users.find(u=>u.email==='admin@rockearn.com')){
+  users.push({name:'Admin',email:'admin@rockearn.com',pass:'admin123',role:'admin',balance:0,profit:0});
+  localStorage.setItem('reUsers',JSON.stringify(users));
+}
+const paymentNumbers = {JazzCash:'03705591562',EasyPaisa:'03379827882'};
+
+// ======== UI ========
+function showNotif(msg,time=2500){const n=document.getElementById('notif');n.innerText=msg;n.style.opacity='1';setTimeout(()=>n.style.opacity='0',time);}
+function getCurrentUser(){return users.find(u=>u.email===currentUserEmail)||null;}
+function setLoggedInUI(){
+  const u=getCurrentUser();
+  if(u){
+    document.getElementById('sidebar').style.display='flex';
+    document.getElementById('welcome').style.display='flex';
+    document.getElementById('authBox').style.display='none';
+    document.getElementById('adminBtn').style.display = u.role==='admin'?'block':'none';
+    document.getElementById('balValue').innerText = (u.balance||0)+' PKR';
+    document.getElementById('profValue').innerText = (u.profit||0)+' PKR';
+    loadPlans();
+  }else{
+    document.getElementById('sidebar').style.display='none';
+    document.getElementById('welcome').style.display='none';
+    document.getElementById('authBox').style.display='block';
+  }
+}
+
+// ======== Auth ========
+function signupUser(){
+  const name=document.getElementById('authName').value.trim();
+  const email=document.getElementById('authEmail').value.trim().toLowerCase();
+  const pass=document.getElementById('authPass').value;
+  if(!name||!email||!pass){showNotif('Fill all fields');return;}
+  if(users.find(u=>u.email===email)){showNotif('Email exists');return;}
+  users.push({name,email,pass,role:'user',balance:0,profit:0});
+  localStorage.setItem('reUsers',JSON.stringify(users));
+  currentUserEmail=email;
+  localStorage.setItem('reCurrentEmail',currentUserEmail);
+  showNotif('Signed up & logged in');
+  setLoggedInUI();
+}
+function loginUser(){
+  const email=document.getElementById('authEmail').value.trim().toLowerCase();
+  const pass=document.getElementById('authPass').value;
+  const u=users.find(x=>x.email===email && x.pass===pass);
+  if(!u){showNotif('Invalid credentials');return;}
+  currentUserEmail=u.email;
+  localStorage.setItem('reCurrentEmail',currentUserEmail);
+  showNotif('Welcome '+u.name.split(' ')[0]);
+  setLoggedInUI();
+}
+function logoutUser(){currentUserEmail=null;localStorage.removeItem('reCurrentEmail');setLoggedInUI();showNotif('Logged out');}
+
+// ======== Plans ========
+let specialOffers = {1:{profit:1200,end:Date.now()+24*60*60*1000},2:{profit:1300,end:Date.now()+24*60*60*1000},3:{profit:1400,end:Date.now()+24*60*60*1000},4:{profit:1500,end:Date.now()+24*60*60*1000},5:{profit:1600,end:Date.now()+24*60*60*1000}};
+function calculateBonus(amount,index){if(specialOffers[index]&&Date.now()<specialOffers[index].end)return specialOffers[index].profit;if(amount===200)return 550;return Math.round(amount*2.75);}
+function formatTime(ms){let s=Math.floor(ms/1000);let h=Math.floor(s/3600);s%=3600;let m=Math.floor(s/60);s%=60;return `${h}h ${m}m ${s}s`;}
+function loadPlans(){
+  const planBox=document.getElementById('plansContainer');planBox.innerHTML='';
+  for(let i=1;i<=15;i++){
+    let amount=i===1?200:i<=5?200*i*5:5000*i;let days=20+i*10;let profit=calculateBonus(amount,i);
+    let tag='';let cd='';
+    if(specialOffers[i] && Date.now()<specialOffers[i].end){tag='<span class="offerTag">🔥 Special Offer</span>';cd='<div class="countdown" id="cd'+i+'"></div>';}
+    planBox.innerHTML+=`<div class="plan-card"><h3>Plan ${i}</h3><p>Amount: <strong>${amount} PKR</strong></p><p>Days: <strong>${days}</strong></p><p>Profit: <strong>${profit} PKR</strong></p>${tag}${cd}<button class="buy-btn" onclick="openDepositFromPlan(${amount})">Buy Now</button></div>`;
+    if(cd){updateCountdown(i);}
+  }
+}
+function updateCountdown(i){
+  const cd=document.getElementById('cd'+i);if(!cd)return;
+  let interval=setInterval(()=>{
+    let remain=specialOffers[i].end-Date.now();
+    if(remain<=0){cd.innerText='Offer expired';clearInterval(interval);loadPlans();return;}
+    cd.innerText='Offer ends in: '+formatTime(remain);
+  },1000);
+}
+
+// ======== Buy → Deposit ========
+function openDepositFromPlan(amount){
+  document.getElementById('depositAmount').value=amount;
+  document.getElementById('depositModal').style.display='flex';
+  updateDepositInfo();
+}
+
+// ======== Deposit Info + Copy ========
+function updateDepositInfo(){
+    const method=document.getElementById('depositMethod').value;
+    const infoDiv=document.getElementById('depositInfo');
+    const copyDiv=document.getElementById('copyDiv');
+    copyDiv.innerHTML='';
+    if(method==='JazzCash' || method==='EasyPaisa'){
+        infoDiv.innerText=`Send your amount to ${method}: ${paymentNumbers[method]}`;
+        let btn=document.createElement('button');
+        btn.innerText='Copy Number';
+        btn.className='copy-btn';
+        btn.onclick=()=>{navigator.clipboard.writeText(paymentNumbers[method]);showNotif('Number copied');}
+        copyDiv.appendChild(btn);
+    } else {
+        infoDiv.innerText = method==='Bank' || method==='Binance' ? method + " coming soon" : '';
     }
+}
 
-    // On load, if logged in, show dashboard
-    window.onload = () => {
-      if (currentUser) {
-        // Refresh currentUser object from users array
-        const stored = users.find(u => u.email === currentUser.email);
-        if (stored) {
-          currentUser = stored;
-          localStorage.setItem('reCurrent', JSON.stringify(currentUser));
-          openDashboard();
-          showNotif('Welcome back, ' + currentUser.name.split(' ')[0]);
-        } else {
-          // If user record removed, logout
-          localStorage.removeItem('reCurrent');
-          currentUser = null;
-        }
-      }
-    };
+function confirmDeposit(){
+    const amount = parseFloat(document.getElementById('depositAmount').value);
+    const method = document.getElementById('depositMethod').value;
+    const transId = document.getElementById('transId').value.trim();
+    if(!amount || !method || !transId){showNotif('Fill all deposit fields');return;}
+    depositRequests.push({user:currentUserEmail,amount,method,transId,date:new Date().toLocaleString()});
+    localStorage.setItem('reDeposit',JSON.stringify(depositRequests));
+    let user = getCurrentUser();
+    user.balance += amount;
+    localStorage.setItem('reUsers',JSON.stringify(users));
+    document.getElementById('balValue').innerText = user.balance+' PKR';
+    showNotif('Deposit added successfully');
+    closeDeposit();
+}
 
-    // --- Plans Data ---
-    const plans = [
-      { name: 'Basic', amount: 200, daily: 30, days: 20 },
-      { name: 'Starter', amount: 500, daily: 75, days: 20 },
-      { name: 'Pro', amount: 1000, daily: 180, days: 20 },
-      { name: 'Advanced', amount: 1500, daily: 250, days: 25 },
-      { name: 'Silver', amount: 2000, daily: 350, days: 30 },
-      { name: 'Gold', amount: 3000, daily: 550, days: 30 },
-      { name: 'Platinum', amount: 5000, daily: 950, days: 40 },
-      { name: 'Diamond', amount: 7000, daily: 1350, days: 50 },
-      { name: 'VIP', amount: 10000, daily: 2000, days: 60 },
-      { name: 'Elite', amount: 12000, daily: 2400, days: 60 },
-      { name: 'Master', amount: 15000, daily: 3000, days: 70 },
-      { name: 'Ultimate', amount: 18000, daily: 3500, days: 75 },
-      { name: 'Legend', amount: 20000, daily: 4000, days: 80 },
-      { name: 'Supreme', amount: 25000, daily: 5000, days: 90 },
-      { name: 'Titan', amount: 30000, daily: 6000, days: 100 },
-      { name: 'Diamond Plus', amount: 35000, daily: 7000, days: 100, coming: true },
-      { name: 'Royal', amount: 40000, daily: 8000, days: 120, coming: true },
-      { name: 'King', amount: 50000, daily: 10000, days: 150, coming: true },
-      { name: 'Legendary', amount: 75000, daily: 15000, days: 180, coming: true },
-      { name: 'Ultimate VIP', amount: 100000, daily: 20000, days: 200, coming: true }
-    ];
+function closeDeposit(){document.getElementById('depositModal').style.display='none';}
 
-    // --- Notifications ---
-    function showNotif(msg) {
-      const el = document.getElementById('notif');
-      el.innerText = msg;
-      el.classList.add('show');
-      setTimeout(() => el.classList.remove('show'), 3000);
-    }
+// ======== Withdraw Info ========
+function updateWithdrawInfo(){
+    const method = document.getElementById('withdrawMethod').value;
+    const infoDiv = document.getElementById('withdrawInfo');
+    if(method==='Bank' || method==='Binance'){
+        infoDiv.innerText = method + " coming soon";
+    } else infoDiv.innerText='';
+    const user = getCurrentUser();
+    document.getElementById('withdrawUsername').value = user ? user.name : '';
+    document.getElementById('withdrawAcc').value = method==='JazzCash'?paymentNumbers.JazzCash:(method==='EasyPaisa'?paymentNumbers.EasyPaisa:'');
+}
 
-    // --- Auth: Signup / Login / Logout ---
-    function signupUser() {
-      const n = document.getElementById('authName').value.trim();
-      const e = document.getElementById('authEmail').value.trim().toLowerCase();
-      const p = document.getElementById('authPass').value;
-      if (!n || !e || !p) { showNotif('Fill all fields'); return; }
-      if (users.find(u => u.email === e)) { showNotif('Email already exists'); return; }
-      const u = { name: n, email: e, pass: p, role: 'user', deposits: [], withdrawals: [], balance: 0, profit: 0 };
-      users.push(u);
-      localStorage.setItem('reUsers', JSON.stringify(users));
-      currentUser = u;
-      localStorage.setItem('reCurrent', JSON.stringify(currentUser));
-      openDashboard();
-      showNotif('Account created & logged in');
-    }
+function confirmWithdraw(){
+    const amount = parseFloat(document.getElementById('withdrawAmount').value);
+    const method = document.getElementById('withdrawMethod').value;
+    const username = document.getElementById('withdrawUsername').value.trim();
+    const acc = document.getElementById('withdrawAcc').value.trim();
+    if(!amount || !method || !username || !acc){showNotif('Fill all withdraw fields');return;}
+    let user = getCurrentUser();
+    if(amount>user.balance){showNotif('Insufficient balance');return;}
+    withdrawRequests.push({user:currentUserEmail,amount,method,username,acc,date:new Date().toLocaleString()});
+    localStorage.setItem('reWithdraw',JSON.stringify(withdrawRequests));
+    user.balance -= amount;
+    localStorage.setItem('reUsers',JSON.stringify(users));
+    document.getElementById('balValue').innerText = user.balance+' PKR';
+    showNotif('Withdraw request submitted');
+    closeWithdraw();
+}
 
-    function loginUser() {
-      const e = document.getElementById('authEmail').value.trim().toLowerCase();
-      const p = document.getElementById('authPass').value;
-      const u = users.find(x => x.email === e && x.pass === p);
-      if (!u) { showNotif('Invalid credentials'); return; }
-      currentUser = u;
-      localStorage.setItem('reCurrent', JSON.stringify(currentUser));
-      openDashboard();
-      showNotif('Welcome ' + currentUser.name.split(' ')[0]);
-    }
+function closeWithdraw(){document.getElementById('withdrawModal').style.display='none';}
 
-    function logoutUser() {
-      currentUser = null;
-      localStorage.removeItem('reCurrent');
-      location.reload();
-    }
+// ======== About ========
+function openAbout(){document.getElementById('aboutModal').style.display='flex';}
+function closeAbout(){document.getElementById('aboutModal').style.display='none';}
 
-    // --- Dashboard / Section Handling ---
-    function openDashboard() {
-      document.getElementById('authBox').style.display = 'none';
-      document.getElementById('sidebar').style.display = 'flex';
-      document.getElementById('welcomeBox').style.display = 'flex';
-      document.getElementById('balValue').innerText = (currentUser.balance || 0) + ' PKR';
-      document.getElementById('profValue').innerText = (currentUser.profit || 0) + ' PKR';
-      if (currentUser.role === 'admin') {
-        document.getElementById('adminBtn').style.display = 'block';
-      }
-      document.getElementById('contentSection').style.display = 'block';
-      openSection('plans');
-    }
+// ======== Sections ========
+function openSection(section){showNotif(section+' section opened');}
 
-    function openSection(type) {
-      const content = document.getElementById('contentSection');
-      content.innerHTML = '';
-      if (type === 'plans') {
-        plans.forEach((p, idx) => {
-          if (p.coming) {
-            content.innerHTML += `<div class="plan-card"><b>${p.name}</b><br><i>Coming Soon</i></div>`;
-          } else {
-            content.innerHTML += `<div class="plan-card"><b>${p.name}</b><br>Amount: ${p.amount} PKR<br>Daily: ${p.daily} PKR<br>Days: ${p.days}<br><button data-plan="${idx}" class="buyBtn">Buy Now</button></div>`;
-          }
-        });
-        document.querySelectorAll('.buyBtn').forEach(btn => {
-          btn.addEventListener('click', () => {
-            const idx = btn.getAttribute('data-plan');
-            const pl = plans[idx];
-            openDeposit(pl.amount, pl.name, pl.daily, pl.days, idx);
-          });
-        });
-      } else if (type === 'deposit') {
-        openDeposit();
-      } else if (type === 'withdraw') {
-        openWithdraw();
-      } else if (type === 'profit') {
-        content.innerHTML = `<h3>Total Profit: ${currentUser.profit} PKR</h3>`;
-      } else if (type === 'history') {
-        let html = '<h3>History</h3>';
-        (currentUser.deposits || []).forEach(d => {
-          html += `<p>Deposit: ${d.plan} - ${d.amount} PKR - TXN: ${d.txn}</p>`;
-        });
-        (currentUser.withdrawals || []).forEach(w => {
-          html += `<p>Withdraw: ${w.amount} PKR - ${w.method}</p>`;
-        });
-        content.innerHTML = html;
-      } else if (type === 'admin' && currentUser.role === 'admin') {
-        let html = '<h3>Admin — Users</h3>';
-        users.forEach(u => {
-          html += `<div>${u.name} (${u.email}) — Balance: ${u.balance} PKR — Profit: ${u.profit} PKR</div>`;
-        });
-        content.innerHTML = html;
-      } else if (type === 'about') {
-        content.innerHTML = `<h2 class="neon-text">About Rock Earn</h2><p>Owner: John Wilson</p><p>Platform: Demo / Test</p>`;
-      } else {
-        content.innerHTML = '<h3>Coming Soon</h3>';
-      }
-    }
+// ======== Profile ========
+function openProfile(){showNotif('Profile opened');}
 
-    // --- Deposit / Withdraw ---
-    function copyText(t) {
-      navigator.clipboard.writeText(t);
-      showNotif('Copied: ' + t);
-    }
+// ======== Admin ========
+function openAdmin(){showNotif('Admin panel opened');}
 
-    function openDeposit(amount = 0, name = '', daily = 0, days = 0, planIndex = 0) {
-      const content = document.getElementById('contentSection');
-      content.innerHTML = `
-        <h3>Deposit — ${name}</h3>
-        <p>Amount: <strong>${amount} PKR</strong></p>
-        <p>JazzCash: <strong>03705519562</strong> <button onclick="copyText('03705519562')">Copy</button></p>
-        <p>EasyPaisa: <strong>03379827882</strong> <button onclick="copyText('03379827882')">Copy</button></p>
-        <div style="margin-top:10px">
-          <input id="depositTxn" placeholder="Transaction ID"><br>
-          <input id="depositProof" type="file"><br>
-          <button onclick="confirmDeposit(${amount}, '${name}', ${daily}, ${days}, ${planIndex})">Submit Deposit</button>
-        </div>
-      `;
-    }
-
-    function confirmDeposit(amount, name, daily, days, planIndex) {
-      const txn = document.getElementById('depositTxn').value.trim();
-      const proof = document.getElementById('depositProof').files[0];
-      if (!txn || !proof) {
-        showNotif('Upload proof & enter txn ID');
-        return;
-      }
-      const deposit = { plan: name, amount, daily, days, txn, proof: proof.name, ts: Date.now() };
-      currentUser.deposits = currentUser.deposits || [];
-      currentUser.deposits.push(deposit);
-      currentUser.balance = (currentUser.balance || 0) + amount;
-      currentUser.profit = (currentUser.profit || 0) + daily;
-      users = users.map(u => u.email === currentUser.email ? currentUser : u);
-      localStorage.setItem('reUsers', JSON.stringify(users));
-      localStorage.setItem('reCurrent', JSON.stringify(currentUser));
-      showNotif('Deposit confirmed, balance updated');
-      openSection('plans');
-    }
-
-    function openWithdraw() {
-      const content = document.getElementById('contentSection');
-      content.innerHTML = `
-        <h3>Withdraw</h3>
-        <input id="withdrawName" placeholder="Your Name"><br>
-        <input id="withdrawAcc" placeholder="Account Number"><br>
-        <input id="withdrawAmount" placeholder="Amount"><br>
-        <select id="withdrawMethod">
-          <option value="JazzCash">JazzCash</option>
-          <option value="EasyPaisa">EasyPaisa</option>
-          <option value="Bank">Bank</option>
-        </select><br><br>
-        <button onclick="confirmWithdraw()">Submit Withdraw</button>
-      `;
-    }
-
-    function confirmWithdraw() {
-      const name = document.getElementById('withdrawName').value.trim();
-      const acc = document.getElementById('withdrawAcc').value.trim();
-      const amt = parseFloat(document.getElementById('withdrawAmount').value);
-      const method = document.getElementById('withdrawMethod').value;
-      if (!name || !acc || !amt || amt > (currentUser.balance || 0)) {
-        showNotif('Invalid or insufficient balance');
-        return;
-      }
-      const w = { name, account: acc, amount: amt, method, ts: Date.now() };
-      currentUser.withdrawals = currentUser.withdrawals || [];
-      currentUser.withdrawals.push(w);
-      currentUser.balance -= amt;
-      users = users.map(u => u.email === currentUser.email ? currentUser : u);
-      localStorage.setItem('reUsers', JSON.stringify(users));
-      localStorage.setItem('reCurrent', JSON.stringify(currentUser));
-      showNotif('Withdraw submitted');
-      openSection('plans');
-    }
-
-    // --- Profile Edit ---
-    function openProfile() {
-      document.getElementById('profileModal').style.display = 'flex';
-      document.getElementById('profileName').value = currentUser.name;
-      document.getElementById('profileEmail').value = currentUser.email;
-    }
-    function closeProfile() {
-      document.getElementById('profileModal').style.display = 'none';
-    }
-    function updateProfile() {
-      const n = document.getElementById('profileName').value.trim();
-      const e = document.getElementById('profileEmail').value.trim().toLowerCase();
-      const p = document.getElementById('profilePass').value;
-      if (!n || !e) {
-        showNotif('Name & Email required');
-        return;
-      }
-      currentUser.name = n;
-      currentUser.email = e;
-      if (p) currentUser.pass = p;
-      users = users.map(u => u.email === currentUser.email ? currentUser : u);
-      localStorage.setItem('reUsers', JSON.stringify(users));
-      localStorage.setItem('reCurrent', JSON.stringify(currentUser));
-      showNotif('Profile updated');
-      closeProfile();
-      openDashboard();
-    }
-  </script>
+// ======== Init ========
+setLoggedInUI();
+</script>
 </body>
 </html>
